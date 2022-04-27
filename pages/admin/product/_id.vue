@@ -211,9 +211,15 @@ export default {
       const reg = new RegExp(
         "^[+-]?[0-9]{1,3}(?:[0-9]*(?:[.,][0-9]{1})?|(?:,[0-9]{3})*(?:.[0-9]{1,2})?|(?:.[0-9]{3})*(?:,[0-9]{1,2})?)$"
       );
+      if (this.product.name === "" || !this.product.name) {
+        this.text = "Adicione<wbr> um<wbr> nome<wbr> para<wbr> o<wbr> produto";
+        this.onDialog(this.timeout);
+        valid = false;
+        return valid;
+      }
 
       if (!reg.test(this.product.price)) {
-        this.text = "Preço Inválido";
+        this.text = "Adicione<wbr> um<wbr> preço<wbr> válido<wbr> para<wbr> o<wbr> produto";
         this.onDialog(this.timeout);
         valid = false;
         return valid;
