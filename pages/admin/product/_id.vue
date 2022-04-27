@@ -214,7 +214,7 @@ export default {
       if (this.product.name === "" || !this.product.name) {
         this.text = "Adicione<wbr> um<wbr> nome<wbr> para<wbr> o<wbr> produto";
         this.onDialog(this.timeout);
-        valid = false;
+        valid = false; 
         return valid;
       }
 
