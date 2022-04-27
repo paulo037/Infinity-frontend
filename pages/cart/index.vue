@@ -26,7 +26,7 @@
             <tr v-for="(item, index) in products" :key="item.name">
               <!-- Para Celular -->
               <td class="hidden-sm-and-up pa-0">
-                <v-card class="d-flex align-start pa-0 ma-2">
+                <v-card class="d-flex align-start pa-0 ma-2 secondary" flat>
                   <v-container class="d-flex align-start">
                     <router-link to="/buy">
                       <v-img
@@ -95,11 +95,13 @@
                 <v-card
                   class="d-flex align-top py-5 ma-2 secondary"
                   width="260px"
-                  elevation="5"
+                  flat
+                
+                
                   to="/buy"
                 >
                   <v-img
-                    class="d-inline-block mx-5"
+                    class="d-inline-block mx-5 rounded-sm"
                     :src="item.img"
                     max-width="80px"
                     height="80px"

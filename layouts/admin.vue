@@ -1,11 +1,21 @@
  <template>
   <v-app>
     <Navbar :hide="true" />
+    
     <Sidbar :hide="true" />
-     <v-container fluid class=" pa-0  ma-0 text-right secondary">
+    <v-container fluid class="pa-0 ma-0 text-right secondary">
       <v-switch
         v-model="switch1"
-        class="pt-12 pb-0  mb-0 pr-5 primary--text secondary text-right d-inline-block"
+        class="
+          pt-12
+          pb-0
+          mb-0
+          pr-5
+          primary--text
+          secondary
+          text-right
+          d-inline-block
+        "
         width="100%"
         color="primary"
         input-value="true"
@@ -15,8 +25,8 @@
       ></v-switch>
     </v-container>
 
-    <v-main class="secondary">
-     <Nuxt/>
+    <v-main class="secondary pa-2">
+      <Nuxt />
     </v-main>
 
     <Footer />
@@ -42,6 +52,7 @@ export default {
       switch1: true,
     };
   },
+ 
 };
 </script>
 

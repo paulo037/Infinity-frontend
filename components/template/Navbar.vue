@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar height="60px" app class="secondary ">
+  <v-app-bar height="60px" app class="secondary " elevation="1">
     <v-toolbar-title>
       <v-card to="/"  class="secondary pl-4" flat align="center">
         <span class="font-weight-light primary--text">Infinity</span>
@@ -54,6 +54,7 @@
         </v-app-bar-nav-icon>
       </span>
     </v-toolbar-items>
+    
   </v-app-bar>
 </template>
 
