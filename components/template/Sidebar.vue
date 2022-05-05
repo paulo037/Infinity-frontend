@@ -51,7 +51,7 @@ export default {
         {
           icon: "mdi-cart",
           text: "CARRINHO",
-          link: "/my-cart",
+          link: "/cart",
         },
       ],
     };

@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <list-product label="Produtos Mais Vendidos"/>
+  <div class="secondary">
+    <list-product label="Produtos Mais Vendidos" :id="1" />
     <list-category label="Categorias"/>
-    <list-product label="Lançamentos"/>
+    <list-product label="Lançamentos" :id="1" />
 
   </div>
 </template>

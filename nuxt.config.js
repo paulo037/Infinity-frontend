@@ -4,7 +4,8 @@ export default {
     // Global page headers: https://go.nuxtjs.dev/config-head
     server: {     
         port: 8000, // default: 3000     
-        // host: '0.0.0.0', // default: localhost   
+        // host: '0.0.0.0', 
+        // default: localhost   
       },
     head: {
         titleTemplate: '%s - frontend',
@@ -25,6 +26,7 @@ export default {
 
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [
+        '@/assets/style.css'
     ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -66,13 +68,16 @@ export default {
                     secondary: colors.grey.darken4, // #FFCDD2
                     third: colors.grey.lighten5,
                     accent: colors.amber.darken2, // #3F51B5
-
+                    disabled_text: colors.grey.lighten2,
+                    disabled: colors.orange.lighten2,
                 },
                 light: {
                     primary: colors.grey.darken4,
                     secondary: colors.grey.lighten5,
                     third: colors.grey.darken4,
                     accent: colors.amber.darken2,
+                    disabled_text: colors.grey.lighten2,
+                    disabled: colors.orange.lighten2,
                 },
             },
 

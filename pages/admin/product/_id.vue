@@ -2,7 +2,7 @@
   <v-form ref="form" enctype="multipart/form-data" method="post">
     <v-row justify="space-around">
       <v-col cols="12">
-        <NuxtLink to="/admin" style="text-decoration: none">
+        <NuxtLink to="/admin/product" style="text-decoration: none">
           <v-icon large class="primary--text ml-5">mdi-arrow-left-bold</v-icon>
         </NuxtLink>
       </v-col>
@@ -30,7 +30,8 @@
       </v-col>
 
       <v-col md="6" sm="10">
-        <ProductSize :items="product.sizes" />
+        <ProductColor />
+        <ProductSize />
         <ProductCategory :items="product.categories" />
       </v-col>
     </v-row>
@@ -61,7 +62,7 @@
         </v-card-title>
 
         <v-card-actions>
-          <v-btn class="accent" @click="dialogFunction()" block> OK </v-btn>
+          <v-btn class="accent" @click="dialogFunction" block> OK </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -69,23 +70,22 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import ProductImage from "../../../components/admin/product/ProductImage.vue";
 import ProductSize from "../../../components/admin/product/ProductSize.vue";
+import ProductColor from "../../../components/admin/product/ProductColor.vue";
 import ProductCategory from "../../../components/admin/product/ProductCategory.vue";
 
 export default {
   components: {
     ProductImage,
+    ProductColor,
     ProductSize,
     ProductCategory,
   },
   data: () => ({
-    dialog: false,
-    dialogFunction: null,
     rate: 0,
     errors: {},
-    snackbar: false,
-    text: null,
     timeout: 3000,
     creating: false,
     product: {
@@ -94,66 +94,112 @@ export default {
       description: null,
       id: null,
       images: [],
-      sizes: [],
+      colors: [],
       categories: [],
     },
   }),
 
+  computed: {
+    text() {
+      return this.$store.state.admin.product.text;
+    },
+    dialog() {
+      return this.$store.state.admin.product.dialog;
+    },
+    sizes() {
+      return this.$store.state.admin.product.sizes;
+    },
+  },
   async fetch() {
-    if (this.$route.params.id) {
+    let colors = [];
+    if (this.$route.params.id != "new-product") {
       this.product = await this.$axios.$get(
         `http://localhost:8080/product/${this.$route.params.id}`
       );
+      this.product.colors.forEach((item) => {
+        if (!colors.find((color) => color.value == item.color)) {
+          colors.push({
+            value: item.color,
+            id: item.color_id,
+          });
+        }
+      });
+      this.initialColor(colors);
+      this.initialSizes(this.product.colors);
+
       return;
     }
+    this.initialColor(colors);
+    this.initialSizes(this.product.colors);
     this.creating = true;
   },
 
   methods: {
+    ...mapMutations({
+      toggle: "todos/toggle",
+      on: "admin/product/onDialog",
+      changeDialog: "admin/product/changeDialog",
+      setText: "admin/product/setText",
+      dialogFunction: "admin/product/executeCallBack",
+      initialColor: "admin/product/initialColor",
+      initialSizes: "admin/product/initialSizes",
+    }),
     async save() {
+      this.product.colors = this.$store.state.admin.product.sizes;
       if (!this.validation()) return;
-      console.log(this.product);
       await this.uploadImages();
-
       await this.$axios
         .$put(`http://localhost:8080/product/${this.$route.params.id}`, {
           product: this.product,
         })
         .then((e) => {
-          this.text = `Modificações Salvas`;
+          this.setText(`Modificações Salvas`);
           this.onDialog(this.timeout);
         })
         .catch((e) => {
           if (e.response.status === 400) {
-            this.text = "<span>Requisição mal<br>formatada Enviada</span>";
+            this.setText("<span>Requisição mal<br>formatada Enviada</span>");
           } else {
-            this.text = "Houve um erro na atualização";
+            this.setText("Houve um erro na atualização");
           }
           this.onDialog(this.timeout);
           return;
         });
     },
     async create() {
+      this.product.colors = this.$store.state.admin.product.sizes;
+
       if (!this.validation()) return;
-
       await this.uploadImages();
-
       await this.$axios
         .$post(`http://localhost:8080/product/`, {
           product: this.product,
         })
-        .then(() => {
-          this.text =
-            "<span>Produto <wbr>foi <wbr> criado<wbr> com<wbr> sucesso</span>";
+        .then((p) => {
+          this.setText(
+            "<span>Produto <wbr>foi <wbr> criado<wbr> com<wbr> sucesso</span>"
+          );
           this.onDialog();
+          this.product = {
+            name: null,
+            price: null,
+            description: null,
+            id: null,
+            images: [],
+            colors: [],
+            categories: [],
+          };
+          this.initialColor([]);
         })
         .catch((e) => {
           if (e.response.status === 400) {
-            this.text = e.response.data
-              ? e.response.data
-              : "<span>Requisição mal<br>formatada Enviada</span>";
+            this.setText(
+              e.response.data
+                ? e.response.data
+                : "<span>Requisição mal<br>formatada Enviada</span>"
+            );
           } else {
-            this.text = "Houve um erro na Criação";
+            this.setText("Houve um erro na Criação");
           }
           this.onDialog(this.timeout);
           return;
@@ -177,9 +223,9 @@ export default {
             },
           })
           .catch((e) => {
-            this.text = e.response.data
-              ? e.response.data
-              : "Houve um erro na atualização";
+            this.setText(
+              e.response.data ? e.response.data : "Houve um erro na atualização"
+            );
             this.onDialog(this.timeout);
             return;
           })
@@ -192,16 +238,18 @@ export default {
       await this.$axios
         .$delete(`http://localhost:8080/product/${this.$route.params.id}`)
         .catch((e) => {
-          this.text = e.response.data
-            ? e.response.data
-            : "Houve um erro ao tentar apagar o produto";
+          this.setText(
+            e.response.data
+              ? e.response.data
+              : "Houve um erro ao tentar apagar o produto"
+          );
           this.onDialog(this.timeout);
           return;
         })
         .then((e) => {
-          this.text = `Produto deletado`;
+          this.setText(`Produto deletado`);
           this.onDialog(null, () => {
-            this.$router.push("/admin");
+            this.$router.push("/admin/product");
           });
         });
     },
@@ -212,21 +260,27 @@ export default {
         "^[+-]?[0-9]{1,3}(?:[0-9]*(?:[.,][0-9]{1})?|(?:,[0-9]{3})*(?:.[0-9]{1,2})?|(?:.[0-9]{3})*(?:,[0-9]{1,2})?)$"
       );
       if (this.product.name === "" || !this.product.name) {
-        this.text = "Adicione<wbr> um<wbr> nome<wbr> para<wbr> o<wbr> produto";
-        this.onDialog(this.timeout);
-        valid = false; 
-        return valid;
-      }
-
-      if (!reg.test(this.product.price)) {
-        this.text = "Adicione<wbr> um<wbr> preço<wbr> válido<wbr> para<wbr> o<wbr> produto";
+        this.setText(
+          "Adicione<wbr> um<wbr> nome<wbr> para<wbr> o<wbr> produto"
+        );
         this.onDialog(this.timeout);
         valid = false;
         return valid;
       }
-      this.product.price = this.product.price.replace(",", ".");
-      if (this.product.sizes.length < 1) {
-        this.text = "Adicione<wbr> pelo<wbr> menos<wbr> um<wbr> tamanho";
+
+      if (!reg.test(this.product.price)) {
+        this.setText(
+          "Adicione<wbr> um<wbr> preço<wbr> válido<wbr> para<wbr> o<wbr> produto"
+        );
+        this.onDialog(this.timeout);
+        valid = false;
+        return valid;
+      }
+      this.product.price = this.product.price.toString().replace(",", ".");
+      this.product.price = parseFloat(this.product.price);
+
+      if (this.product.colors.length < 1) {
+        this.setText("Adicione<wbr> pelo<wbr> menos<wbr> um<wbr> tamanho");
         this.onDialog(this.timeout);
         valid = false;
         return valid;
@@ -234,16 +288,10 @@ export default {
 
       return valid;
     },
-    onDialog(timout, cb) {
-      this.dialog = true;
 
-      this.dialogFunction =
-        cb != undefined
-          ? cb
-          : function () {
-              console.log(this.dialog);
-              this.dialog = false;
-            };
+    onDialog(timout, cb) {
+      this.on(timout, cb);
+
       timout != undefined
         ? setTimeout(() => {
             this.dialogFunction();
@@ -251,6 +299,7 @@ export default {
           }, timout)
         : null;
     },
+
     parseImages(images) {
       let m = [];
       this.product.images.map((file) => {

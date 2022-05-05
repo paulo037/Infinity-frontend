@@ -1,13 +1,10 @@
 <template>
-  <v-container>
+  <v-container style="width:100%; max-width:none">
     <h2 class="primary--text ml-10">{{ label }}</h2>
-    <v-sheet color="secondary" >
+    <v-sheet color="secondary">
       <v-slide-group show-arrows>
         <v-slide-item v-for="n in imgs.length" :key="n" class="">
-          <category
-            :name="names[n - 1]"
-            :img="imgs[n - 1]"
-          />
+          <category :name="names[n - 1]" :img="imgs[n - 1]" />
         </v-slide-item>
       </v-slide-group>
     </v-sheet>
@@ -15,12 +12,12 @@
 </template>
 
 <script>
-
-import Category from './Category.vue';
+import Category from "./Category.vue";
 export default {
   components: {
     Category,
   },
+ 
   data() {
     return {
       imgs: [
@@ -39,7 +36,6 @@ export default {
         "Short Praia",
         "Short Básico",
       ],
-
     };
   },
   props: {

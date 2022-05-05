@@ -1,49 +1,58 @@
 <template>
   <v-card class="ma-10 mt-0 pt-0">
     <v-tabs v-model="tab" class="pa-5 pb-0">
-      <v-tab v-for="(item, index) in tabLabel" :key="index"> {{ item }} </v-tab>
+      <v-tab v-for="(item, index) in tabs" :key="index" nuxt :to="item.link">
+        {{ item.label }}
+      </v-tab>
     </v-tabs>
     <v-divider class="pb-5"></v-divider>
     <v-tabs-items v-model="tab" class="pa-5">
-      <v-tab-item> usuarios </v-tab-item>
-      <v-tab-item>
-        <v-card outlined class="pb-10">
-          <div class="primary--text text-center d-block text-h4 mt-5">
-            Produtos
-          </div>
-          <v-divider class="pb-5"></v-divider>
-          <nuxt-child />
-        </v-card>
-      </v-tab-item>
-      <v-tab-item> pedidos </v-tab-item>
-      <v-tab-item>
-        <SizeAdm />
-        <CategoryAdm />
-      </v-tab-item>
+      <v-card outlined class="pb-10">
+        <div
+          class="primary--text text-center d-block text-h4 mt-5"
+      
+        >{{title}}</div>
+        <v-divider class="pb-5"></v-divider>
+        <nuxt-child></nuxt-child>
+      </v-card>
     </v-tabs-items>
   </v-card>
 </template>
 
 <script>
-import ProductEdit from "~/components/admin/ProductEdit.vue";
-import ProductTable from "~/components/admin/ProductTable.vue";
-import SizeAdm from "~/components/admin/SizeAdm.vue";
-import CategoryAdm from "~/components/admin/CategoryAdm.vue";
+
 
 export default {
-  components: {
-    ProductEdit,
-    ProductTable,
-    SizeAdm,
-    CategoryAdm,
-  },
+  
   layout: "admin",
   data() {
     return {
       tab: null,
-      tabLabel: ["Usuários", "Produtos", "Pedidos", "Propriedades"],
+      title: "",
+      tabs: [
+        { label: "Usuários", link: "/admin/user" },
+        { label: "Produtos", link: "/admin/product" },
+        { label: "Pedidos", link: "/admin/order" },
+        { label: "Propriedades", link: "/admin/property" },
+      ],
     };
   },
+  watch: {
+    tab() {
+      let value = "";
+      this.tabs.forEach((element) => {
+        if (element.link == this.tab) {
+          value = element.label;
+        }
+        this.title = value;
+      });
+    },
+  },
+  created(){
+
+    if (this.$router.history.current.path) this.$router.push('/admin/user')
+      
+  }
 };
 </script>
 

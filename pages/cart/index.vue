@@ -83,10 +83,10 @@
                   <v-icon
                     block
                     small
-                    class="red rounded-circle ma-2"
+                    class="red--text ma-2"
                     @click="deleteProduct(index)"
                   >
-                    mdi-close
+                    mdi-delete
                   </v-icon>
                 </v-card>
               </td>
@@ -154,11 +154,11 @@
                   class="text-right pa-1"
                 >
                   <v-icon
-                    small
-                    class="red rounded-circle ma-2"
+                    
+                    class="red--text ma-2"
                     @click="deleteProduct(index)"
                   >
-                    mdi-close
+                    mdi-delete
                   </v-icon>
                 </v-container>
               </td>
@@ -251,7 +251,6 @@ export default {
       this.active = index;
     },
     deleteProduct(index) {
-      console.log(index);
       const name = this.products[index].name;
       this.products.splice(index, 1);
       this.text = `O produto ${name} foi removido`;
