@@ -22,7 +22,7 @@
       :hide-default-header="true"
       hide-default-footer
     >
-      <template v-slot:item.actions="{ item }">
+      <template  #[`item.actions`]="{ item }">
         <v-icon @click="deleteCategory(item.name)" class="mr-2 accent--text">
           mdi-pencil
         </v-icon>
@@ -48,7 +48,7 @@ export default {
     };
   },
   async fetch() {
-    this.categories = await this.$axios.$get(`http://localhost:8080/size`);
+    this.categories = await this.$axios.$get(`size`);
   },
 
   methods: {

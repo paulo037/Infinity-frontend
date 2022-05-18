@@ -26,7 +26,7 @@
       :hide-default-header="true"
       hide-default-footer
     >
-      <template v-slot:item.image="{ item }">
+      <template  #[`item.image`]="{ item }">
         <v-img
           :src="item.image ? item.image : 'noImage.png'"
           max-width="36px"
@@ -35,7 +35,7 @@
         </v-img>
       </template>
 
-      <template v-slot:item.actions="{ item }">
+      <template  #[`item.actions`]="{ item }">
         <v-icon @click="deleteCategory(item.name)" class="mr-2 red--text">
           mdi-delete
         </v-icon>
@@ -57,7 +57,7 @@ export default {
     };
   },
   async fetch() {
-    this.categories = await this.$axios.$get(`http://localhost:8080/category`);
+    this.categories = await this.$axios.$get(`category`);
   },
   props: {
     items: [],

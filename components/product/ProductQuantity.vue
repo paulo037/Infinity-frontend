@@ -27,7 +27,7 @@
       bottom
     >
       <span class="d-flex align-center justify-center">
-        Quantidade Maxima para o tamanho e cor já selecionada
+        Quantidade máxima já selecionada.
       </span>
     </v-snackbar>
   </v-container>
@@ -37,7 +37,7 @@
 export default {
   data() {
     return {
-      timeout: 1200,
+      timeout: 2000,
       snackbar: false,
     };
   },

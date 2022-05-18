@@ -14,12 +14,12 @@
           </v-col>
         </v-row>
       </template>
-      <template v-slot:item.actions="{ item, index }">
+      <template  #[`item.actions`]="{ item, index }">
         <v-icon class="mr-2 primary--text" @click="onDialog(item, index)">
           mdi-pencil
         </v-icon>
       </template>
-      <template v-slot:item.admin="{ item }">
+      <template  #[`item.admin`]="{ item }">
         {{ item.admin ? "sim" : "não" }}
       </template>
     </v-data-table>
@@ -71,7 +71,7 @@ export default {
     ],
   }),
   async fetch() {
-    this.users = await this.$axios.$get(`http://localhost:8080/user`);
+    this.users = await this.$axios.$get(`user`);
   },
   methods: {
     onDialog(user, index) {
@@ -84,7 +84,7 @@ export default {
     async changePermission() {
       this.dialog = false;
       await this.$axios
-        .$put(`http://localhost:8080/admin/user/${this.user.id}`, {
+        .$put(`admin/user/${this.user.id}`, {
           admin: !Boolean(this.user.admin),
         })
         .catch((e) => {

@@ -26,7 +26,7 @@
       </v-col>
 
       <v-col cols="10" md="5">
-        <v-card class="third--text pa-12" outlined max-width="800px">
+        <v-card class="third--text pt-3 px-12 pb-12" outlined max-width="800px">
           <h1 class="pb-2">{{ product.name }}</h1>
           <v-row align="center" class="mx-0 py-2 justify-center">
             <v-col class="d-flex justify-center">
@@ -63,9 +63,20 @@
             :quantity="quantity"
             v-on:increment="increment"
             v-on:decrement="decrement"
+            class="pt-0"
           />
-
-          <v-container class="px-0">
+          <v-container class="px-0 py-1">
+            <div class="py-2 px-1 d-inline">Cor:</div>
+            <v-select
+              :items="colors"
+              item-text="value"
+              class="d-inline-block"
+              dense
+              outlined
+              v-model="color"
+            ></v-select>
+          </v-container>
+          <v-container class="px-0 py-1">
             <div>Tamanho:</div>
             <v-btn
               light
@@ -76,13 +87,13 @@
               min-height="30px"
               height="30px"
               width="30px"
-              v-for="(size, index) in product.sizes"
+              v-for="size in sizes"
               :key="size.value"
               v-bind:class="{
-                'accent secondary--text': active == index,
-                white: active != index,
+                'accent secondary--text': active == indexOfSize(size),
+                white: active != indexOfSize(size),
               }"
-              @click="active = index"
+              @click="active = indexOfSize(size)"
             >
               {{ size.value }}
             </v-btn>
@@ -149,22 +160,22 @@ export default {
     return {
       category: 2,
       snackbar: false,
-      timeout: 1100,
+      timeout: 3000,
       active: null,
       quantity: 1,
       max: null,
       price: 60,
       product: {},
+      color: null,
     };
   },
 
   async fetch() {
-    this.product = await this.$axios.$get(
-      `http://localhost:8080/product/${this.$route.params.id}`
-    );
-    this.active = 0;
-    console.log(this.product.categories[0].id)
-    this.category = this.product.categories[0].id
+    this.product = await this.$axios.$get(`product/${this.$route.params.id}`);
+    this.category = this.product.categories[0].id;
+    this.color = this.product.colors[0].color;
+    this.active = this.getActive();
+    console.log("ativo", this.active);
   },
 
   methods: {
@@ -177,7 +188,6 @@ export default {
     increment() {
       if (this.quantity == this.max) {
         this.snackbar = true;
-        console.log("true");
         return;
       }
       this.quantity++;
@@ -187,12 +197,79 @@ export default {
         ? parseFloat(this.product.rating).toFixed(1)
         : 5;
     },
+
+    getActive() {
+      this.product.colors.sort((a,b) =>  b.size.charCodeAt(0) - a.size.charCodeAt(0));
+      console.log(this.product.colors)
+      let items = this.product.colors.find((item) => item.color === this.color);
+      return this.product.colors.indexOf(items);
+    },
+
+    indexOfSize(size) {
+      let item = this.product.colors.find(
+        (item) => item.size_id === size.id && item.color === this.color
+      );
+      return this.product.colors.indexOf(item);
+    },
   },
 
   watch: {
     active() {
-      this.max = this.product.sizes[this.active].quantity;
+      if (!this.colors) return;
+      this.max = this.getMax;
       this.quantity = 1;
+    },
+
+    color() {
+      this.active = this.getActive();
+      //   this.active = 0;
+      if (!this.colors) return;
+      console.log("ativo", this.active);
+      this.max = this.getMax;
+      this.quantity = 1;
+    },
+  },
+
+  computed: {
+    colors() {
+      let colors = [];
+      if (this.product.colors) {
+        this.product.colors.forEach((item) => {
+          if (!colors.find((color) => color == item.color)) {
+            colors.push({
+              value: item.color,
+              id: item.color_id,
+            });
+          }
+        });
+      }
+
+      return colors;
+    },
+
+    sizes() {
+      let sizes = [];
+      if (this.product.colors) {
+        this.product.colors.forEach((item) => {
+          if (item.color === this.color) {
+            sizes.push({ value: item.size, id: item.size_id });
+          }
+        });
+      }
+      sizes = sizes.sort((a, b) => {
+          return b.value.charCodeAt(0) - a.value.charCodeAt(0)
+      });
+
+      return sizes;
+    },
+    getMax() {
+      let choice = this.product.colors.find(
+        (item) =>
+          item.color === this.color &&
+          item.size_id == this.product.colors[this.active].size_id
+      );
+
+      return choice.quantity;
     },
   },
 };

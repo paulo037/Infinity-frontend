@@ -43,7 +43,7 @@ export default {
 
   async fetch() {
     this.products = await this.$axios
-      .$get(`http://localhost:8080/product/category/${this.id}`)
+      .$get(`product/category/${this.id}`)
       .catch((e) => console.log(e));
     console.log(this.Products);
   },

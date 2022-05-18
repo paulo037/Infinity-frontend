@@ -37,7 +37,7 @@
       :headers="headers"
       hide-default-footer
     >
-      <template v-slot:item.image="{ item }">
+      <template #[`item.image`]="{ item}">
         <v-img
           :src="item.url ? item.url : createURL(item)"
           max-width="36px"
@@ -45,7 +45,7 @@
         >
         </v-img>
       </template>
-      <template v-slot:item.primary="{ item, index }">
+      <template #[`item.primary`]="{ item, index }">
         <v-icon
           small
           class="rounded-0 ma-0 mr-15 d-block accent--text"
@@ -56,12 +56,12 @@
         </v-icon>
       </template>
 
-      <template v-slot:item.name="{ item, index }">
+      <template  #[`item.name`]="{ item }">
         {{ item.name.substring(0, 19) }}
         {{ item.name.length > 20 ? "..." : "" }}
       </template>
 
-      <template v-slot:item.actions="{ item, index }">
+      <template  #[`item.actions`]="{index }">
         <v-icon @click="removeImage(index)" class="mr-2 red--text">
           mdi-delete
         </v-icon>

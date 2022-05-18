@@ -50,13 +50,13 @@
         </v-icon>
       </template>
 
-      <template #[`item.quantity`]="{ item }">
+      <template #[`item.quantity`]="{ item, index }">
         <div class="d-flex no-wrap align-baseline">
           <v-icon
             color="sencondary"
             class="accent rounded-circle"
             :disabled="item.quantity == 1 ? true : false"
-            @click="item.quantity--"
+            @click="decrementSize(index)"
           >
             mdi-minus
           </v-icon>
@@ -68,7 +68,7 @@
           <v-icon
             color="sencondary"
             class="accent rounded-circle"
-            @click="item.quantity++"
+            @click="incrementSize(index)"
           >
             mdi-plus
           </v-icon>
@@ -88,6 +88,7 @@ export default {
       newSize: null,
       sizesperColor: [],
       index: null,
+      timout: 3000,
       headers: [
         { text: "Cor", value: "color", sortable: false },
         { text: "Tamanho", value: "size", sortable: false, align: "center" },
@@ -97,7 +98,7 @@ export default {
     };
   },
   async fetch() {
-    this.sizes = await this.$axios.$get(`http://localhost:8080/size`);
+    this.sizes = await this.$axios.$get(`size`);
   },
   methods: {
     ...mapMutations({
@@ -109,6 +110,9 @@ export default {
       changeSize: "admin/product/changeSize",
       changeIdSize: "admin/product/changeIdSize",
       _pushSize: "admin/product/pushSize",
+      incrementSize: "admin/product/incrementSize",
+      decrementSize: "admin/product/decrementSize",
+       
     }),
 
     onDialog(timout, cb) {
@@ -127,13 +131,13 @@ export default {
         this.setText(
           "Selecione<wbr> o<wbr> tamanho<wbr> para<wbr> ser <wbr>adicionado."
         );
-        this.onDialog(1500);
+        this.onDialog(this.timout);
         return;
       }
 
       if (this.colors.length < 1) {
         this.setText("Adicione<wbr> uma <wbr>cor <wbr> primeiro<wbr>");
-        this.onDialog(1500);
+        this.onDialog(this.timout);
         return;
       }
       let size = this.sizes.find((s) => s.value === this.newSize);

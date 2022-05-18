@@ -140,7 +140,7 @@ export default {
       params.append("limit", this.limit);
       params.append("page", this.page);
       let { products, count } = await this.$axios.$get(
-        `http://localhost:8080/product/`,
+        `product/`,
         { params }
       );
       this.products = products;
@@ -154,7 +154,7 @@ export default {
       if (!this.id) return;
       this.dialog = false;
       await this.$axios
-        .$delete(`http://localhost:8080/product/${this.id}`)
+        .$delete(`product/${this.id}`)
         .catch((e) => {
           this.text = e.response.data
             ? e.response.data

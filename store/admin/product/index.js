@@ -37,6 +37,14 @@ export const mutations = {
 
     },
 
+    incrementSize(state, index){
+        state.sizes[index].quantity++;
+    },
+
+    decrementSize(state, index){
+        state.sizes[index].quantity--;
+    },
+
 
     deleteSize(state, value) {
         state.sizes.splice(state.sizes.indexOf(value), 1);

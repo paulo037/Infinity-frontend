@@ -114,7 +114,7 @@ export default {
     let colors = [];
     if (this.$route.params.id != "new-product") {
       this.product = await this.$axios.$get(
-        `http://localhost:8080/product/${this.$route.params.id}`
+        `product/${this.$route.params.id}`
       );
       this.product.colors.forEach((item) => {
         if (!colors.find((color) => color.value == item.color)) {
@@ -149,7 +149,7 @@ export default {
       if (!this.validation()) return;
       await this.uploadImages();
       await this.$axios
-        .$put(`http://localhost:8080/product/${this.$route.params.id}`, {
+        .$put(`product/${this.$route.params.id}`, {
           product: this.product,
         })
         .then((e) => {
@@ -168,11 +168,10 @@ export default {
     },
     async create() {
       this.product.colors = this.$store.state.admin.product.sizes;
-
       if (!this.validation()) return;
       await this.uploadImages();
       await this.$axios
-        .$post(`http://localhost:8080/product/`, {
+        .$post(`product/`, {
           product: this.product,
         })
         .then((p) => {
@@ -217,7 +216,7 @@ export default {
 
       if (append) {
         await this.$axios
-          .$post(`http://localhost:8080/product/image`, formData, {
+          .$post(`product/image`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -236,7 +235,7 @@ export default {
     },
     async deleteProduct() {
       await this.$axios
-        .$delete(`http://localhost:8080/product/${this.$route.params.id}`)
+        .$delete(`product/${this.$route.params.id}`)
         .catch((e) => {
           this.setText(
             e.response.data

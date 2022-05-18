@@ -50,7 +50,7 @@ export default {
     };
   },
   async fetch() {
-    this.colors = await this.$axios.$get(`http://localhost:8080/color`).then();
+    this.colors = await this.$axios.$get(`color`).then();
   },
   methods: {
     ...mapMutations({
