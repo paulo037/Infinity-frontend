@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div
+>
     <div
       :class="`mt-4 text-${size1} text-decoration-line-through font-weight-light pr-14`"
       style="color: #bdbdbd"

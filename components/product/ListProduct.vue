@@ -1,10 +1,10 @@
 <template>
-  <v-container style="width:100%; max-width:none">
+  <v-container >
     <h2 class="primary--text ml-10 d-inline-block" align="start">
       {{ label }}
     </h2>
     <v-sheet color="secondary" >
-      <v-slide-group show-arrows class="ma-0" >
+      <v-slide-group class="ma-0" >
         <v-slide-item
           v-for="(product, index) in products"
           :key="index"
@@ -45,7 +45,6 @@ export default {
     this.products = await this.$axios
       .$get(`product/category/${this.id}`)
       .catch((e) => console.log(e));
-    console.log(this.Products);
   },
 };
 </script>

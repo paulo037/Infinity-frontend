@@ -1,32 +1,34 @@
 <template>
-  <v-app-bar height="60px" app class="secondary " elevation="1">
+  <v-app-bar height="60px" app class="secondary" elevation="1">
     <v-toolbar-title>
-      <v-card to="/"  class="secondary pl-4" flat align="center">
+      <v-card to="/" class="secondary pl-4" flat align="center">
         <span class="font-weight-light primary--text">Infinity</span>
         <span class="primary--text"> Modas</span>
       </v-card>
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
+  
     <v-text-field
-      append-icon="mdi-magnify"
-      placeholder="Pesquisar"
+      v-model="term"
+      placeholder="Pesquisar" 
       class="mt-6 primary--text"
-      rounded
       dense
       outlined
-      filled
-     
+      @keydown="enter"
+      
       v-if="!hide"
-    ></v-text-field>
+    >
+    <template v-slot:append>
+         <v-icon @click="search">
+            mdi-magnify
+        </v-icon>
+    </template>
+    
+    </v-text-field>
     <v-spacer></v-spacer>
 
     <v-toolbar-items v-if="!hide">
-   
-      
-  
-
-
       <NuxtLink
         v-for="(btn, index) in btns"
         :key="index"
@@ -39,12 +41,6 @@
         </v-btn>
       </NuxtLink>
 
-
-
-
-       
-     
-    
       <span>
         <v-app-bar-nav-icon
           text
@@ -54,13 +50,19 @@
         </v-app-bar-nav-icon>
       </span>
     </v-toolbar-items>
-    
   </v-app-bar>
 </template>
 
 <script>
 import { mapState } from "vuex";
+
+  
 export default {
+
+    async fetch() {
+        //  this.items = await this.$axios.$get(`/search/`);
+      },
+
   data() {
     return {
       btns: [
@@ -80,6 +82,12 @@ export default {
           link: "/login",
         },
       ],
+      loading: false,
+      items: [],
+      term: null,
+      select: null,
+      text: null,
+     
     };
   },
   props: {
@@ -89,17 +97,47 @@ export default {
     changeMenuVisible() {
       this.$store.commit("changeMenu");
     },
+    search(){
+        if (this.term){
+           this.$router.push(`/search/${this.term}`);
+        }
+    },
+
+    enter(keydown){
+        if (keydown.key === 'Enter'){
+           this.search();
+        }
+    }
+
   },
   computed: {
     ...mapState({
       isMenuOpen: (state) => state.isMenuOpen,
     }),
   },
+
+  watch:{
+      term(){
+        if(this.term){
+            this.text = this.term;
+        }else{
+            this.term = this.text;
+        }
+      },
+       select(){
+          console.log(this.term, this.select)
+      }
+  }
+   
+ 
 };
 </script>
 
 <style>
 .v-toolbar__content {
   padding: 0px !important;
+}
+.v-select.v-select--is-menu-active .v-input__icon--append .v-icon {
+  transform: rotate(0deg);
 }
 </style>

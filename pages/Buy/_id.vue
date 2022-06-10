@@ -167,6 +167,7 @@ export default {
       price: 60,
       product: {},
       color: null,
+      noImage: null,
     };
   },
 
@@ -175,7 +176,7 @@ export default {
     this.category = this.product.categories[0].id;
     this.color = this.product.colors[0].color;
     this.active = this.getActive();
-    console.log("ativo", this.active);
+    if (this.product.images.length === 0) this.product.images.push({url: '/noImage.png'})
   },
 
   methods: {
@@ -199,8 +200,10 @@ export default {
     },
 
     getActive() {
-      this.product.colors.sort((a,b) =>  b.size.charCodeAt(0) - a.size.charCodeAt(0));
-      console.log(this.product.colors)
+      this.product.colors.sort(
+        (a, b) => b.size.charCodeAt(0) - a.size.charCodeAt(0)
+      );
+      console.log(this.product.colors);
       let items = this.product.colors.find((item) => item.color === this.color);
       return this.product.colors.indexOf(items);
     },
@@ -257,7 +260,7 @@ export default {
         });
       }
       sizes = sizes.sort((a, b) => {
-          return b.value.charCodeAt(0) - a.value.charCodeAt(0)
+        return b.value.charCodeAt(0) - a.value.charCodeAt(0);
       });
 
       return sizes;

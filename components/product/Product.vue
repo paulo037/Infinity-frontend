@@ -12,7 +12,7 @@
           <v-img
             height="280"
             width="280"
-            :src="image ? image : '/noImage'"
+            :src="image ? image : '/noImage.png'"
           ></v-img>
 
           <v-card-title style="width: 250px; heigth: 20px" class="text-h6">
@@ -20,8 +20,8 @@
             {{ name.length > 17 ? "..." : "" }}
           </v-card-title>
 
-          <v-card-text>
-            <v-row align="center" class="mx-0">
+          <v-card-text  style="text-align: start">
+            <v-row  class="mx-0">
               <v-rating
                 :value="sold >= 1 ? rating : 5"
                 color="amber"
