@@ -10,8 +10,8 @@
           :elevation="hover ? 2 : 0"
         >
           <v-img
-            height="280"
-            width="280"
+            height="260"
+            width="260"
             :src="image ? image : '/noImage.png'"
           ></v-img>
 

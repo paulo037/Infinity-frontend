@@ -4,12 +4,12 @@ export default {
     // Global page headers: https://go.nuxtjs.dev/config-head
     server: {     
         port: 8000, // default: 3000     
-        // host: '0.0.0.0', 
+        host: '0.0.0.0', 
         // default: localhost   
       },
     head: {
-        titleTemplate: '%s - frontend',
-        title: 'frontend',
+        titleTemplate: 'Infinity Modas',
+        title: 'Infinity Modas',
         htmlAttrs: {
             lang: 'en'
         },

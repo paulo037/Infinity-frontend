@@ -97,9 +97,10 @@ export default {
     changeMenuVisible() {
       this.$store.commit("changeMenu");
     },
-    search(){
+    async search(){
         if (this.term){
-           this.$router.push(`/search/${this.term}`);
+            await this.$router.push({path: '/search', query: { term: this.term }});
+            
         }
     },
 
@@ -117,6 +118,7 @@ export default {
   },
 
   watch:{
+   
       term(){
         if(this.term){
             this.text = this.term;

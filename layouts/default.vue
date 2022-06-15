@@ -1,5 +1,5 @@
  <template>
-  <v-app >
+  <v-app>
     <Navbar :hide="false" />
 
     <Sidbar :hide="false" />
@@ -17,7 +17,8 @@
     </v-container>
 
     <v-main class="secondary pa-2">
-     <Nuxt class="pa-0"/>
+    
+      <Nuxt class="pa-0" />
     </v-main>
 
     <Footer />
