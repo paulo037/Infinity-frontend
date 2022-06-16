@@ -2,11 +2,11 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
     // Global page headers: https://go.nuxtjs.dev/config-head
-    server: {     
+    server: {
         // port: process.env.PORT | 3000, // default: 3000     
         // host: '0.0.0.0', 
         // default: localhost   
-      },
+    },
     head: {
         titleTemplate: 'Infinity Modas',
         title: 'Infinity Modas',
@@ -29,6 +29,8 @@ export default {
         '@/assets/style.css'
     ],
 
+    transpileDependencies: ["vuetify", "@peepi/vuetify-tiptap"],
+
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
     ],
@@ -48,13 +50,13 @@ export default {
         // https://go.nuxtjs.dev/axios
 
         '@nuxtjs/axios',
-       
+
     ],
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
         // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-        baseURL: process.env.URLBASE 
+        baseURL: process.env.URLBASE
     },
 
     // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -86,5 +88,6 @@ export default {
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {
+       
     }
 }
