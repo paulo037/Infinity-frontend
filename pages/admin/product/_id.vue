@@ -22,10 +22,12 @@
 
         <v-textarea
           outlined
+          auto-grow
           name="input-7-1"
           label="Descrição"
           v-model="product.description"
         ></v-textarea>
+
         <ProductImage :items="product.images" />
       </v-col>
 
@@ -113,9 +115,7 @@ export default {
   async fetch() {
     let colors = [];
     if (this.$route.params.id != "new-product") {
-      this.product = await this.$axios.$get(
-        `product/${this.$route.params.id}`
-      );
+      this.product = await this.$axios.$get(`product/${this.$route.params.id}`);
       this.product.colors.forEach((item) => {
         if (!colors.find((color) => color.value == item.color)) {
           colors.push({

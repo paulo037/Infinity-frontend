@@ -19,7 +19,7 @@
         <v-card outlined class="d-none d-md-block mt-10" max-width="500px">
           <v-card-title class="flex justify-center"> Descrição</v-card-title>
 
-          <v-card-text v-html="product.description">
+          <v-card-text v-html="product.description" style="text-align: initial;">
          
           </v-card-text>
         </v-card>
@@ -134,8 +134,7 @@
         <v-card outlined class="mt-10" max-width="500px">
           <v-card-title class="flex justify-center"> Descrição</v-card-title>
 
-          <v-card-text>
-            {{ product.description }}
+          <v-card-text  v-html="product.description" style="text-align: initial;">
           </v-card-text>
         </v-card>
       </v-col>
