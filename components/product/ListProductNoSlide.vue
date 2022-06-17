@@ -11,11 +11,8 @@
 
         <span v-else>
           Resultado (s) para categoria: "{{
-          
-           products.length > 0
-           ? products[0].category
-           : ""
-         }}"
+            products.length > 0 ? products[0].category : ""
+          }}"
         </span>
       </h2>
     </v-row>
@@ -34,6 +31,10 @@
           :id="product.id"
         />
       </v-col>
+
+      <v-col class="ma-0 pa-0 d-flex flex-grow-0" v-for="n in 3" :key="n">
+       <SkeletonProduct v-if="$fetchState.pending"/>
+      </v-col>
     </v-row>
 
     <v-row justify="center">
@@ -49,10 +50,12 @@
 
 <script>
 import Product from "./Product.vue";
+import SkeletonProduct from "~/components/product/SkeletonProduct.vue";
 import { mapMutations } from "vuex";
 export default {
   components: {
     Product,
+    SkeletonProduct,
   },
   data() {
     return {
@@ -70,7 +73,7 @@ export default {
   },
 
   async fetch() {
-    this.searchTerm()
+    this.searchTerm();
   },
   methods: {
     ...mapMutations({
@@ -81,8 +84,7 @@ export default {
     async searchTerm() {
       this.setCategory(null);
       if (this.term) {
-        this.products = await this.$axios
-          .$get(`product/search/${this.term}`)
+        this.products = await this.$axios.$get(`product/search/${this.term}`);
         let categories = [];
 
         this.products.forEach(async (p) => {
@@ -94,8 +96,9 @@ export default {
         });
         this.setCategories(categories);
       } else if (this.category) {
-        this.products = await this.$axios
-          .$get(`product/category/${this.category}`);
+        this.products = await this.$axios.$get(
+          `product/category/${this.category}`
+        );
       }
     },
   },
@@ -110,8 +113,8 @@ export default {
       }
       let products = [];
       this.products.forEach((p) => {
-          p.categories.forEach((c) => {
-            console.log(c)
+        p.categories.forEach((c) => {
+          console.log(c);
           if (c.id == this.$store.state.search.select) {
             products.push(p);
           }
@@ -126,10 +129,10 @@ export default {
     term() {
       this.searchTerm();
     },
-    
   },
 };
 </script>
 
 <style>
+
 </style>

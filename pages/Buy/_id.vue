@@ -1,6 +1,7 @@
 <template>
   <div align="center">
-    <v-row justify="center" class="pb-16">
+     <SkeletonProductBuy v-if="$fetchState.pending"/>
+    <v-row justify="center" class="pb-16" v-else>
       <v-col cols="10" md="5">
         <div style="max-width: 800px">
           <v-card width="500" outlined class="pa-1">
@@ -140,17 +141,20 @@
       </v-col>
     </v-row>
     <ListProduct label="Relacionados" :id="category" />
+ 
   </div>
 </template>
 
 <script>
 import ListProduct from "@/components/product/ListProduct.vue";
+import SkeletonProductBuy from "~/components/product/SkeletonProductBuy.vue";
 import Price from "@/components/product/Price.vue";
 import ProductQuantity from "@/components/product/ProductQuantity.vue";
 export default {
   scrollToTop: true,
 
   components: {
+    SkeletonProductBuy,
     ListProduct,
     ProductQuantity,
     Price,

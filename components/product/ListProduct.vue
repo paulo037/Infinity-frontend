@@ -71,9 +71,6 @@ export default {
 </script>
 
 <style>
-.v-skeleton-loader__image {
-  width: 260px;
-  height: 260px;
-}
+
 
 </style>
