@@ -4,8 +4,8 @@
       {{ label }}
     </h2>
     <div>
-      <v-sheet color="secondary" >
-        <v-slide-group class="" show-arrows="desktop" >
+      <v-sheet color="secondary">
+        <v-slide-group show-arrows="desktop" v-if="!$fetchState.pending">
           <v-slide-item v-for="(product, index) in products" :key="index">
             <Product
               :name="product.name"
@@ -15,6 +15,26 @@
               :image="product.image"
               :id="product.id"
             />
+          </v-slide-item>
+        </v-slide-group>
+        <v-slide-group show-arrows="desktop" v-if="$fetchState.pending">
+          <v-slide-item v-for="n in 10" :key="n">
+            <v-hover>
+              <template v-slot:default="{ hover }">
+                <v-card
+                  tag="span"
+                  class="d-inline-block my-5 mx-2 pa-3"
+                  height="450px"
+                  outlined
+                  :elevation="hover ? 2 : 0"
+                >
+                  <v-skeleton-loader
+                    width="260px"
+                    type=" image, list-item-three-line, list-item"
+                  ></v-skeleton-loader>
+                </v-card>
+              </template>
+            </v-hover>
           </v-slide-item>
         </v-slide-group>
       </v-sheet>
@@ -31,6 +51,7 @@ export default {
   data() {
     return {
       products: [],
+      loading: true,
     };
   },
 
@@ -43,9 +64,16 @@ export default {
     this.products = await this.$axios
       .$get(`product/category/${this.id}`)
       .catch((e) => console.log(e));
+
+    this.loading = false;
   },
 };
 </script>
 
 <style>
+.v-skeleton-loader__image {
+  width: 260px;
+  height: 260px;
+}
+
 </style>

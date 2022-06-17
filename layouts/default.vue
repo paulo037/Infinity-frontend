@@ -16,8 +16,7 @@
       ></v-switch>
     </v-container>
 
-    <v-main class="secondary pa-2">
-    
+    <v-main class="secondary pa-2 d-flex">
       <Nuxt class="pa-0" />
     </v-main>
 
