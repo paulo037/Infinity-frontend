@@ -18,6 +18,9 @@
                     v-model="user.password"
                     required
                     outlined
+                    :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="show_password = !show_password"
+                    :type="show_password ? 'text' : 'password'"
                 ></v-text-field>
 
                 <span> Não têm conta ? </span>
@@ -75,6 +78,7 @@ export default {
                 email: "",
                 password: "",
             },
+            show_password:null,
         };
     },
 
@@ -96,12 +100,11 @@ export default {
                     },
                 })
                 .then((response) => {
-                    console.log(response)
+                    console.log(response);
                     this.toasted({
                         text: "Login realizado com sucesso !",
                         color: "success",
                     });
-
                 })
                 .catch((e) =>
                     e.response.data
