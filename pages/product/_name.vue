@@ -233,7 +233,7 @@ export default {
                 product_id: this.product_id,
                 size_id: this.choice.size_id,
                 color_id: this.choice.color_id,
-                quantity: this.choice.quantity,
+                quantity: this.quantity,
             };
 
             this.$axios

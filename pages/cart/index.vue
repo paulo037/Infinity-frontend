@@ -80,10 +80,7 @@
                                                     <br />
                                                     R$:
                                                     {{
-                                                        (
-                                                            item.price *
-                                                            item.quantity
-                                                        )
+                                                        (item.price * 1)
                                                             .toFixed(2)
                                                             .replace(".", ",")
                                                     }}
@@ -234,11 +231,12 @@
                                 >
                                     R$:
                                     {{
-                                        (item.price * item.quantity)
+                                        (item.price * 1)
                                             .toFixed(2)
                                             .replace(".", ",")
                                     }}
                                 </td>
+
                                 <td class="pa-0 hidden-xs-only">
                                     <v-container
                                         style="height: 100%; padding: 0px"
