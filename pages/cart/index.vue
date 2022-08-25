@@ -6,7 +6,7 @@
                 class="secondary mx-8 mb-16"
                 elevation="12"
             >
-                <v-card class="primary--text secondary py-2" >
+                <v-card class="primary--text secondary py-2">
                     <span class="text-h5"> CARRINHO | </span>
                     <v-icon class="primary--text pb-3">mdi-cart</v-icon>
                 </v-card>
@@ -61,7 +61,9 @@
                                         flat
                                     >
                                         <v-container class="d-flex align-start">
-                                            <router-link  :to="`/product/${item.name}`">
+                                            <router-link
+                                                :to="`/product/${item.name}`"
+                                            >
                                                 <v-img
                                                     class="d-inline-block"
                                                     :src="item.image"
@@ -293,21 +295,6 @@
                     </v-btn>
                 </v-container>
             </v-card>
-
-            <v-snackbar v-model="snackbar" :timeout="timeout" class="ma-8">
-                {{ text }}
-
-                <template v-slot:action="{ attrs }">
-                    <v-btn
-                        color="accent"
-                        text
-                        v-bind="attrs"
-                        @click="snackbar = false"
-                    >
-                        Close
-                    </v-btn>
-                </template>
-            </v-snackbar>
         </div>
 
         <div align="center" v-else>
@@ -320,10 +307,11 @@
                 <span class="primary--text text-h6">
                     Nenhum produto adicionado ainda !
                 </span>
-                <div >
-                    <br>
+                <div>
+                    <br />
+
                     <svg
-                    class="primary--text"
+                        class="primary--text"
                         xmlns="http://www.w3.org/2000/svg"
                         width="50px"
                         height="50px"
@@ -342,38 +330,86 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
     scrollToTop: true,
 
     async fetch() {
-        console.log(this.$auth.user);
-
         this.products = await this.$axios.$get(`cart/${this.$auth.user.id}`);
     },
     data() {
         return {
-            snackbar: false,
-            text: "My timeout is set to 2000.",
-            timeout: 2000,
             products: [],
         };
     },
     methods: {
         decrement(index) {
-            this.products[index].quantity--;
+            const cart = {
+                user_id: this.$auth.user.id,
+                product_id: this.products[index].product_id,
+                size_id: this.products[index].size_id,
+                color_id: this.products[index].color_id,
+                quantity: this.products[index].quantity - 1,
+            };
+
+            this.$axios
+                .put("/cart", { cart: cart })
+                .then(() => this.products[index].quantity--)
+                .catch((e) =>
+                    this.toasted({
+                        text: e.response.data ? e.response.data : e,
+                    })
+                );
         },
         increment(index) {
-            this.products[index].quantity++;
+            const cart = {
+                user_id: this.$auth.user.id,
+                product_id: this.products[index].product_id,
+                size_id: this.products[index].size_id,
+                color_id: this.products[index].color_id,
+                quantity: this.products[index].quantity + 1,
+            };
+
+            this.$axios
+                .put("/cart", { cart: cart })
+                .then(() => this.products[index].quantity++)
+                .catch((e) =>
+                    this.toasted({
+                        text: e.response.data ? e.response.data : e,
+                    })
+                );
         },
         changeActive(index) {
             this.active = index;
         },
         deleteProduct(index) {
+            const cart = {
+                user_id: this.$auth.user.id,
+                product_id: this.products[index].product_id,
+                size_id: this.products[index].size_id,
+                color_id: this.products[index].color_id,
+                quantity: this.products[index].quantity,
+            };
             const name = this.products[index].name;
-            this.products.splice(index, 1);
-            this.text = `O produto ${name} foi removido`;
-            this.snackbar = true;
+
+            this.$axios
+                .delete("/cart", { data: { cart: cart } })
+                .then(() => {
+                    this.toasted({
+                        text: `O produto ${name} foi removido do carrinho`,
+                        color: "success",
+                    });
+                    this.products.splice(index, 1);
+                })
+                .catch((e) =>
+                    this.toasted({
+                        text: e.response.data ? e.response.data : e,
+                    })
+                );
         },
+
+        ...mapMutations(["toasted"]),
     },
 
     computed: {

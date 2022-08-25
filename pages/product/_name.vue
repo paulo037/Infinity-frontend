@@ -40,8 +40,8 @@
                     outlined
                     max-width="800px"
                 >
-                    <h1 class="pb-2">{{ product.name }}</h1>
-                    <v-row align="center" class="mx-0 py-2 justify-center">
+                    <h1 class="">{{ product.name }}</h1>
+                    <v-row align="center" class="mx-0justify-center">
                         <v-col class="d-flex justify-center">
                             <v-rating
                                 :value="
@@ -80,7 +80,7 @@
                         :quantity="quantity"
                         v-on:increment="increment"
                         v-on:decrement="decrement"
-                        class="pt-0"
+                        class="pb-0"
                     />
                     <v-container class="px-0 py-1">
                         <div class="py-2 px-1 d-inline">Cor:</div>
@@ -116,7 +116,7 @@
                             {{ size.value }}
                         </v-btn>
                     </v-container>
-                    <v-row class="pt-5" justify="space-between">
+                    <v-row justify="space-between">
                         <v-col cols="12" sm="5" md="12" lg="5" class="px-0">
                             <v-btn
                                 class="primary secondary--text"
@@ -237,7 +237,7 @@ export default {
             };
 
             this.$axios
-                .post("/new-cart", { newCart })
+                .post("/cart", { cart:newCart })
                 .then(() =>
                     this.toasted({ text: `${this.$route.params.name} adicionado ao carrinho !` , color: "success"})
                 )
