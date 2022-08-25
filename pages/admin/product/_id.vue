@@ -6,7 +6,7 @@
           <v-icon large class="primary--text ml-5">mdi-arrow-left-bold</v-icon>
         </NuxtLink>
       </v-col>
-      <v-col md="5" cols="10">
+      <v-col md="6"  sm="10">
         <v-text-field
           outlined
           label="Nome"
@@ -45,11 +45,11 @@
         </v-btn>
       </v-col>
 
-      <v-col cols="8" sm="4" md="3" v-if="!creating">
+      <v-col cols="6" sm="6" md="3" v-if="!creating">
         <v-btn block color="green" @click="save()"> SALVAR </v-btn>
       </v-col>
 
-      <v-col cols="8" sm="4" md="3" v-if="!creating">
+      <v-col cols="6" sm="6" md="3" v-if="!creating">
         <v-btn block color="red" @click="deleteProduct()"> EXCLUIR </v-btn>
       </v-col>
     </v-row>

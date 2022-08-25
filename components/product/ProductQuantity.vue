@@ -14,51 +14,31 @@
     <v-icon
       color="sencondary"
       class="accent rounded-circle"
-      @click="quantity == max ? snackbar = true : $emit('increment')"
+      @click="quantity == max ? toasted(payload) : $emit('increment')"
     >
       mdi-plus
     </v-icon>
 
-    <v-snackbar
-      v-model="snackbar"
-      color="secondary primary--text"
-      class="pa-10"
-      :timeout="timeout"
-      bottom
-    >
-      <span class="d-flex align-center justify-center">
-        Quantidade máxima já selecionada.
-      </span>
-    </v-snackbar>
   </v-container>
 </template>
 
 <script>
+
+import { mapMutations } from 'vuex';
 export default {
   data() {
     return {
-      timeout: 2000,
-      snackbar: false,
+      payload: {text: "Quantidade máxima já selecionada."}
     };
+  },
+  methods:{
+    ...mapMutations(["toasted"]),
   },
   props: {
     quantity: Number,
     max: Number,
   },
 
-  methods: {
-    decrement() {
-      this.quantity--;
-    },
-    increment() {
-      if (this.quantity == this.max) {
-        this.snackbar = true;
-        console.log("true");
-        return;
-      }
-      this.quantity++;
-    },
-  },
 };
 </script>
 

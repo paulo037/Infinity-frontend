@@ -71,7 +71,7 @@ export default {
     ],
   }),
   async fetch() {
-    this.users = await this.$axios.$get(`user`);
+    this.users = await this.$axios.$get(`users`);
   },
   methods: {
     onDialog(user, index) {

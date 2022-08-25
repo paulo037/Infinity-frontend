@@ -15,7 +15,7 @@
         </v-autocomplete>
       </v-col>
 
-      <v-col cols="4" sm="3">
+      <v-col cols="12" sm="4">
         <v-btn block class="accent" @click="pushColor"> adicionar </v-btn>
       </v-col>
     </v-row>

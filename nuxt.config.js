@@ -4,7 +4,7 @@ export default {
     // Global page headers: https://go.nuxtjs.dev/config-head
     server: {
         // port: process.env.PORT | 3000, // default: 3000     
-        // host: '0.0.0.0', 
+        host: '0.0.0.0',
         // default: localhost   
     },
     head: {
@@ -33,6 +33,7 @@ export default {
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
+        '~plugins/vue-the-mask.js'
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -50,8 +51,35 @@ export default {
         // https://go.nuxtjs.dev/axios
 
         '@nuxtjs/axios',
+        '@nuxtjs/axios',
+        '@nuxtjs/auth-next'
 
     ],
+
+    auth: {
+        strategies: {
+            local: {
+                token: {
+                    property: 'token',
+                    global: true,
+                    // required: true,
+                    type: 'Bearer'
+                },
+                user: {
+                    property: 'user',
+                    // autoFetch: true
+                },
+                
+                endpoints: {
+                    login: { url: '/signin', method: 'post' },
+                    logout: { url: '/api/auth/logout', method: 'post' },
+                    user: { url: '/validateToken', method: 'post' , },
+                },
+                
+            }
+        }
+    },
+
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
@@ -88,6 +116,6 @@ export default {
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {
-       
+
     }
 }
