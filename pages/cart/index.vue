@@ -46,7 +46,7 @@
                         <tbody>
                             <tr
                                 v-for="(item, index) in products"
-                                :key="item.name"
+                                :key="`${item.product_id}_${item.size_id}_${item.color_id}`"
                             >
                                 <!-- Para Celular -->
                                 <td class="hidden-sm-and-up pa-0">
@@ -94,7 +94,7 @@
                                                             rounded-circle
                                                         "
                                                         :disabled="
-                                                            item.quantity == 1
+                                                            item.quantity <= 1
                                                                 ? true
                                                                 : false
                                                         "
@@ -203,7 +203,7 @@
                                         color="sencondary"
                                         class="accent rounded-circle"
                                         :disabled="
-                                            item.quantity == 1 ? true : false
+                                            item.quantity <= 1 ? true : false
                                         "
                                         @click="decrement(index)"
                                     >
@@ -342,7 +342,8 @@ export default {
         };
     },
     methods: {
-        decrement(index) {
+        async decrement(index) {
+            
             const cart = {
                 user_id: this.$auth.user.id,
                 product_id: this.products[index].product_id,
@@ -351,16 +352,22 @@ export default {
                 quantity: this.products[index].quantity - 1,
             };
 
-            this.$axios
+            await this.$axios
                 .put("/cart", { cart: cart })
-                .then(() => this.products[index].quantity--)
+                .then(() => {
+                    if (this.products[index].quantity > 1) {
+                        this.products[index].quantity--;
+                    }
+                })
                 .catch((e) =>
                     this.toasted({
                         text: e.response.data ? e.response.data : e,
                     })
                 );
         },
-        increment(index) {
+
+        async increment(index) {
+            const quantity = this.products[index].quantity;
             const cart = {
                 user_id: this.$auth.user.id,
                 product_id: this.products[index].product_id,
@@ -369,9 +376,11 @@ export default {
                 quantity: this.products[index].quantity + 1,
             };
 
-            this.$axios
+            await this.$axios
                 .put("/cart", { cart: cart })
-                .then(() => this.products[index].quantity++)
+                .then(() => {
+                    if (this.products[index].quantity == quantity)this.products[index].quantity++;
+                })
                 .catch((e) =>
                     this.toasted({
                         text: e.response.data ? e.response.data : e,
@@ -381,7 +390,7 @@ export default {
         changeActive(index) {
             this.active = index;
         },
-        deleteProduct(index) {
+        async deleteProduct(index) {
             const cart = {
                 user_id: this.$auth.user.id,
                 product_id: this.products[index].product_id,
@@ -391,7 +400,7 @@ export default {
             };
             const name = this.products[index].name;
 
-            this.$axios
+            await this.$axios
                 .delete("/cart", { data: { cart: cart } })
                 .then(() => {
                     this.toasted({
