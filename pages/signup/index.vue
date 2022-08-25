@@ -84,13 +84,7 @@ export default {
             show1: false,
             show2: false,
             user: {
-                first_name: "paulo",
-                last_name: "henrique",
-                cpf: "13210829675",
-                email: "p@gmail.com",
-                password: "77770000",
-                confirm_password: "77770000",
-                // first_name: "f",
+                // first_name: "",
                 // last_name: "",
                 // cpf: "",
                 // email: "",
@@ -138,12 +132,10 @@ export default {
                             },
                         })
                         .then((response) => {
-                           
                             this.toasted({
                                 text: "Login realizado com sucesso !",
                                 color: "success",
                             });
-
                         })
                         .catch((e) =>
                             e.response.data
