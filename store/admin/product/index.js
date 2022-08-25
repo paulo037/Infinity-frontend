@@ -1,21 +1,18 @@
 export const state = () => ({
     sizes: [],
     colors: [],
-    dialog: false,
-    dialogFunction: () => null,
-    text: '',
 })
 
 
 export const mutations = {
-    pushSize(state, {size, color}) {
-        
+    pushSize(state, { size, color }) {
+
         let item = {
-          size: size.value,
-          size_id: size.id,
-          color: color.value,
-          color_id: color.id,
-          quantity: 1,
+            size: size.value,
+            size_id: size.id,
+            color: color.value,
+            color_id: color.id,
+            quantity: 1,
         };
         state.sizes.push(item);
     },
@@ -37,11 +34,11 @@ export const mutations = {
 
     },
 
-    incrementSize(state, index){
+    incrementSize(state, index) {
         state.sizes[index].quantity++;
     },
 
-    decrementSize(state, index){
+    decrementSize(state, index) {
         state.sizes[index].quantity--;
     },
 
@@ -66,34 +63,11 @@ export const mutations = {
         state.sizes = sizes;
     },
 
-    changeIdSize(state,  {index, color, id}) {
+    changeIdSize(state, { index, color, id }) {
 
         state.sizes[index].color_id = id;
         state.sizes[index].color = color;
     },
 
-    setText(state, text) {
-        state.text = text;
-    },
-
-    changeDialog(state) {
-        state.dialog = !state.dialog;
-    },
-
-    onDialog(state, timout, cb) {
-        state.dialog = true;
-
-        state.dialogFunction =
-            cb != undefined
-                ? cb
-                : function () {
-                    state.dialog = false;
-                };
-
-    },
-
-    executeCallBack(state) {
-        state.dialogFunction();
-    },
 
 }
