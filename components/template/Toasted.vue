@@ -2,7 +2,7 @@
     <v-snackbar
         v-model="show"
         
-        class="ma-16"
+        class="my-16"
         :timeout="timeout"
         :color="color || 'error'"
         top

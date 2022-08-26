@@ -1,6 +1,44 @@
 <template>
     <div>
-        <div align="center" v-if="products.length > 0">
+        <!-- <v-skeleton-loader
+            width="260px"
+            type=" card"
+            v-if="$fetchState.pending"
+        ></v-skeleton-loader> -->
+
+        <div align="center" v-if="products.length == 0 && !$fetchState.pending">
+            <v-card
+                align="center"
+                max-width="500px"
+                class="secondary mx-8 pa-8 justify-center"
+                elevation="5"
+            >
+                <span class="primary--text text-h6">
+                    Nenhum produto adicionado ainda !
+                </span>
+                <div>
+                    <br />
+
+                    <svg
+                        class="primary--text"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="50px"
+                        height="50px"
+                        preserveAspectRatio="xMidYMid meet"
+                        viewBox="0 0 16 16"
+                    >
+                        <path
+                            fill="currentColor"
+                            d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607l1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4a2 2 0 0 0 0-4h7a2 2 0 1 0 0 4a2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0a1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0zM7.354 5.646L8.5 6.793l1.146-1.147a.5.5 0 0 1 .708.708L9.207 7.5l1.147 1.146a.5.5 0 0 1-.708.708L8.5 8.207L7.354 9.354a.5.5 0 1 1-.708-.708L7.793 7.5L6.646 6.354a.5.5 0 1 1 .708-.708z"
+                        />
+                    </svg>
+                </div>
+                <br />
+                <nuxt-link to="/">Ir à página pricipal.</nuxt-link>
+            </v-card>
+        </div>
+
+        <div align="center" v-else>
             <v-card
                 max-width="900px"
                 class="secondary mx-8 mb-16"
@@ -11,8 +49,13 @@
                     <v-icon class="primary--text pb-3">mdi-cart</v-icon>
                 </v-card>
                 <v-divider class="third"></v-divider>
-
-                <v-simple-table class="secondary third--text mb-5">
+                <v-skeleton-loader
+                    class="mx-auto"
+                    max-width="900px"
+                    type="image"
+                    v-if="$fetchState.pending"
+                ></v-skeleton-loader>
+                <v-simple-table class="secondary third--text mb-5" v-else>
                     <template v-slot:default>
                         <thead>
                             <tr>
@@ -292,38 +335,6 @@
                         >COMPRAR
                     </v-btn>
                 </v-container>
-            </v-card>
-        </div>
-
-        <div align="center" v-else>
-            <v-card
-                align="center"
-                max-width="500px"
-                class="secondary mx-8 pa-8 justify-center"
-                elevation="5"
-            >
-                <span class="primary--text text-h6">
-                    Nenhum produto adicionado ainda !
-                </span>
-                <div>
-                    <br />
-
-                    <svg
-                        class="primary--text"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="50px"
-                        height="50px"
-                        preserveAspectRatio="xMidYMid meet"
-                        viewBox="0 0 16 16"
-                    >
-                        <path
-                            fill="currentColor"
-                            d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607l1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4a2 2 0 0 0 0-4h7a2 2 0 1 0 0 4a2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0a1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0zM7.354 5.646L8.5 6.793l1.146-1.147a.5.5 0 0 1 .708.708L9.207 7.5l1.147 1.146a.5.5 0 0 1-.708.708L8.5 8.207L7.354 9.354a.5.5 0 1 1-.708-.708L7.793 7.5L6.646 6.354a.5.5 0 1 1 .708-.708z"
-                        />
-                    </svg>
-                </div>
-                <br />
-                <nuxt-link to="/">Ir à página pricipal.</nuxt-link>
             </v-card>
         </div>
     </div>
