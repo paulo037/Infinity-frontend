@@ -322,6 +322,8 @@
                         />
                     </svg>
                 </div>
+                <br />
+                <nuxt-link to="/">Ir à página pricipal.</nuxt-link>
             </v-card>
         </div>
     </div>
@@ -343,7 +345,6 @@ export default {
     },
     methods: {
         async decrement(index) {
-            
             const cart = {
                 user_id: this.$auth.user.id,
                 product_id: this.products[index].product_id,
@@ -379,7 +380,8 @@ export default {
             await this.$axios
                 .put("/cart", { cart: cart })
                 .then(() => {
-                    if (this.products[index].quantity == quantity)this.products[index].quantity++;
+                    if (this.products[index].quantity == quantity)
+                        this.products[index].quantity++;
                 })
                 .catch((e) =>
                     this.toasted({
