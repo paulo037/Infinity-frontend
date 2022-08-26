@@ -134,7 +134,7 @@
                                     vertical
                                     class="secondary mx-2"
                                 ></v-divider>
-                                <v-icon class="text--end"> mdi-cart </v-icon>
+                                <v-icon class="text--end"> mdi-cart-plus </v-icon>
                             </v-btn>
                         </v-col>
                         <v-col cols="12" sm="5" lg="5" md="12" class="px-0">

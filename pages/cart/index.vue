@@ -1,11 +1,5 @@
 <template>
     <div>
-        <!-- <v-skeleton-loader
-            width="260px"
-            type=" card"
-            v-if="$fetchState.pending"
-        ></v-skeleton-loader> -->
-
         <div align="center" v-if="products.length == 0 && !$fetchState.pending">
             <v-card
                 align="center"

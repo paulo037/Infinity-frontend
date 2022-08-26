@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar height="60px" app class="secondary" elevation="1">
+  <v-app-bar height="60px"  app class=" nav_background text--accent" elevation="1">
     <v-toolbar-title>
-      <v-card to="/" class="secondary pl-4" flat align="center">
+      <v-card to="/" class="nav_background pl-4" flat align="center">
         <span class="font-weight-light primary--text">Infinity</span>
         <span class="primary--text"> Modas</span>
       </v-card>

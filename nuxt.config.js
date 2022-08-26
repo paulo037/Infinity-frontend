@@ -69,13 +69,13 @@ export default {
                     property: 'user',
                     // autoFetch: true
                 },
-                
+
                 endpoints: {
                     login: { url: '/signin', method: 'post' },
                     logout: { url: '/api/auth/logout', method: 'post' },
-                    user: { url: '/validateToken', method: 'post' , },
+                    user: { url: '/validateToken', method: 'post', },
                 },
-                
+
             }
         }
     },
@@ -94,20 +94,24 @@ export default {
             dark: true,
             themes: {
                 dark: {
-                    primary: colors.amber.darken2, // #E53935
-                    secondary: colors.grey.darken4, // #FFCDD2
-                    third: colors.grey.lighten5,
+                    primary: colors.amber.darken2, // dourado
+                    secondary: colors.grey.darken4, // black
+                    third: colors.grey.lighten5, //branco
                     accent: colors.amber.darken2, // #3F51B5
                     disabled_text: colors.grey.lighten2,
                     disabled: colors.orange.lighten2,
+                    nav_background: colors.grey.darken4, // black
+                    nav_text: colors.amber.darken2, // black
                 },
                 light: {
-                    primary: colors.grey.darken4,
-                    secondary: colors.grey.lighten5,
-                    third: colors.grey.darken4,
-                    accent: colors.amber.darken2,
+                    primary: colors.grey.darken4, // black
+                    secondary: colors.grey.lighten4, //branco
+                    third: colors.grey.darken4, // black
+                    accent: colors.amber.darken2, // dourado
                     disabled_text: colors.grey.lighten2,
                     disabled: colors.orange.lighten2,
+                    nav_background: colors.amber.lighten1, // dourado
+                    nav_text: colors.amber.darken2, // black
                 },
             },
 

@@ -3,7 +3,7 @@
         fixed
         :value.sync="isMenuOpen"
         right
-        class="secondary hidden-md-and-up"
+        class="nav_background hidden-md-and-up"
     >
         <v-list v-if="!hide">
             <v-list-item class="text-end">
