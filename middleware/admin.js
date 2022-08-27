@@ -1,10 +1,17 @@
-export default ({$auth, redirect}) => {
-    // console.log(context.$auth.$state.loggedIn)
-    if($auth.$state.loggedIn && $auth.$state.user.admin){
-        console.log("admin")
+export default async ({ $auth, redirect, $axios }) => {
+
+
+    const admin = await $axios.$get('/admin')
+        .catch(() => redirect("/"))
+
+
+    if ($auth.$state.loggedIn && admin.admin) {
+        return
     }
-    else{
-        return redirect("/")
-    }
-    
+
+    redirect("/")
+
 }
+
+
+

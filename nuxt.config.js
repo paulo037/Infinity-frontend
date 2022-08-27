@@ -21,7 +21,15 @@ export default {
         ],
         link: [
             { rel: 'icon', type: 'image/png', href: '/favicon.png' }
-        ]
+        ],
+        script: [
+            {
+                src: "https://sdk.mercadopago.com/js/v2",
+                async: true
+            },
+
+
+        ],
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
@@ -33,7 +41,7 @@ export default {
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
-        '~plugins/vue-the-mask.js'
+        '~plugins/vue-the-mask.js',
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -43,7 +51,9 @@ export default {
     buildModules: [
         // https://go.nuxtjs.dev/eslin  '@nuxtjs/eslint-module',
         // https://go.nuxtjs.dev/vuetify
-        ['@nuxtjs/vuetify']
+        ['@nuxtjs/vuetify',
+            "@nuxtjs/dotenv"
+        ]
     ],
 
     // Modules: https://go.nuxtjs.dev/config-modules
@@ -80,6 +90,9 @@ export default {
         }
     },
 
+    env: {
+        MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY
+    },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {

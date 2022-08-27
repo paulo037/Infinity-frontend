@@ -117,6 +117,7 @@
                         </v-btn>
                     </v-container>
                     <v-row justify="space-between">
+                        <div class="cho-container"></div>
                         <v-col cols="12" sm="5" md="12" lg="5" class="px-0">
                             <v-btn
                                 class="primary secondary--text"
@@ -134,7 +135,9 @@
                                     vertical
                                     class="secondary mx-2"
                                 ></v-divider>
-                                <v-icon class="text--end"> mdi-cart-plus </v-icon>
+                                <v-icon class="text--end">
+                                    mdi-cart-plus
+                                </v-icon>
                             </v-btn>
                         </v-col>
                         <v-col cols="12" sm="5" lg="5" md="12" class="px-0">
@@ -146,6 +149,7 @@
                                 @click="buy"
                                 >COMPRAR
                             </v-btn>
+                            <div id="button-checkout"></div>
                         </v-col>
                     </v-row>
                 </v-card>
@@ -164,6 +168,9 @@
                 </v-card>
             </v-col>
         </v-row>
+
+        <payment :dialog="dialog"></payment>
+
         <ListProduct
             v-if="category != null"
             label="Relacionados"
@@ -172,12 +179,15 @@
     </div>
 </template>
 
+<script src="@/plugins/mercadopago" ></script>
+
 <script>
 import { mapMutations } from "vuex";
 import ListProduct from "@/components/product/ListProduct.vue";
 import SkeletonProductBuy from "~/components/product/SkeletonProductBuy.vue";
 import Price from "@/components/product/Price.vue";
 import ProductQuantity from "@/components/product/ProductQuantity.vue";
+import Payment from "~/components/product/Payment.vue";
 
 export default {
     scrollToTop: true,
@@ -188,6 +198,7 @@ export default {
         ListProduct,
         ProductQuantity,
         Price,
+        Payment,
     },
     data() {
         return {
@@ -199,10 +210,14 @@ export default {
             product: {},
             color: null,
             product_id: null,
+            checkout: null,
+            dialog: false,
         };
     },
 
     async fetch() {
+        console.log(this.checkout);
+
         this.product_id = this.$store.state.product_id;
 
         if (!this.product_id) {
@@ -224,7 +239,18 @@ export default {
         ...mapMutations(["toasted"]),
 
         buy() {
-            console.log(this.quantity);
+            var mp = new MercadoPago(process.env.MP_PUBLIC_KEY, {
+                locale: "pt-BR",
+            });
+
+            console.log("ok");
+
+            this.checkout = mp.checkout({
+                preference: {
+                    id: "661619804-42559619-21b6-40db-ac20-835b5745a277",
+                },
+                autoOpen: true,
+            });
         },
 
         addCart() {
@@ -237,20 +263,20 @@ export default {
             };
 
             this.$axios
-                .post("/cart", { cart:newCart })
+                .post("/cart", { cart: newCart })
                 .then(() =>
-                    this.toasted({ text: `${this.$route.params.name} adicionado ao carrinho !` , color: "success"})
+                    this.toasted({
+                        text: `${this.$route.params.name} adicionado ao carrinho !`,
+                        color: "success",
+                    })
                 )
                 .catch((e) =>
                     this.toasted({
-                        text: e.response.data
-                            ? e.response.data
-                            : e
+                        text: e.response.data ? e.response.data : e,
                     })
                 );
 
             console.log(newCart);
-            // console.log(this.colors.indexOf(this.color), this.colors);
         },
 
         decrement() {
