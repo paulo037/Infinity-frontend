@@ -1,5 +1,12 @@
 <template>
     <div align="center">
+        <v-progress-circular
+            indeterminate
+            color="blue"
+            v-if="block"
+            style="position: absolute; left: 50%; z-index: 50; top: 250px"
+        ></v-progress-circular>
+
         <SkeletonProductBuy v-if="$fetchState.pending" />
         <v-row justify="center" class="pb-16" v-else>
             <v-col cols="10" md="5">
@@ -147,9 +154,9 @@
                                 width="200px"
                                 height="50px"
                                 @click="buy"
+                                :disabled="block"
                                 >COMPRAR
                             </v-btn>
-                            <div id="button-checkout"></div>
                         </v-col>
                     </v-row>
                 </v-card>
@@ -169,7 +176,7 @@
             </v-col>
         </v-row>
 
-        <payment :dialog="dialog"></payment>
+        <payment :dialog="dialog" :src="init_point"></payment>
 
         <ListProduct
             v-if="category != null"
@@ -179,7 +186,6 @@
     </div>
 </template>
 
-<script src="@/plugins/mercadopago" ></script>
 
 <script>
 import { mapMutations } from "vuex";
@@ -212,6 +218,9 @@ export default {
             product_id: null,
             checkout: null,
             dialog: false,
+            preferece_id: null,
+            init_point: null,
+            block: false,
         };
     },
 
@@ -238,19 +247,44 @@ export default {
     methods: {
         ...mapMutations(["toasted"]),
 
-        buy() {
+        async buy() {
             var mp = new MercadoPago(process.env.MP_PUBLIC_KEY, {
                 locale: "pt-BR",
             });
 
-            console.log("ok");
+            await this.createPreference();
+            console.log(this.preferece_id);
 
             this.checkout = mp.checkout({
                 preference: {
-                    id: "661619804-42559619-21b6-40db-ac20-835b5745a277",
+                    id: this.preferece_id,
                 },
                 autoOpen: true,
             });
+        },
+
+        async createPreference() {
+            console.log("ok");
+            this.block = true;
+            const products = [
+                {
+                    title: this.product.name,
+                    unit_price: parseFloat(this.product.price),
+                    quantity: this.quantity,
+                    id: this.product.id,
+                    picture_url: this.product.images[0].url,
+                    description: this.product.description,
+                },
+            ];
+
+            console.log(products);
+
+            await this.$axios
+                .$post("preference", { items: products })
+                .then((response) => {
+                    this.preferece_id = response.id;
+                    this.block = false;
+                });
         },
 
         addCart() {
