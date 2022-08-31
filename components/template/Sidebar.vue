@@ -24,7 +24,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item v-if="$auth.loggedIn" @click="$auth.logout()">
+            <v-list-item v-if="$auth.loggedIn" @click="logout">
                 <v-list-item-content>
                     <MdiLinkVue
                         :icon="'mdi-logout'"
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import MdiLinkVue from "./MdiLink.vue";
 
 export default {
@@ -85,6 +85,13 @@ export default {
         changeMenuVisible() {
             this.$store.commit("changeMenu");
         },
+        ...mapMutations(["toasted"]),
+
+
+        logout(){
+            this.toasted({ text: "Logout realizado com sucesso !" , color: "success"});
+            this.$auth.logout();
+        }
     },
 
     computed: {

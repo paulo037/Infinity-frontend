@@ -1,17 +1,27 @@
-export default async ({ route, $axios, redirect }) => {
+export default async ({ route, $axios, redirect, store, $auth }) => {
 
     const name = route.params ? route.params.name : null
 
-    if (name) {
-        $axios.$get(`/product-id/${name}`)
-            .catch((e) => {
-                redirect('/not-found')
-            })
 
-    } else {
-        redirect('/not-found')
+    const response = await $axios.$get(`/product-id/${name}`).catch(e => console.log(e))
+
+
+    if (response)
+        store.commit('setProduct', response.id)
+    else {
+        return redirect("/not-found")
+    }
+
+
+    if (response.id)
+        store.commit('setProduct', response.id)
+    else {
+        return redirect("/not-found")
     }
 
 
 
-}       
+
+
+
+}

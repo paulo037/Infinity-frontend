@@ -84,12 +84,12 @@ export default {
             show1: false,
             show2: false,
             user: {
-                // first_name: "",
-                // last_name: "",
-                // cpf: "",
-                // email: "",
-                // password: "",
-                // confirm_password: "",
+                first_name: "",
+                last_name: "",
+                cpf: "",
+                email: "",
+                password: "",
+                confirm_password: "",
             },
 
             rules: {

@@ -7,6 +7,7 @@
                 <v-text-field
                     label="E-mail"
                     name="email"
+                    type="email"
                     v-model="user.email"
                     required
                     outlined
@@ -39,23 +40,7 @@
                         CONTINUAR
                     </v-btn>
                 </v-container>
-                <!-- <v-btn
-          @click="$auth.loginWith('google')"
-          height="40px"
-          class="third pa-0 rounded-pill pr-2"
-          small
-        >
-          <div height="40px" width="40px" class="rounded-circle">
-            <v-img
-              :src="'google.svg'"
-              class="ma-2"
-              height="25.5px"
-              width="25.5px"
-            >
-            </v-img>
-          </div>
-          <span class="secondary--text"> Fazer login com o Google </span>
-        </v-btn> -->
+
             </v-form>
         </v-card>
 
@@ -68,10 +53,7 @@
 import { mapMutations } from "vuex";
 
 export default {
-    // middleware: 'a',
-    // middleware (){
-    //  console.log("okookokoko")
-    // },
+
     data() {
         return {
             user: {
@@ -85,13 +67,6 @@ export default {
 
     methods: {
         async login() {
-            //   console.log(this.user);
-            //   await this.$axios
-            //     .$post(`signin/`, {
-            //       email: this.user.email,
-            //       password: this.user.password,
-            //     })
-            //     .catch((e) => console.log(e));
 
             this.$auth
                 .loginWith("local", {
@@ -101,6 +76,7 @@ export default {
                     },
                 })
                 .then((response) => {
+                    // this.$auth.setUserToken(response.data.tokens.access_token, response.data.tokens.refresh_token)
                     console.log(response);
                     this.toasted({
                         text: "Login realizado com sucesso !",

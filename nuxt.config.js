@@ -3,6 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 export default {
     // Global page headers: https://go.nuxtjs.dev/config-head
     server: {
+
         // port: process.env.PORT | 3000, // default: 3000     
         host: '0.0.0.0',
         // default: localhost   
@@ -11,7 +12,7 @@ export default {
         titleTemplate: 'Infinity Modas',
         title: 'Infinity Modas',
         htmlAttrs: {
-            lang: 'en'
+            lang: 'pt-br'
         },
         meta: [
             { charset: 'utf-8' },
@@ -61,34 +62,62 @@ export default {
         // https://go.nuxtjs.dev/axios
 
         '@nuxtjs/axios',
-        '@nuxtjs/axios',
         '@nuxtjs/auth-next'
 
     ],
 
     auth: {
+
         strategies: {
             local: {
+                scheme: 'refresh',
+                localStorage: false,
+                autoLogout: true,
+
+                refreshToken: {
+                    property: 'refresh_token',
+                    data: 'refresh_token',
+                    tokenRequired: true,
+
+                },
+
                 token: {
-                    property: 'token',
+                    property: 'access_token',
+                  
                     global: true,
-                    // required: true,
                     type: 'Bearer'
                 },
                 user: {
                     property: 'user',
-                    // autoFetch: true
                 },
+
+
 
                 endpoints: {
                     login: { url: '/signin', method: 'post' },
-                    logout: { url: '/api/auth/logout', method: 'post' },
+                    logout: false,
                     user: { url: '/validateToken', method: 'post', },
+                    refresh: { url: '/refreshToken', method: 'post' },
                 },
 
             }
-        }
+        },
+
+
+        redirect: {
+            login: '/',
+            logout: '/login/',
+            home: '/',
+            callback: '/login',
+        },
+
+
     },
+
+    router: {
+        middleware: ['token']
+    },
+
 
     env: {
         MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY

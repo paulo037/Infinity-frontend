@@ -19,7 +19,6 @@ export const mutations = {
     },
 
     setProduct(state, payload) {
-        console.log("setado dentro")
       state.product_id = payload
     }
 }

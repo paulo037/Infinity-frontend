@@ -4,7 +4,8 @@
             indeterminate
             color="blue"
             v-if="block"
-            style="position: absolute; left: 50%; z-index: 50; top: 250px"
+            :size="60"
+            style="position: absolute; left: 47%; z-index: 50; top: 0px"
         ></v-progress-circular>
 
         <SkeletonProductBuy v-if="$fetchState.pending" />
@@ -157,6 +158,7 @@
                                 :disabled="block"
                                 >COMPRAR
                             </v-btn>
+                           
                         </v-col>
                     </v-row>
                 </v-card>
@@ -175,8 +177,6 @@
                 </v-card>
             </v-col>
         </v-row>
-
-        <payment :dialog="dialog" :src="init_point"></payment>
 
         <ListProduct
             v-if="category != null"
@@ -225,14 +225,11 @@ export default {
     },
 
     async fetch() {
-        console.log(this.checkout);
-
         this.product_id = this.$store.state.product_id;
 
         if (!this.product_id) {
-            this.product_id = await this.$axios.$get(
-                `/product-id/${this.$route.params.name}`
-            );
+            this.$router.push("not-found");
+            return;
         }
 
         this.product = await this.$axios.$get(`product/${this.product_id}`);
@@ -248,6 +245,7 @@ export default {
         ...mapMutations(["toasted"]),
 
         async buy() {
+            
             var mp = new MercadoPago(process.env.MP_PUBLIC_KEY, {
                 locale: "pt-BR",
             });
@@ -261,10 +259,11 @@ export default {
                 },
                 autoOpen: true,
             });
+
+
         },
 
         async createPreference() {
-            console.log("ok");
             this.block = true;
             const products = [
                 {

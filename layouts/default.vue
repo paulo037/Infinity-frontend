@@ -7,7 +7,7 @@
             <v-switch
                 v-model="switch1"
                 class="
-                    mt-15
+                    mt-0
                     pr-5
                     primary--text
                     secondary
