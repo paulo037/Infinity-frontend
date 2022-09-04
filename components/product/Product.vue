@@ -66,7 +66,7 @@ export default {
         name: String,
         rating: Number | NaN,
         image: String,
-        id: Number,
+        id: String,
         sold: Number | NaN,
     },
 

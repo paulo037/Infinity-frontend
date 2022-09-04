@@ -28,13 +28,37 @@
             <v-col
                 cols="10"
                 md="3"
-                class="d-flex align-start flex-column"
+                class="d-flex align-center pt-16 px-0 flex-column"
                 v-if="!this.$route.query.category"
             >
-                <h3 class="primary--text text-center align-self-center py-2">
-                    Filtrar por categoria
-                </h3>
-                <div class="align-self-center">
+                <v-simple-table>
+                    <template v-slot:default>
+                        <thead>
+                            <tr  >
+                                <th class="text-left px-10 primary--text text-h6">
+                                    Categorias
+                                </th>
+                                <th class="text-left"></th>
+                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="(item, index) in categories"
+                                :key="index"
+                            >
+                                <td>{{ item.category }}</td>
+                                <td>
+                                    <v-checkbox
+                                        v-model="selected"
+                                        :value="item"
+                                    ></v-checkbox>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </template>
+                </v-simple-table>
+                <!-- <div class="align-self-center">
                     <v-select
                         :items="categories"
                         item-text="category"
@@ -46,7 +70,7 @@
                         style="width: 250px"
                     >
                     </v-select>
-                </div>
+                </div> -->
             </v-col>
             <v-col cols="10" md="9" class="">
                 <list-product-no-slide
@@ -70,7 +94,7 @@ export default {
     data() {
         return {
             categories: [],
-            select: null,
+            selected: [],
             products: [],
             loading: false,
         };
@@ -89,18 +113,27 @@ export default {
         },
 
         productsWithFilter() {
-            if (this.select == null) {
+            if (this.selected.length == 0) {
                 return this.products;
             }
 
             let products = [];
 
             this.products.forEach((p) => {
-                p.categories.forEach((c) => {
-                    if (c.id == this.select) {
-                        products.push(p);
+                let pertence = true;
+                this.selected.forEach((c) => {
+                    if (
+                        !p.categories.find(
+                            (category) => c.category == category.category
+                        )
+                    ) {
+                        pertence = false;
                     }
                 });
+
+                if (pertence) {
+                    products.push(p);
+                }
             });
 
             return products;
@@ -120,7 +153,11 @@ export default {
 
                 this.products.forEach(async (p) => {
                     p.categories.forEach((c) => {
-                        if (categories.indexOf(c) == -1) {
+                        if (
+                            !categories.find(
+                                (category) => c.category == category.category
+                            )
+                        ) {
                             categories.push(c);
                         }
                     });

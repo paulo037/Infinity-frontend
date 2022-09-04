@@ -40,7 +40,6 @@
                         CONTINUAR
                     </v-btn>
                 </v-container>
-
             </v-form>
         </v-card>
 
@@ -53,21 +52,18 @@
 import { mapMutations } from "vuex";
 
 export default {
-
     data() {
         return {
             user: {
                 email: "",
                 password: "",
             },
-            show_password:null,
-            
+            show_password: null,
         };
     },
 
     methods: {
         async login() {
-
             this.$auth
                 .loginWith("local", {
                     data: {
@@ -76,12 +72,14 @@ export default {
                     },
                 })
                 .then((response) => {
-                    // this.$auth.setUserToken(response.data.tokens.access_token, response.data.tokens.refresh_token)
-                    console.log(response);
                     this.toasted({
-                        text: "Login realizado com sucesso !",
+                        text: "Login realizado com sucesso!",
                         color: "success",
                     });
+                    if (this.$store.state.back_url) {
+                        this.$router.push(this.$store.state.back_url);
+                        this.$store.commit("SetBack_url", null);
+                    }
                 })
                 .catch((e) =>
                     e.response.data

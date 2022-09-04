@@ -28,7 +28,7 @@ export default {
   props: {
     name: String,
     img: String,
-    id: Number,
+    id: String,
   },
 };
 </script>

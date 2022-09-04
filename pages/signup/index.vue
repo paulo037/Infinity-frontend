@@ -120,7 +120,7 @@ export default {
                 })
                 .then(() => {
                     this.toasted({
-                        text: "Conta criada com sucesso !",
+                        text: "Conta criada com sucesso!",
                         color: "success",
                     });
 
@@ -133,9 +133,13 @@ export default {
                         })
                         .then((response) => {
                             this.toasted({
-                                text: "Login realizado com sucesso !",
+                                text: "Login realizado com sucesso!",
                                 color: "success",
                             });
+                            if (this.$store.state.back_url){
+                                this.$router.push(this.$store.state.back_url)
+                                this.$store.commit("SetBack_url", null)
+                            }
                         })
                         .catch((e) =>
                             e.response.data
@@ -164,11 +168,11 @@ export default {
 
         validateName() {
             if (this.user.first_name == "") {
-                this.toasted({ text: "Nome inválido !" });
+                this.toasted({ text: "Nome inválido!" });
                 return false;
             }
             if (this.user.last_name == "") {
-                this.toasted({ text: "Sobrenome inválido !" });
+                this.toasted({ text: "Sobrenome inválido!" });
                 return false;
             }
             return true;
@@ -200,7 +204,7 @@ export default {
             if (Resto != parseInt(cpf.substring(10, 11))) valido = false;
 
             if (!valido) {
-                this.toasted({ text: "CPF inválido !" });
+                this.toasted({ text: "CPF inválido!" });
             }
             return valido;
         },
@@ -212,24 +216,24 @@ export default {
             let valido = pattern.test(this.user.email);
 
             if (!valido) {
-                this.toasted({ text: "E-mail inválido !" });
+                this.toasted({ text: "E-mail inválido!" });
             }
             return valido;
         },
 
         validatePassword() {
             if (this.user.password.length < 8) {
-                this.toasted({ text: "Senha inválido !" });
+                this.toasted({ text: "Senha inválido!" });
                 return false;
             }
 
             if (this.user.confirm_password < 8) {
-                this.toasted({ text: "Confirmação de senha inválido !" });
+                this.toasted({ text: "Confirmação de senha inválido!" });
                 return false;
             }
 
             if (this.user.password != this.user.confirm_password) {
-                this.toasted({ text: "Senhas não conferem !" });
+                this.toasted({ text: "Senhas não conferem!" });
                 return false;
             }
 

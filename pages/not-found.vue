@@ -6,7 +6,7 @@
             class="secondary mx-8 pa-8 justify-center primary--text"
             elevation="5"
         >
-            <span class="text-h6"> Parece que esta página não existe ! </span>
+            <span class="text-h6"> Parece que esta página não existe! </span>
             <div>
                 <br />
                 <v-icon class="primary--text" height="200px" x-large

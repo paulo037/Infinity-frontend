@@ -1,10 +1,5 @@
 <template>
-    <v-app-bar
-        height="60px"
-        
-        class="nav_background text--accent"
-        elevation="1"
-    >
+    <v-app-bar height="60px" class="nav_background text--accent" elevation="1">
         <v-toolbar-title>
             <v-card to="/" class="nav_background pl-4" flat align="center">
                 <span class="font-weight-light primary--text">Infinity</span>
@@ -16,7 +11,7 @@
 
         <v-text-field
             v-model="term"
-            placeholder="Pesquisar"
+            placeholder="Buscar Produtos"
             class="mt-6 primary--text"
             dense
             outlined
@@ -34,6 +29,37 @@
                 <v-btn text class="primary--text hidden-sm-and-down py-8">
                     <v-icon> mdi-cart </v-icon>
                     <span v-bind:style="{ marginLeft: '5px' }"></span>
+
+                    <span
+                        class="blue white--text rounded-circle"
+                        style="
+                            position: absolute;
+                            left: 18px;
+                            top: -12px;
+                            padding: 3px 1px;
+                            font-size: x-small;
+                        "
+                        v-if="
+                            $store.state.numberOfProductsInCart > 9 &&
+                            $store.state.numberOfProductsInCart < 100
+                        "
+                    >
+                        {{ $store.state.numberOfProductsInCart }}
+                    </span>
+
+                    <span
+                        class="blue white--text rounded-circle"
+                        style="
+                            position: absolute;
+                            right: -2px;
+                            top: -7px;
+                            font-size: small;
+                            width: 15px;
+                            height: 15px;
+                        "
+                        v-else-if="$store.state.numberOfProductsInCart < 9"
+                        >{{ $store.state.numberOfProductsInCart }}</span
+                    >
                 </v-btn>
             </NuxtLink>
 
@@ -48,7 +74,7 @@
                     @click="logout"
                 >
                     <v-icon> mdi-logout </v-icon>
-                    <span v-bind:style="{ marginLeft: '5px' }">LOGOUT</span>
+                    <span v-bind:style="{ marginLeft: '5px' }">Sair</span>
                 </v-btn>
             </NuxtLink>
 
@@ -56,7 +82,7 @@
                 <v-btn text class="primary--text hidden-sm-and-down py-8">
                     <v-icon> mdi-account </v-icon>
                     <span v-bind:style="{ marginLeft: '5px' }"
-                        >LOGIN | CADASTRO</span
+                        >Entrar | CADASTRO</span
                     >
                 </v-btn>
             </NuxtLink>
@@ -64,8 +90,8 @@
             <NuxtLink
                 class="text-decoration-none"
                 to="/admin"
-                v-if="$auth.user ? $auth.user.admin : false"
-            >
+                v-if="$auth.user ? $auth.user.ad : false"
+                >
                 <v-btn text class="primary--text hidden-sm-and-down py-8">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -96,10 +122,16 @@
 </template>
 
 <script>
-
 import { mapState, mapMutations } from "vuex";
 
 export default {
+    async fetch() {
+        if (this.$auth.loggedIn) {
+            let response = await this.$axios.$get("cart/products-number");
+            this.$store.commit("setNumberOfProductsInCart", response.number);
+        }
+    },
+
     data() {
         return {
             loading: false,
@@ -117,7 +149,11 @@ export default {
             this.$store.commit("changeMenu");
         },
         logout() {
-            this.toasted({ text: "Logout realizado com sucesso !", color: "success" });
+            this.toasted({
+                text: "Logout realizado com sucesso!",
+                color: "success",
+            });
+
             this.$auth.logout();
         },
         async search() {
@@ -151,8 +187,17 @@ export default {
                 this.term = this.text;
             }
         },
-        select() {
-            console.log(this.term, this.select);
+
+        async "$auth.loggedIn"() {
+            if (this.$auth.loggedIn) {
+                let response = await this.$axios.$get("cart/products-number");
+                this.$store.commit(
+                    "setNumberOfProductsInCart",
+                    response.number
+                );
+            } else {
+                this.$store.commit("setNumberOfProductsInCart", 0);
+            }
         },
     },
 };

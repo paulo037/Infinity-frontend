@@ -1,5 +1,15 @@
 <template>
     <div>
+        <v-dialog v-model="preference_loading">
+            <v-progress-circular
+                indeterminate
+                color="blue"
+                v-if="preference_loading"
+                :size="60"
+                style="position: fixed; top: 98px; left: 48%; z-index: 50"
+            ></v-progress-circular>
+        </v-dialog>
+
         <div align="center" v-if="products.length == 0 && !$fetchState.pending">
             <v-card
                 align="center"
@@ -8,7 +18,7 @@
                 elevation="5"
             >
                 <span class="primary--text text-h6">
-                    Nenhum produto adicionado ainda !
+                    Nenhum produto adicionado ainda!
                 </span>
                 <div>
                     <br />
@@ -110,7 +120,14 @@
                                             </router-link>
                                             <div class="text ml-5">
                                                 <span>
-                                                    {{ item.name }}
+                                                    {{
+                                                        item.name.length > 28
+                                                            ? item.name.substring(
+                                                                  0,
+                                                                  25
+                                                              ) + "..."
+                                                            : item.name
+                                                    }}
                                                 </span>
 
                                                 <span class="primary--text">
@@ -219,7 +236,14 @@
                                                     text-body-1
                                                 "
                                             >
-                                                {{ item.name }}
+                                                {{
+                                                    item.name.length > 28
+                                                        ? item.name.substring(
+                                                              0,
+                                                              25
+                                                          ) + "..."
+                                                        : item.name
+                                                }}
                                             </span>
 
                                             <span class="text-subtitle-3">
@@ -326,29 +350,118 @@
                         class="primary secondary--text"
                         width="60%"
                         height="50px"
+                        @click="selectAddress"
                         >COMPRAR
                     </v-btn>
                 </v-container>
             </v-card>
         </div>
+
+        <ChoseAddress
+            :addresses="addresses"
+            :model="choseAddressModel"
+            v-on:buy="buy"
+            v-on:back="choseAddressModel = false"
+            v-on:selectedChange="(s) => (selected = s)"
+        />
     </div>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
-
+import ChoseAddress from "~/components/product/ChoseAddress.vue";
 export default {
-    scrollToTop: true,
+    components: {
+        ChoseAddress,
+    },
 
     async fetch() {
+        if (!this.$auth.loggedIn) {
+            this.toasted({
+                text: "Entre ou crie uma conta para ver seu carrinho!",
+            });
+            this.SetBack_url(this.$router.history.current.path);
+            return this.$router.push("/login");
+        }
+
         this.products = await this.$axios.$get(`cart/${this.$auth.user.id}`);
     },
     data() {
         return {
             products: [],
+            preference_loading: false,
+            choseAddressModel: false,
+            addresses: [],
+            selected: [0],
         };
     },
     methods: {
+        async selectAddress() {
+            if (!this.$auth.loggedIn) {
+                this.toasted({
+                    text: "Entre ou crie uma conta para comprar produtos!",
+                });
+                this.SetBack_url(this.$router.history.current.path);
+                return this.$router.push("/login");
+            }
+
+            await this.getAddresses();
+            this.choseAddressModel = true;
+        },
+
+        async getAddresses() {
+            await this.$axios
+                .get("/address")
+                .then((a) => {
+                    this.addresses = a.data;
+                })
+                .catch((e) =>
+                    this.toasted({
+                        text: e.response.data ? e.response.data : e,
+                    })
+                );
+        },
+
+        async buy() {
+            this.choseAddressModel = false;
+            var mp = new MercadoPago(process.env.MP_PUBLIC_KEY, {
+                locale: "pt-BR",
+            });
+
+            await this.createPreference();
+
+            this.checkout = mp.checkout({
+                preference: {
+                    id: this.preferece_id,
+                },
+                autoOpen: true,
+            });
+        },
+
+        async createPreference() {
+            this.preference_loading = true;
+
+            let products = [];
+
+            this.products.forEach((p) => {
+                products.push({
+                    product_id: p.product_id.toString(),
+                    quantity: p.quantity,
+                    size: p.size,
+                    color: p.color,
+                });
+            });
+
+            const address = this.addresses[this.selected[0]];
+
+            await this.$axios
+                .$post("preference", { items: products, address: address })
+                .then((response) => {
+                    this.preferece_id = response.id;
+                    this.preference_loading = false;
+                });
+        },
+
         async decrement(index) {
             const cart = {
                 user_id: this.$auth.user.id,
@@ -410,6 +523,7 @@ export default {
             await this.$axios
                 .delete("/cart", { data: { cart: cart } })
                 .then(() => {
+                    this.$store.commit("decrementNumberOfProductsInCart");
                     this.toasted({
                         text: `O produto ${name} foi removido do carrinho`,
                         color: "success",
@@ -432,7 +546,6 @@ export default {
             this.products.map(
                 (product) => (amout += product.price * product.quantity)
             );
-            console.log(amout);
             return amout;
         },
     },

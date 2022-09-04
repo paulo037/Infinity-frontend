@@ -28,7 +28,7 @@
             :color="$store.state.color"
         ></toasted-vue>
 
-        <v-main class="secondary pa-2 d-flex">
+        <v-main class="secondary pa-5 d-flex">
             <Nuxt class="pa-0"> </Nuxt>
         </v-main>
 

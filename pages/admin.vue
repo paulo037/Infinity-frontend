@@ -52,7 +52,8 @@ export default {
         },
     },
     created() {
-        if (this.$router.history.current.path) this.$router.push("/admin/user");
+        let route = this.$router.history.current.path.split("/")
+        if (route.length <= 2) this.$router.push("/admin/user");
     },
 };
 </script>

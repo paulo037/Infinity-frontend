@@ -32,7 +32,7 @@
             <v-col
                 class="ma-0 pa-0 d-flex flex-grow-0"
                 v-for="(product, index) in productsWithPagination"
-                :key="index"
+                :key="`${index}-${product.name}`"
             >
                 <Product
                     :name="product.name"

@@ -27,7 +27,7 @@
                     auto-grow
                     name="input-7-1"
                     label="Descrição"
-                    v-model="product.description"
+                    v-model="descriptionText"
                 ></v-textarea>
 
                 <ProductImage :items="product.images" />
@@ -84,6 +84,7 @@ export default {
         errors: {},
         timeout: 3000,
         creating: false,
+        descriptionText: "",
         product: {
             name: null,
             price: null,
@@ -109,9 +110,22 @@ export default {
     async fetch() {
         let colors = [];
         if (this.$route.params.id != "new-product") {
-            this.product = await this.$axios.$get(
-                `product/${this.$route.params.id}`
-            );
+            this.product = await this.$axios
+                .$get(`product/${this.$route.params.id}`)
+                .catch((e) => {
+                    e.response.data
+                        ? this.toasted({ text: e.response.data })
+                        : this.toasted({ text: e });
+                });
+
+            let pDescription = this.product.description;
+
+            if (pDescription) {
+                this.descriptionText = pDescription
+                    .replace(/<br>/g, "\n")
+                    .replace(/<wbr\/\>&nbsp;<wbr\/\>/g, " ");
+            }
+
             this.product.colors.forEach((item) => {
                 if (!colors.find((color) => color.value == item.color)) {
                     colors.push({
@@ -120,11 +134,13 @@ export default {
                     });
                 }
             });
+
             this.initialColor(colors);
             this.initialSizes(this.product.colors);
 
             return;
         }
+
         this.initialColor(colors);
         this.initialSizes(this.product.colors);
         this.creating = true;
@@ -138,6 +154,10 @@ export default {
         }),
         async save() {
             this.product.colors = this.$store.state.admin.product.sizes;
+            this.product.description = await this.descriptionText
+                .replace(/\n/g, "<br>")
+                .replace(/ /g, "<wbr/>&nbsp;<wbr/>");
+
             if (!this.validation()) return;
             await this.uploadImages();
             await this.$axios
@@ -149,6 +169,7 @@ export default {
                         text: "Modificações salvas!",
                         color: "success",
                     });
+                    this.$router.push("/admin/product");
                 })
                 .catch((e) => {
                     e.response.data
@@ -179,6 +200,7 @@ export default {
                         categories: [],
                     };
                     this.initialColor([]);
+                    this.$router.push("/admin/product");
                 })
                 .catch((e) => {
                     e.response.data
@@ -190,8 +212,9 @@ export default {
             let formData = new FormData();
             let append = false;
             this.product.images.forEach((image, index) => {
-                if (!image.id) {
-                    formData.append("uploadImages", image);
+                if (image.file) {
+                    image.file.primary = image.primary;
+                    formData.append("uploadImages", image.file);
                     append = true;
                 }
             });
@@ -261,7 +284,7 @@ export default {
             }
 
             if (this.product.colors.length < 1) {
-                this.toasted({ text: "Adicione pelo menos um tamanho !" });
+                this.toasted({ text: "Adicione pelo menos um tamanho!" });
                 return false;
             }
 

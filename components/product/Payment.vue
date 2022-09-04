@@ -1,13 +1,8 @@
 <template>
     <div class="text-center">
-        <v-dialog persistent max-width="60%" v-model="dialog">
-            <iframe
-                height="500px"
-                target="_self"
-                src="https://sandbox.mercadopago.com.br/checkout/v1/modal?pref_id=661619804-69a1f2da-86ea-4929-b48b-2cd3ff6c37b2"
-            >
-
-           
+        <v-dialog persistent>
+            <iframe height="812px" id="iFrame" :src="link">
+                <div>sair</div>
             </iframe>
         </v-dialog>
     </div>
@@ -17,11 +12,18 @@
 export default {
     props: {
         dialog: Boolean,
+        src: String,
     },
 
     watch: {
         dialog() {
-            // window.open("https://www.codexworld.com/", "_self");
+            // window.open = function (url, name, features, replace) {
+            //     this.$el.querySelector("#k").src = url;
+            // };
+
+            this.$el.querySelector("#k").src =
+                "https://sandbox.mercadopago.com.br/checkout/v1/redirect?pref_id=661619804-80850242-2f20-4c57-9ff7-941503af326d";
+            console.log(this.$el.querySelector("#k"));
         },
     },
 
