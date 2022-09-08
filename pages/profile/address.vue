@@ -79,7 +79,7 @@
                         <v-text-field
                             outlined
                             label="Telefone para contato"
-                            v-mask="'+55 (##) #########'"
+                            v-mask="'(##) #########'"
                             v-model="address.telephone"
                             
                         ></v-text-field>
@@ -107,6 +107,8 @@
 </template>
 
 <script>
+import { send } from 'q';
+
 export default {
     data() {
         return {
@@ -132,8 +134,15 @@ export default {
     },
 
     async fetch() {
-        if (this.id) {
-            //get address
+        if (this.$route.query.edit) {
+            this.address = await this.$axios.$get(`/address/${this.$route.query.id}`)
+        }
+    },
+
+
+    methods:{
+        async send(){
+            
         }
     },
 

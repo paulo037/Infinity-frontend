@@ -129,7 +129,7 @@
                     <v-row justify="space-around">
                         <v-col cols="10" sm="5" md="7" lg="5" class="px-0">
                             <v-btn
-                                class="accent third--text"
+                                class="accent white--text"
                                 height="50px"
                                 append
                                 width="200px"
@@ -144,7 +144,7 @@
                                 >
                                 <v-divider
                                     vertical
-                                    class="third mx-2"
+                                    class="white mx-2"
                                 ></v-divider>
                                 <v-icon class="text--end">
                                     mdi-cart-plus
@@ -153,11 +153,11 @@
                         </v-col>
                         <v-col cols="10" sm="5" lg="5" md="7" class="px-0">
                             <v-btn
-                                class="accent third--text font-weight-bold"
+                                class="accent white--text font-weight-bold"
                                 block
                                 width="200px"
                                 height="50px"
-                                @click="selectAddress"
+                                @click="checkout"
                                 :disabled="preference_loading"
                                 >COMPRAR
                             </v-btn>
@@ -187,14 +187,6 @@
             :id="category"
         />
 
-        <ChoseAddress
-            :addresses="addresses"
-            :model="choseAddressModel"
-            :selected="selected"
-            v-on:buy="buy"
-            v-on:back="choseAddressModel = false"
-            v-on:selectedChange="(s) => (selected = s)"
-        />
     </div>
 </template>
 
@@ -206,7 +198,8 @@ import SkeletonProductBuy from "~/components/product/SkeletonProductBuy.vue";
 import Price from "@/components/product/Price.vue";
 import ProductQuantity from "@/components/product/ProductQuantity.vue";
 import Payment from "~/components/product/Payment.vue";
-import ChoseAddress from "@/components/product/ChoseAddress.vue";
+import { v4 } from "uuid";
+import {sign } from "jsonwebtoken";
 
 export default {
     middleware: ["product-view"],
@@ -217,7 +210,6 @@ export default {
         ProductQuantity,
         Price,
         Payment,
-        ChoseAddress,
     },
 
     data() {
@@ -267,7 +259,8 @@ export default {
     methods: {
         ...mapMutations(["toasted", "SetBack_url"]),
 
-        async selectAddress() {
+        async checkout() {
+
             if (!this.$auth.loggedIn) {
                 this.toasted({
                     text: "Entre ou crie uma conta para comprar produtos!",
@@ -276,66 +269,40 @@ export default {
                 return this.$router.push("/login");
             }
 
-            await this.getAddresses();
-            this.choseAddressModel = true;
-        },
 
-        async getAddresses() {
-            await this.$axios
-                .get("/address")
-                .then((a) => {
-                    this.addresses = a.data;
-                    console.log(this.addresses);
-                })
-                .catch((e) =>
-                    this.toasted({
-                        text: e.response.data ? e.response.data : e,
-                    })
-                );
-        },
+            const reference = v4();
 
-        async buy() {
-            this.choseAddressModel = false;
-
-            var mp = new MercadoPago(process.env.MP_PUBLIC_KEY, {
-                locale: "pt-BR",
-            });
-
-            await this.createPreference();
-
-            mp.checkout({
-                preference: {
-                    id: this.preferece_id,
-                },
-                autoOpen: true,
-            });
-        },
-
-        async createPreference() {
-            this.preference_loading = true;
-            const products = [
+            const items = [
                 {
                     quantity: this.quantity,
                     product_id: this.product.id,
+                    name: this.product.name,
+                    price: this.product.price,
+                    image: this.product.images[0].url,
                     size: this.product.colors[this.size_selected].size,
                     color: this.product.colors[this.size_selected].color,
-                },
-            ];
+                }
+            ]
+            
 
-            const address = this.addresses[this.selected[0]];
+            localStorage.setItem(
+                "reference",
+                sign(reference, process.env.JWT_SECRET)
+            );
 
-            await this.$axios
-                .$post("preference", { items: products, address: address })
-                .then((response) => {
-                    this.preferece_id = response.id;
-                    this.preference_loading = false;
-                })
-                .catch((e) =>
-                    this.toasted({
-                        text: e.response.data ? e.response.data : e,
-                    })
-                );
+            localStorage.setItem(
+                "checkout",
+                sign(JSON.stringify(items), process.env.JWT_SECRET)
+            );
+
+
+            await this.$router.push({
+                path: "/checkout",
+                query: { reference: reference, type: "unique" },
+            });
         },
+
+       
 
         addCart() {
             if (!this.$auth.loggedIn) {

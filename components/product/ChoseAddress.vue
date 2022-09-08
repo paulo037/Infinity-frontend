@@ -29,7 +29,11 @@
                 <v-divider></v-divider>
                 <v-simple-table>
                     <tbody>
-                        <tr v-for="(address, index) in addresses" :key="index">
+                        <tr
+                            
+                            v-for="(address, index) in addresses"
+                            :key="index"
+                        >
                             <td style="width: 20px">
                                 <v-icon>mdi-home</v-icon>
                             </td>

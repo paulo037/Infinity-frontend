@@ -64,7 +64,7 @@
                         <thead>
                             <tr>
                                 <th class="text-left third--text px-8">
-                                    PRODUTOS
+                                    PRODUTO
                                 </th>
 
                                 <th
@@ -119,7 +119,13 @@
                                                 ></v-img>
                                             </router-link>
                                             <div class="text ml-5">
-                                                <span>
+                                                <span
+                                                    class="
+                                                        primary--text
+                                                        font-weight-bold
+                                                        text-body-1
+                                                    "
+                                                >
                                                     {{
                                                         item.name.length > 28
                                                             ? item.name.substring(
@@ -130,7 +136,7 @@
                                                     }}
                                                 </span>
 
-                                                <span class="primary--text">
+                                                <span>
                                                     <br />
                                                     R$:
                                                     {{
@@ -182,16 +188,14 @@
                                                         mdi-plus
                                                     </v-icon>
                                                 </div>
-                                                <span class="primary--text">
-                                                    {{ item.color }}
+                                                <span>
+                                                    Cor: {{ item.color }}
                                                 </span>
-                                                <span class="third--text"
-                                                    >|</span
-                                                >
 
-                                                <span class="primary--text">{{
-                                                    item.size
-                                                }}</span>
+                                                <div>
+                                                    Tamanho:
+                                                    {{ item.size }}
+                                                </div>
                                             </div>
                                         </v-container>
 
@@ -233,6 +237,7 @@
                                             <span
                                                 class="
                                                     primary--text
+                                                    font-weight-bold
                                                     text-body-1
                                                 "
                                             >
@@ -245,15 +250,14 @@
                                                         : item.name
                                                 }}
                                             </span>
-
                                             <span class="text-subtitle-3">
                                                 <br />
-                                                {{ item.size }}
+                                                Tamanho: {{ item.size }}
                                             </span>
 
                                             <span class="text-subtitle-3">
                                                 <br />
-                                                {{ item.color }}
+                                                Cor: {{ item.color }}
                                             </span>
                                         </div>
                                     </v-card>
@@ -347,33 +351,27 @@
                 <v-divider class="third"></v-divider>
                 <v-container class="text-center text-h5 primary--text pa-8">
                     <v-btn
-                        class="primary secondary--text"
+                        class="primary white--text"
                         width="60%"
                         height="50px"
-                        @click="selectAddress"
+                        @click="checkout"
                         >COMPRAR
                     </v-btn>
                 </v-container>
             </v-card>
         </div>
 
-        <ChoseAddress
-            :addresses="addresses"
-            :model="choseAddressModel"
-            v-on:buy="buy"
-            v-on:back="choseAddressModel = false"
-            v-on:selectedChange="(s) => (selected = s)"
-        />
+       
     </div>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
-import ChoseAddress from "~/components/product/ChoseAddress.vue";
+import { v4 } from "uuid";
+import { sign } from "jsonwebtoken";
+
 export default {
-    components: {
-        ChoseAddress,
-    },
+
 
     async fetch() {
         if (!this.$auth.loggedIn) {
@@ -396,7 +394,7 @@ export default {
         };
     },
     methods: {
-        async selectAddress() {
+        async checkout() {
             if (!this.$auth.loggedIn) {
                 this.toasted({
                     text: "Entre ou crie uma conta para comprar produtos!",
@@ -405,61 +403,36 @@ export default {
                 return this.$router.push("/login");
             }
 
-            await this.getAddresses();
-            this.choseAddressModel = true;
-        },
+            const reference = v4();
 
-        async getAddresses() {
-            await this.$axios
-                .get("/address")
-                .then((a) => {
-                    this.addresses = a.data;
-                })
-                .catch((e) =>
-                    this.toasted({
-                        text: e.response.data ? e.response.data : e,
-                    })
-                );
-        },
-
-        async buy() {
-            this.choseAddressModel = false;
-            var mp = new MercadoPago(process.env.MP_PUBLIC_KEY, {
-                locale: "pt-BR",
-            });
-
-            await this.createPreference();
-
-            this.checkout = mp.checkout({
-                preference: {
-                    id: this.preferece_id,
-                },
-                autoOpen: true,
-            });
-        },
-
-        async createPreference() {
-            this.preference_loading = true;
-
-            let products = [];
+            let items = [];
 
             this.products.forEach((p) => {
-                products.push({
+                items.push({
                     product_id: p.product_id.toString(),
                     quantity: p.quantity,
                     size: p.size,
                     color: p.color,
+                    name: p.name,
+                    price: p.price,
+                    image: p.image,
                 });
             });
 
-            const address = this.addresses[this.selected[0]];
+            localStorage.setItem(
+                "reference",
+                sign(reference, process.env.JWT_SECRET)
+            );
 
-            await this.$axios
-                .$post("preference", { items: products, address: address })
-                .then((response) => {
-                    this.preferece_id = response.id;
-                    this.preference_loading = false;
-                });
+            localStorage.setItem(
+                "checkout",
+                sign(JSON.stringify(items), process.env.JWT_SECRET)
+            );
+
+            await this.$router.push({
+                path: "/checkout",
+                query: { reference: reference, type: "cart" },
+            });
         },
 
         async decrement(index) {
@@ -507,9 +480,11 @@ export default {
                     })
                 );
         },
+
         changeActive(index) {
             this.active = index;
         },
+
         async deleteProduct(index) {
             const cart = {
                 user_id: this.$auth.user.id,

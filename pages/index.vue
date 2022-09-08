@@ -18,8 +18,8 @@ export default {
 
     data() {
         return {
-            c1: "3fa9ef43-e9a3-4fab-ad2c-8ab3b6b6e281",
-            c2: "f80b17b9-6f19-48b6-a033-3724bbf1297f",
+            c1: "9bcf9dfc-f0ba-4b48-9b82-b4fb13893a2b",
+            c2: "a00d1ae9-b32c-4dea-acb0-062ec4a1cc07",
         };
     },
 };

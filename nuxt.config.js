@@ -120,7 +120,8 @@ export default {
 
 
     env: {
-        MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY
+        MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY,
+        JWT_SECRET:process.env.JWT_SECRET,
     },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
