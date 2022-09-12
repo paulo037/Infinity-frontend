@@ -1,8 +1,11 @@
  <template>
     <v-app>
-        <Navbar :hide="false" />
+        <client-only>
+            <Navbar :hide="false" />
 
-        <Sidbar :hide="false" />
+            <Sidbar :hide="false" />
+        </client-only>
+        
         <v-container fluid class="text-right ma-0 pa-0 secondary">
             <v-switch
                 v-model="switch1"
@@ -32,7 +35,7 @@
             <Nuxt class="pa-0"> </Nuxt>
         </v-main>
 
-        <Footer/>
+        <Footer />
     </v-app>
 </template>
 
