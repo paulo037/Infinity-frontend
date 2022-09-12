@@ -43,6 +43,7 @@ export default {
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
         '~plugins/vue-the-mask.js',
+        '~/plugins/axios',
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -62,7 +63,10 @@ export default {
         // https://go.nuxtjs.dev/axios
 
         '@nuxtjs/axios',
-        '@nuxtjs/auth-next'
+        '@nuxtjs/auth-next',
+        'cookie-universal-nuxt',
+        'universal-cookie',
+        ['cookie-universal-nuxt', { alias: 'cookiz' }],
 
     ],
 
@@ -78,14 +82,13 @@ export default {
                     property: 'refresh_token',
                     data: 'refresh_token',
                     tokenRequired: true,
-
+                    maxAge: 60 * 60 * 24,
                 },
 
                 token: {
                     property: 'access_token',
-                  
-                    global: true,
-                    type: 'Bearer'
+                    maxAge: 60 * 15,
+                    tokenRequired: true,
                 },
                 user: {
                     property: 'user',
@@ -94,10 +97,10 @@ export default {
 
 
                 endpoints: {
-                    login: { url: '/signin', method: 'post' },
+                    login: { url: '/signin', method: 'post', withCredentials: true },
                     logout: false,
-                    user: { url: '/validateToken', method: 'post', },
-                    refresh: { url: '/refreshToken', method: 'post' },
+                    user: { url: '/validateToken', method: 'post', withCredentials: true },
+                    refresh: { url: '/refreshToken', method: 'post', withCredentials: true },
                 },
 
             }
@@ -121,13 +124,14 @@ export default {
 
     env: {
         MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY,
-        JWT_SECRET:process.env.JWT_SECRET,
+        JWT_SECRET: process.env.JWT_SECRET,
     },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
         // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-        baseURL: process.env.URLBASE
+        baseURL: process.env.URLBASE,
+        credentials: true
     },
 
     // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
