@@ -374,6 +374,8 @@ export default {
 
 
     async fetch() {
+        console.log( this.$auth.strategy.token.sync(), this.$auth.loggedIn)
+        this.$auth.strategy.token.sync()
         if (!this.$auth.loggedIn) {
             this.toasted({
                 text: "Entre ou crie uma conta para ver seu carrinho!",
@@ -384,6 +386,9 @@ export default {
 
         this.products = await this.$axios.$get(`cart/${this.$auth.user.id}`);
     },
+
+
+
     data() {
         return {
             products: [],
