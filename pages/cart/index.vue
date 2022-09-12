@@ -374,6 +374,7 @@ export default {
 
 
     async fetch() {
+        await this.axios.post('validateToken')
         console.log( this.$auth.strategy.token.sync(), this.$auth.loggedIn)
         this.$auth.strategy.token.sync()
         if (!this.$auth.loggedIn) {
@@ -398,6 +399,7 @@ export default {
             selected: [0],
         };
     },
+
     methods: {
         async checkout() {
             if (!this.$auth.loggedIn) {
