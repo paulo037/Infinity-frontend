@@ -42,7 +42,7 @@ export default function ({ $axios, res, $cookies }) {
         if (setCookies) {
             // Combine the cookies set on axios with the new cookies and serialize them
             const cookie = serializeCookies({
-                ...parseCookie($axios.defaults.headers.common.cookie),
+                // ...parseCookie($axios.defaults.headers.common.cookie),
                 ...parseSetCookies(setCookies),
             });
 
