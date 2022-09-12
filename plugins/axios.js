@@ -37,28 +37,28 @@ export default function ({ $axios, res, $cookies }) {
         
         
 
-        const setCookies = response.headers['set-cookie'];
+        // const setCookies = response.headers['set-cookie'];
         
-        if (setCookies) {
-            // Combine the cookies set on axios with the new cookies and serialize them
-            const cookie = serializeCookies({
-                ...parseCookie($axios.defaults.headers.common.cookie),
-                ...parseSetCookies(setCookies),
-            });
+        // if (setCookies) {
+        //     // Combine the cookies set on axios with the new cookies and serialize them
+        //     const cookie = serializeCookies({
+        //         ...parseCookie($axios.defaults.headers.common.cookie),
+        //         ...parseSetCookies(setCookies),
+        //     });
 
-            $axios.defaults.headers.common.cookie = cookie; // eslint-disable-line no-param-reassign
+        //     $axios.defaults.headers.common.cookie = cookie; // eslint-disable-line no-param-reassign
 
-            // If the res already has a Set-Cookie header it should be merged
-            if (res.getHeader('Set-Cookie')) {
-                const newCookies = mergeSetCookies(
-                    res.getHeader('Set-Cookie'),
-                    setCookies,
-                );
+        //     // If the res already has a Set-Cookie header it should be merged
+        //     if (res.getHeader('Set-Cookie')) {
+        //         const newCookies = mergeSetCookies(
+        //             res.getHeader('Set-Cookie'),
+        //             setCookies,
+        //         );
 
-                res.setHeader('Set-Cookie', newCookies);
-            } else {
-                res.setHeader('Set-Cookie', setCookies);
-            }
-        }
+        //         res.setHeader('Set-Cookie', newCookies);
+        //     } else {
+        //         res.setHeader('Set-Cookie', setCookies);
+        //     }
+        // }
     });
 }
