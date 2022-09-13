@@ -1,10 +1,8 @@
  <template>
     <v-app>
-        <client-only>
-            <Navbar :hide="false" />
+        <Navbar :hide="false" />
 
-            <Sidbar :hide="false" />
-        </client-only>
+        <Sidbar :hide="false" />
         <v-container fluid class="text-right ma-0 pa-0 secondary">
             <v-switch
                 v-model="switch1"

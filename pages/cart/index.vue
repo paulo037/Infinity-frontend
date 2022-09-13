@@ -1,6 +1,5 @@
 <template>
     <div>
-        <client-only>
         <v-dialog v-model="preference_loading">
             <v-progress-circular
                 indeterminate
@@ -54,72 +53,198 @@
                     <v-icon class="primary--text pb-3">mdi-cart</v-icon>
                 </v-card>
                 <v-divider class="third"></v-divider>
+
                 <v-skeleton-loader
                     class="mx-auto"
                     max-width="900px"
                     type="image"
                     v-if="page_loading"
                 ></v-skeleton-loader>
-                <v-simple-table class="secondary third--text mb-5" v-else>
-                    <template v-slot:default>
-                        <thead>
-                            <tr>
-                                <th class="text-left third--text px-8">
-                                    PRODUTO
-                                </th>
+                <client-only>
+                    <v-simple-table class="secondary third--text mb-5">
+                        <template v-slot:default>
+                            <thead>
+                                <tr>
+                                    <th class="text-left third--text px-8">
+                                        PRODUTO
+                                    </th>
 
-                                <th
-                                    class="
-                                        text-left
-                                        third--text
-                                        hidden-xs-only
-                                        pa-0
-                                    "
-                                >
-                                    QUANTIDADE
-                                </th>
-                                <th
-                                    class="
-                                        text-left
-                                        third--text
-                                        text-center
-                                        hidden-xs-only
-                                    "
-                                >
-                                    PREÇO
-                                </th>
-                                <th class="pa-0"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="(item, index) in products"
-                                :key="`${item.product_id}_${item.size_id}_${item.color_id}`"
-                            >
-                                <!-- Para Celular -->
-                                <td class="hidden-sm-and-up pa-0">
-                                    <v-card
+                                    <th
                                         class="
-                                            d-flex
-                                            align-start
+                                            text-left
+                                            third--text
+                                            hidden-xs-only
                                             pa-0
-                                            ma-2
-                                            secondary
                                         "
-                                        flat
                                     >
-                                        <v-container class="d-flex align-start">
-                                            <router-link
-                                                :to="`/product/${item.name}`"
+                                        QUANTIDADE
+                                    </th>
+                                    <th
+                                        class="
+                                            text-left
+                                            third--text
+                                            text-center
+                                            hidden-xs-only
+                                        "
+                                    >
+                                        PREÇO
+                                    </th>
+                                    <th class="pa-0"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="(item, index) in products"
+                                    :key="`${item.product_id}_${item.size_id}_${item.color_id}`"
+                                >
+                                    <!-- Para Celular -->
+                                    <td class="hidden-sm-and-up pa-0">
+                                        <v-card
+                                            class="
+                                                d-flex
+                                                align-start
+                                                pa-0
+                                                ma-2
+                                                secondary
+                                            "
+                                            flat
+                                        >
+                                            <v-container
+                                                class="d-flex align-start"
                                             >
-                                                <v-img
-                                                    class="d-inline-block"
-                                                    :src="item.image"
-                                                    max-width="80px"
-                                                    height="80px"
-                                                ></v-img>
-                                            </router-link>
-                                            <div class="text ml-5">
+                                                <router-link
+                                                    :to="`/product/${item.name}`"
+                                                >
+                                                    <v-img
+                                                        class="d-inline-block"
+                                                        :src="item.image"
+                                                        max-width="80px"
+                                                        height="80px"
+                                                    ></v-img>
+                                                </router-link>
+                                                <div class="text ml-5">
+                                                    <span
+                                                        class="
+                                                            primary--text
+                                                            font-weight-bold
+                                                            text-body-1
+                                                        "
+                                                    >
+                                                        {{
+                                                            item.name.length >
+                                                            28
+                                                                ? item.name.substring(
+                                                                      0,
+                                                                      25
+                                                                  ) + "..."
+                                                                : item.name
+                                                        }}
+                                                    </span>
+
+                                                    <span>
+                                                        <br />
+                                                        R$:
+                                                        {{
+                                                            (item.price * 1)
+                                                                .toFixed(2)
+                                                                .replace(
+                                                                    ".",
+                                                                    ","
+                                                                )
+                                                        }}
+                                                    </span>
+
+                                                    <div>
+                                                        <v-icon
+                                                            color="sencondary"
+                                                            class="
+                                                                accent
+                                                                rounded-circle
+                                                            "
+                                                            :disabled="
+                                                                item.quantity <=
+                                                                1
+                                                                    ? true
+                                                                    : false
+                                                            "
+                                                            @click="
+                                                                decrement(index)
+                                                            "
+                                                            small
+                                                        >
+                                                            mdi-minus
+                                                        </v-icon>
+
+                                                        <span
+                                                            class="
+                                                                font-weight-light
+                                                                pa-2
+                                                            "
+                                                            v-text="
+                                                                item.quantity
+                                                            "
+                                                        ></span>
+                                                        <v-icon
+                                                            color="sencondary"
+                                                            class="
+                                                                accent
+                                                                rounded-circle
+                                                            "
+                                                            small
+                                                            @click="
+                                                                increment(index)
+                                                            "
+                                                            link
+                                                        >
+                                                            mdi-plus
+                                                        </v-icon>
+                                                    </div>
+                                                    <span>
+                                                        Cor: {{ item.color }}
+                                                    </span>
+
+                                                    <div>
+                                                        Tamanho:
+                                                        {{ item.size }}
+                                                    </div>
+                                                </div>
+                                            </v-container>
+
+                                            <v-icon
+                                                block
+                                                small
+                                                class="red--text ma-2"
+                                                @click="deleteProduct(index)"
+                                            >
+                                                mdi-delete
+                                            </v-icon>
+                                        </v-card>
+                                    </td>
+                                    <!-- Para Computadores -->
+                                    <td class="hidden-xs-only">
+                                        <v-card
+                                            class="
+                                                d-flex
+                                                align-top
+                                                py-5
+                                                ma-2
+                                                secondary
+                                            "
+                                            width="260px"
+                                            flat
+                                            :to="`/product/${item.name}`"
+                                        >
+                                            <v-img
+                                                class="
+                                                    d-inline-block
+                                                    mx-5
+                                                    rounded-sm
+                                                "
+                                                :src="item.image"
+                                                max-width="80px"
+                                                height="80px"
+                                            ></v-img>
+                                            <div>
                                                 <span
                                                     class="
                                                         primary--text
@@ -136,190 +261,78 @@
                                                             : item.name
                                                     }}
                                                 </span>
-
-                                                <span>
+                                                <span class="text-subtitle-3">
                                                     <br />
-                                                    R$:
-                                                    {{
-                                                        (item.price * 1)
-                                                            .toFixed(2)
-                                                            .replace(".", ",")
-                                                    }}
+                                                    Tamanho: {{ item.size }}
                                                 </span>
 
-                                                <div>
-                                                    <v-icon
-                                                        color="sencondary"
-                                                        class="
-                                                            accent
-                                                            rounded-circle
-                                                        "
-                                                        :disabled="
-                                                            item.quantity <= 1
-                                                                ? true
-                                                                : false
-                                                        "
-                                                        @click="
-                                                            decrement(index)
-                                                        "
-                                                        small
-                                                    >
-                                                        mdi-minus
-                                                    </v-icon>
-
-                                                    <span
-                                                        class="
-                                                            font-weight-light
-                                                            pa-2
-                                                        "
-                                                        v-text="item.quantity"
-                                                    ></span>
-                                                    <v-icon
-                                                        color="sencondary"
-                                                        class="
-                                                            accent
-                                                            rounded-circle
-                                                        "
-                                                        small
-                                                        @click="
-                                                            increment(index)
-                                                        "
-                                                        link
-                                                    >
-                                                        mdi-plus
-                                                    </v-icon>
-                                                </div>
-                                                <span>
+                                                <span class="text-subtitle-3">
+                                                    <br />
                                                     Cor: {{ item.color }}
                                                 </span>
-
-                                                <div>
-                                                    Tamanho:
-                                                    {{ item.size }}
-                                                </div>
                                             </div>
-                                        </v-container>
+                                        </v-card>
+                                    </td>
 
+                                    <td class="hidden-xs-only pa-0">
                                         <v-icon
-                                            block
-                                            small
-                                            class="red--text ma-2"
-                                            @click="deleteProduct(index)"
-                                        >
-                                            mdi-delete
-                                        </v-icon>
-                                    </v-card>
-                                </td>
-                                <!-- Para Computadores -->
-                                <td class="hidden-xs-only">
-                                    <v-card
-                                        class="
-                                            d-flex
-                                            align-top
-                                            py-5
-                                            ma-2
-                                            secondary
-                                        "
-                                        width="260px"
-                                        flat
-                                        :to="`/product/${item.name}`"
-                                    >
-                                        <v-img
-                                            class="
-                                                d-inline-block
-                                                mx-5
-                                                rounded-sm
+                                            color="sencondary"
+                                            class="accent rounded-circle"
+                                            :disabled="
+                                                item.quantity <= 1
+                                                    ? true
+                                                    : false
                                             "
-                                            :src="item.image"
-                                            max-width="80px"
-                                            height="80px"
-                                        ></v-img>
-                                        <div>
-                                            <span
-                                                class="
-                                                    primary--text
-                                                    font-weight-bold
-                                                    text-body-1
-                                                "
-                                            >
-                                                {{
-                                                    item.name.length > 28
-                                                        ? item.name.substring(
-                                                              0,
-                                                              25
-                                                          ) + "..."
-                                                        : item.name
-                                                }}
-                                            </span>
-                                            <span class="text-subtitle-3">
-                                                <br />
-                                                Tamanho: {{ item.size }}
-                                            </span>
-
-                                            <span class="text-subtitle-3">
-                                                <br />
-                                                Cor: {{ item.color }}
-                                            </span>
-                                        </div>
-                                    </v-card>
-                                </td>
-
-                                <td class="hidden-xs-only pa-0">
-                                    <v-icon
-                                        color="sencondary"
-                                        class="accent rounded-circle"
-                                        :disabled="
-                                            item.quantity <= 1 ? true : false
-                                        "
-                                        @click="decrement(index)"
-                                    >
-                                        mdi-minus
-                                    </v-icon>
-
-                                    <span
-                                        class="font-weight-light pa-2"
-                                        v-text="item.quantity"
-                                    ></span>
-                                    <v-icon
-                                        color="sencondary"
-                                        class="accent rounded-circle"
-                                        @click="increment(index)"
-                                    >
-                                        mdi-plus
-                                    </v-icon>
-                                </td>
-                                <td
-                                    class="
-                                        hidden-xs-only
-                                        primary--text
-                                        text-subtitle-1 text-center
-                                    "
-                                >
-                                    R$:
-                                    {{
-                                        (item.price * 1)
-                                            .toFixed(2)
-                                            .replace(".", ",")
-                                    }}
-                                </td>
-
-                                <td class="pa-0 hidden-xs-only">
-                                    <v-container
-                                        style="height: 100%; padding: 0px"
-                                        class="text-right pa-1"
-                                    >
-                                        <v-icon
-                                            class="red--text ma-2"
-                                            @click="deleteProduct(index)"
+                                            @click="decrement(index)"
                                         >
-                                            mdi-delete
+                                            mdi-minus
                                         </v-icon>
-                                    </v-container>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </template>
-                </v-simple-table>
+
+                                        <span
+                                            class="font-weight-light pa-2"
+                                            v-text="item.quantity"
+                                        ></span>
+                                        <v-icon
+                                            color="sencondary"
+                                            class="accent rounded-circle"
+                                            @click="increment(index)"
+                                        >
+                                            mdi-plus
+                                        </v-icon>
+                                    </td>
+                                    <td
+                                        class="
+                                            hidden-xs-only
+                                            primary--text
+                                            text-subtitle-1 text-center
+                                        "
+                                    >
+                                        R$:
+                                        {{
+                                            (item.price * 1)
+                                                .toFixed(2)
+                                                .replace(".", ",")
+                                        }}
+                                    </td>
+
+                                    <td class="pa-0 hidden-xs-only">
+                                        <v-container
+                                            style="height: 100%; padding: 0px"
+                                            class="text-right pa-1"
+                                        >
+                                            <v-icon
+                                                class="red--text ma-2"
+                                                @click="deleteProduct(index)"
+                                            >
+                                                mdi-delete
+                                            </v-icon>
+                                        </v-container>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </template>
+                    </v-simple-table>
+                </client-only>
                 <v-divider class="third"></v-divider>
 
                 <v-container class="py-5">
@@ -361,8 +374,6 @@
                 </v-container>
             </v-card>
         </div>
-
-    </client-only>
     </div>
 </template>
 
@@ -372,10 +383,8 @@ import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
 
 export default {
-
-
     async mounted() {
-       console.log("auth: ", this.$auth.loggedIn)
+        console.log("auth: ", this.$auth.loggedIn);
         if (!this.$auth.loggedIn) {
             this.toasted({
                 text: "Entre ou crie uma conta para ver seu carrinho!",
@@ -388,8 +397,6 @@ export default {
         this.page_loading = false;
     },
 
-
-
     data() {
         return {
             products: [],
@@ -397,7 +404,7 @@ export default {
             choseAddressModel: false,
             addresses: [],
             selected: [0],
-            page_loading : true
+            page_loading: true,
         };
     },
 
