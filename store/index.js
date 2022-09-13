@@ -6,9 +6,15 @@ export const state = () => ({
     snackbar: false,
     color: "",
     back_url: "",
+    setup: true,
 
 })
 export const mutations = {
+
+    setup(state){
+        state.setup = false
+    },
+
     changeMenu(state) {
         state.isMenuOpen = !state.isMenuOpen
     },
