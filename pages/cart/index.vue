@@ -42,7 +42,7 @@
                 </v-card>
             </div>
 
-            <div align="center" v-else>
+            <div align="center" v-else-if="!page_loading">
                 <v-card
                     max-width="900px"
                     class="secondary mx-8 mb-16"
@@ -369,7 +369,9 @@
                     </v-container>
                 </v-card>
             </div>
-            <div align="center" slot="placeholder">
+        </client-only>
+
+        <div align="center" v-if="page_loading">
                 <v-card max-width="900px" class="pa-2">
                     <v-card class="primary--text secondary py-2">
                         <span class="text-h5"> CARRINHO | </span>
@@ -382,7 +384,6 @@
                     ></v-skeleton-loader>
                 </v-card>
             </div>
-        </client-only>
     </div>
 </template>
 
