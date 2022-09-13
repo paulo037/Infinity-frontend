@@ -1,5 +1,15 @@
 <template>
     <div align="center">
+        <v-dialog v-model="login_loading">
+            <v-progress-circular
+                indeterminate
+                color="accent"
+                v-if="login_loading"
+                :size="60"
+                style="position: fixed; top: 98px; left: 48%; z-index: 50"
+            ></v-progress-circular>
+        </v-dialog>
+
         <v-card max-width="500px" class="secondary mb-8 pa-8" elevation="20">
             <header class="third--text text-h4 mb-8">CADASTRAR</header>
             <v-form ref="form" class="text-left">
@@ -91,6 +101,7 @@ export default {
                 password: "",
                 confirm_password: "",
             },
+            login_loading: false,
 
             rules: {
                 required: (value) => !!value || "Campo obrigatório.",
@@ -114,11 +125,13 @@ export default {
     methods: {
         async createUser() {
             if (!this.validateUser()) return;
+            this.login_loading = true;
             this.$axios
                 .$post(`signup/`, {
                     user: this.user,
                 })
                 .then(() => {
+                    this.login_loading = false;
                     this.toasted({
                         text: "Conta criada com sucesso!",
                         color: "success",
@@ -132,13 +145,9 @@ export default {
                             },
                         })
                         .then((response) => {
-                            this.toasted({
-                                text: "Login realizado com sucesso!",
-                                color: "success",
-                            });
-                            if (this.$store.state.back_url){
-                                this.$router.push(this.$store.state.back_url)
-                                this.$store.commit("SetBack_url", null)
+                            if (this.$store.state.back_url) {
+                                this.$router.push(this.$store.state.back_url);
+                                this.$store.commit("SetBack_url", null);
                             }
                         })
                         .catch((e) =>
@@ -147,11 +156,12 @@ export default {
                                 : this.toasted({ text: e })
                         );
                 })
-                .catch((e) =>
+                .catch((e) => {
+                    this.login_loading = false;
                     e.response.data
                         ? this.toasted({ text: e.response.data })
-                        : this.toasted({ text: e })
-                );
+                        : this.toasted({ text: e });
+                });
         },
 
         ...mapMutations(["toasted"]),

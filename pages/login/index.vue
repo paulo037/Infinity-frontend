@@ -1,5 +1,15 @@
 <template>
     <div align="center">
+        <v-dialog v-model="login_loading">
+            <v-progress-circular
+                indeterminate
+                color="accent"
+                v-if="login_loading"
+                :size="60"
+                style="position: fixed; top: 98px; left: 48%; z-index: 50"
+            ></v-progress-circular>
+        </v-dialog>
+
         <v-card max-width="500px" class="secondary mb-8 pa-8" elevation="20">
             <header class="third--text text-h4 mb-8">LOGIN</header>
 
@@ -36,6 +46,7 @@
                         height="40px"
                         class="primary px-10"
                         @click="login"
+                        :disabled="login_loading"
                     >
                         CONTINUAR
                     </v-btn>
@@ -59,11 +70,13 @@ export default {
                 password: "",
             },
             show_password: null,
+            login_loading: false,
         };
     },
 
     methods: {
         async login() {
+            this.login_loading = true;
             this.$auth
                 .loginWith("local", {
                     data: {
@@ -72,6 +85,8 @@ export default {
                     },
                 })
                 .then((response) => {
+                    this.login_loading = false;
+
                     this.toasted({
                         text: "Login realizado com sucesso!",
                         color: "success",
@@ -81,11 +96,12 @@ export default {
                         this.$store.commit("SetBack_url", null);
                     }
                 })
-                .catch((e) =>
+                .catch((e) => {
                     e.response.data
                         ? this.toasted({ text: e.response.data })
-                        : this.toasted({ text: e })
-                );
+                        : this.toasted({ text: e });
+                    this.login_loading = false;
+                });
         },
 
         ...mapMutations(["toasted"]),
