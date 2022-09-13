@@ -1,5 +1,6 @@
 <template>
     <div>
+        <client-only>
         <v-dialog v-model="preference_loading">
             <v-progress-circular
                 indeterminate
@@ -361,7 +362,7 @@
             </v-card>
         </div>
 
-       
+    </client-only>
     </div>
 </template>
 
