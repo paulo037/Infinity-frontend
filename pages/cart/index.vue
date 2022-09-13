@@ -374,9 +374,7 @@ export default {
 
 
     async fetch() {
-        await this.axios.post('validateToken')
-        console.log( this.$auth.strategy.token.sync(), this.$auth.loggedIn)
-        this.$auth.strategy.token.sync()
+       console.log("auth: ", this.$auth.loggedIn)
         if (!this.$auth.loggedIn) {
             this.toasted({
                 text: "Entre ou crie uma conta para ver seu carrinho!",
