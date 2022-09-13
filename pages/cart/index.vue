@@ -10,7 +10,7 @@
             ></v-progress-circular>
         </v-dialog>
 
-        <div align="center" v-if="products.length == 0 && !$fetchState.pending">
+        <div align="center" v-if="products.length == 0 && !page_loading">
             <v-card
                 align="center"
                 max-width="500px"
@@ -57,7 +57,7 @@
                     class="mx-auto"
                     max-width="900px"
                     type="image"
-                    v-if="$fetchState.pending"
+                    v-if="page_loading"
                 ></v-skeleton-loader>
                 <v-simple-table class="secondary third--text mb-5" v-else>
                     <template v-slot:default>
@@ -373,7 +373,7 @@ import { sign } from "jsonwebtoken";
 export default {
 
 
-    async fetch() {
+    async mounted() {
        console.log("auth: ", this.$auth.loggedIn)
         if (!this.$auth.loggedIn) {
             this.toasted({
@@ -384,6 +384,7 @@ export default {
         }
 
         this.products = await this.$axios.$get(`cart/${this.$auth.user.id}`);
+        this.page_loading = false;
     },
 
 
@@ -395,6 +396,7 @@ export default {
             choseAddressModel: false,
             addresses: [],
             selected: [0],
+            page_loading : true
         };
     },
 

@@ -1,12 +1,12 @@
 export default async ({ redirect, store, $auth, $axios }) => {
 
-    if (store.state.setup) {
-        await $axios.$post("validateToken").catch(e => console.log(e)).then(()=> {
-            console.log($auth.loggedIn)
-            store.commit('setup')
-        }
-        )
-    }
+    // if (store.state.setup) {
+    //     await $axios.$post("validateToken").catch(e => console.log(e)).then(()=> {
+    //         console.log($auth.loggedIn)
+    //         store.commit('setup')
+    //     }
+    //     )
+    // }
 
 
     if (!$auth.strategy.token.status().valid() && $auth.loggedIn && !$auth.strategy.refreshToken.status().valid()) {

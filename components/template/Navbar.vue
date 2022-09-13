@@ -125,7 +125,7 @@
 import { mapState, mapMutations } from "vuex";
 
 export default {
-    async fetch() {
+    async mounted() {
         if (this.$auth.loggedIn) {
             let response = await this.$axios.$get("cart/products-number");
             this.$store.commit("setNumberOfProductsInCart", response.number);

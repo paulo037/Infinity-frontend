@@ -120,7 +120,6 @@ export default {
     },
     async fetch() {
         this.orders = await this.$axios.$get("order");
-        console.log(this.orders);
     },
 
     methods: {

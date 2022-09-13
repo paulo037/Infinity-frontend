@@ -49,7 +49,6 @@ export default {
   },
   async fetch() {
     this.categories = await this.$axios.$get(`category`);
-    console.log(this.categories)
   },
 
   methods: {
