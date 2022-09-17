@@ -88,7 +88,7 @@ export default {
 
                 token: {
                     property: 'access_token',
-                    maxAge: 60 * 15,
+                    maxAge: 60 * 2,
                     tokenRequired: true,
                 },
                 user: {
