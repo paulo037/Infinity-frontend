@@ -6,6 +6,7 @@ export default function ({ $axios, res, $cookies, store }) {
 
         $axios.defaults.headers['Authorization'] = `${token}`
         console.log(token)
+        store.commit("toasted", { text: token })
         return config;
     }, function (error) {
         // Do something with request error
@@ -13,10 +14,12 @@ export default function ({ $axios, res, $cookies, store }) {
     });
 
     $axios.onResponse((config) => {
-        if (config.config.ur == "/signin") {
-
-            console.log("config\n", config.config.url)
-        }
+        // if (config.config.url == "/signin") {
+        //     const token = config.data.access_token
+        //     config.data.access_token = true
+        //     $axios.defaults.headers['Authorization'] = `Bearer ${token}`
+        // }
+        // return config;
 
     });
 }
