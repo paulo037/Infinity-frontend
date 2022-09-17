@@ -14,6 +14,34 @@
                 </v-list-item-content>
             </v-list-item>
 
+            <v-list-item v-if="$auth.loggedIn" class="pa-0">
+                <v-list-item-content class="pa-0">
+                    <NuxtLink to="/profile" class="text-decoration-none" width="100%">
+                        <v-btn
+                            text
+                            class="primary--text text-start py-8"
+                            block
+                        >
+                            <v-icon> mdi-account-circle </v-icon>
+                            <v-list-item-title class="ml-5 primary--text"
+                                >PERFIL</v-list-item-title
+                            >
+                        </v-btn>
+                    </NuxtLink>
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item v-else class="pa-0">
+                <v-list-item-content>
+                    <MdiLinkVue
+                        :icon="'mdi-account'"
+                        :link="'/login'"
+                        :text="'LOGIN | CADASTRO'"
+                    ></MdiLinkVue>
+                </v-list-item-content>
+            </v-list-item>
+
+
             <v-list-item class="pa-0">
                 <v-list-item-content class="pa-0">
                     <MdiLinkVue
@@ -65,26 +93,7 @@
                 </v-list-item-content>
             </v-list-item>
 
-            <v-list-item v-if="$auth.loggedIn" class="pa-0">
-                <v-list-item-content class="pa-0">
-                    <MdiLinkVue
-                        @click="logout"
-                        :icon="'mdi-logout'"
-                        :link="'/login'"
-                        :text="'LOGOUT'"
-                    ></MdiLinkVue>
-                </v-list-item-content>
-            </v-list-item>
-
-            <v-list-item v-else class="pa-0">
-                <v-list-item-content>
-                    <MdiLinkVue
-                        :icon="'mdi-account'"
-                        :link="'/login'"
-                        :text="'LOGIN | CADASTRO'"
-                    ></MdiLinkVue>
-                </v-list-item-content>
-            </v-list-item>
+          
             <client-only>
                 <v-list-item
                     v-if="$auth.user ? $auth.user.ad : false"

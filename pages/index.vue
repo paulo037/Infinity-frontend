@@ -10,6 +10,7 @@
 <script>
 import ListProduct from "@/components/product/ListProduct.vue";
 import ListCategory from "@/components/category/ListCategory.vue";
+
 export default {
     components: {
         ListProduct,
@@ -25,5 +26,6 @@ export default {
 };
 </script>
 
+    
 <style>
 </style>

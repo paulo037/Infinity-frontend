@@ -1,5 +1,8 @@
-export default async ({ redirect, store, $auth, $axios }) => {
 
+ 
+
+export default async ({ redirect, store, $auth, $axios}) => {
+    
     // if (store.state.setup) {
     //     await $axios.$post("validateToken").catch(e => console.log(e)).then(()=> {
     //         console.log($auth.loggedIn)
@@ -7,6 +10,8 @@ export default async ({ redirect, store, $auth, $axios }) => {
     //     }
     //     )
     // }
+    // const access = app.$cookies.get("access_token");
+    // console.log(access)
 
 
     if (!$auth.strategy.token.status().valid() && $auth.loggedIn && !$auth.strategy.refreshToken.status().valid()) {

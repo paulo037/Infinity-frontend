@@ -6,7 +6,7 @@
                 color="accent"
                 v-if="login_loading"
                 :size="60"
-                style="position: fixed; top: 98px; left: 48%; z-index: 50"
+                style="position: fixed; top: 98px; left: 42%; z-index: 50"
             ></v-progress-circular>
         </v-dialog>
 

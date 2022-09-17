@@ -1,7 +1,7 @@
 <template>
     <v-app-bar height="60px" class="nav_background text--accent" elevation="1">
         <v-toolbar-title>
-            <v-card to="/" class="nav_background pl-4" flat align="center">
+            <v-card to="/" class="nav_background px-2" flat align="center">
                 <span class="font-weight-light primary--text">Infinity</span>
                 <span class="primary--text"> Modas</span>
             </v-card>
@@ -65,16 +65,14 @@
 
                 <NuxtLink
                     class="text-decoration-none"
-                    to="/login"
+                    to="/profile"
                     v-if="$auth.loggedIn"
                 >
                     <v-btn
                         text
                         class="primary--text hidden-sm-and-down py-8"
-                        @click="logout"
                     >
-                        <v-icon> mdi-logout </v-icon>
-                        <span v-bind:style="{ marginLeft: '5px' }">Sair</span>
+                        <v-icon large> mdi-account-circle </v-icon>
                     </v-btn>
                 </NuxtLink>
 
