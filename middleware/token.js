@@ -1,35 +1,46 @@
 
 
-export default async ({ redirect, store, $auth, $axios, $cookies }) => {
+export default async ({ redirect, store, $auth, $axios, $cookies , app}) => {
 
     if (store.state.setup) {
+ 
+        if (process.server) {
+            const token = $cookies.get('access_token')
+            if (token) {
 
-        // const token = $cookies.get('access_token')
-        // const refresh_token = $cookies.get('refresh_token')
-        // store.commit('setRefresh_token', refresh_token)
-        // store.commit('setAccess_token', token)
-        // console.log("refresh: ",  $cookies.get('auth._refresh_token.local'))
-        // console.log("setup")
-        // store.commit('setup')
-        // try {
-        //     await $axios.$post('/refreshToken')
+                const valid = $cookies.get('auth._token_expiration.local')
 
-        // } catch (error) {
-        //     console.log(error)
+                const maxAge = Math.floor((valid - Date.now()) / 1000);
 
-        // }
-        // console.log("setup finish")
-        // $axios.onRequest((config) => {
+                $cookies.set('access_token', token, {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    secure: true,
+                    maxAge: maxAge
+                })
 
-        // const token = $cookies.get('access_token')
-        // const refresh_token = $cookies.get('refresh_token')
+                $axios.setHeader('Authorization', token)
 
-        // axios.setToken(token, 'Bearer')
-        // axios.defaults.headers['refresh_token'] = `${refresh_token}`
-        // inject('axios', axios)
-        //     return config;
 
-        // });
+
+                const refresh_token = $cookies.get('refresh_token')
+                const refresh_token_valid = $cookies.get('auth._refresh_token_expiration.local')
+
+                const refresh_token_maxAge = Math.floor((refresh_token_valid - Date.now()) / 1000);
+
+                $cookies.set('access_token', token, {
+                    httpOnly: true,
+                    sameSite: 'none',
+                    secure: true,
+                    maxAge: refresh_token_maxAge
+                })
+
+                $axios.setToken(refresh_token)
+                $axios.setHeader('refresh_token', '123')
+            }
+
+        }
+
 
     }
 
