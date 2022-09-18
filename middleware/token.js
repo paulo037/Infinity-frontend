@@ -40,6 +40,7 @@ export default async ({ redirect, store, $auth, $axios, $cookies , app}) => {
             }
 
         }
+        store.commit('setup');
 
 
     }
