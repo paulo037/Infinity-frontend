@@ -28,15 +28,14 @@ export default async ({ redirect, store, $auth, $axios, $cookies , app}) => {
 
                 const refresh_token_maxAge = Math.floor((refresh_token_valid - Date.now()) / 1000);
 
-                $cookies.set('access_token', token, {
+                $cookies.set('refresh_token', refresh_token, {
                     httpOnly: true,
                     sameSite: 'none',
                     secure: true,
                     maxAge: refresh_token_maxAge
                 })
 
-                $axios.setToken(refresh_token)
-                $axios.setHeader('refresh_token', '123')
+                $axios.setHeader('refresh_token', refresh_token)
             }
 
         }
