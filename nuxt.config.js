@@ -74,9 +74,10 @@ export default {
     auth: {
 
         strategies: {
+            localStorage: false,
             local: {
                 scheme: 'refresh',
-                localStorage: false,
+                
                 autoLogout: true,
 
                 refreshToken: {
@@ -88,7 +89,7 @@ export default {
 
                 token: {
                     property: 'access_token',
-                    maxAge: 60 * 2,
+                    maxAge: 60 * 60 * 3 ,
                     tokenRequired: true,
                 },
                 user: {

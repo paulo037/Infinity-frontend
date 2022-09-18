@@ -450,7 +450,7 @@
                 color="blue"
                 v-if="preference_loading"
                 :size="60"
-                style="position: fixed; top: 98px; left: 48%; z-index: 50"
+                style="position: fixed; top: 98px;  z-index: 50"
             ></v-progress-circular>
         </v-dialog>
     </div>
@@ -592,4 +592,14 @@ export default {
 </script>
 
 <style>
+
+.v-dialog--active {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    max-height: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 </style>

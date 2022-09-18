@@ -7,6 +7,7 @@ export const state = () => ({
     color: "",
     back_url: "",
     setup: true,
+    refresh_token: null,
 
 })
 export const mutations = {
@@ -17,6 +18,15 @@ export const mutations = {
 
     changeMenu(state) {
         state.isMenuOpen = !state.isMenuOpen
+    },
+
+    setRefresh_token(state, payload){
+        state.refresh_token = payload
+    },
+
+
+    setAccess_token(state, payload){
+        state.refresh_token = payload
     },
 
     toasted(state, payload) {

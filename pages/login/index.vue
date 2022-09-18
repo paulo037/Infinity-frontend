@@ -1,12 +1,11 @@
 <template>
     <div align="center">
-        <v-dialog v-model="login_loading">
+        <v-dialog v-model="login_loading" style="">
             <v-progress-circular
                 indeterminate
                 color="accent"
                 v-if="login_loading"
                 :size="60"
-                style="position: fixed; top: 98px; left: 42%; z-index: 50"
             ></v-progress-circular>
         </v-dialog>
 
@@ -110,4 +109,13 @@ export default {
 </script>
 
 <style>
+.v-dialog--active {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    max-height: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 </style>
