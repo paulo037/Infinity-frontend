@@ -8,6 +8,7 @@ export const state = () => ({
     back_url: "",
     setup: true,
     refresh_token: null,
+    access_token: null,
 
 })
 export const mutations = {
@@ -26,7 +27,7 @@ export const mutations = {
 
 
     setAccess_token(state, payload){
-        state.refresh_token = payload
+        state.access_token = payload
     },
 
     toasted(state, payload) {

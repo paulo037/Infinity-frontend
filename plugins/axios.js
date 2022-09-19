@@ -2,52 +2,56 @@
 export default function ({ $axios, res, $cookies, store }, inject) {
 
 
+    $axios.onResponse((config) => {
+        if (config.config.url == "/signin" || config.config.url == "/validateToken") {
 
-    // $axios.onRequest((config) => {
-    //     if (process.server) {
-    //         const token = $cookies.get('access_token')
-    //         const valid = $cookies.get('auth._token_expiration.local')
+            const token = config.data.access_token
+            config.data.access_token = true
+            config.data.refresh_token = true
 
-    //         const maxAge = Math.floor((valid - Date.now()) / 1000);
+            $axios.setToken(token, 'Bearer')
 
-    //         $cookies.set('access_token', token, {
-    //             httpOnly: true,
-    //             sameSite: 'none',
-    //             secure: true,
-    //             maxAge: maxAge
-    //         })
-
-    //         $axios.setHeader('Authorization', token)
-
-    //         const refresh_token = $cookies.get('refresh_token')
-    //         const refresh_token_valid = $cookies.get('auth._refresh_token_expiration.local')
-
-    //         const refresh_token_maxAge = Math.floor((refresh_token_valid - Date.now()) / 1000);
-
-    //         $cookies.set('access_token', token, {
-    //             httpOnly: true,
-    //             sameSite: 'none',
-    //             secure: true,
-    //             maxAge: refresh_token_maxAge
-    //         })
-
-    //         $axios.setToken(refresh_token)
-    //         $axios.setHeader('refresh_token', '123')
-
-
-    //         // config.headers.common.Authorization = token
-    //         // console.log(config.headers.common.Authorization)
-    //         config.headers = {"Authorization": token}
-
-    //     }else{
-    //     }
-        
-    //     return config;
-
-    // });
+            if (store.state.setup) {
+                store.commit('setAccess_token', token)
+            }
 
 
 
+        }
+        return config;
+
+    });
 
 
+    $axios.onRequest((config) => {
+
+        if (process.server) {
+
+            const token = $cookies.get('access_token')
+            config.headers = {
+                common: {
+                    Authorization: token,
+                }
+            }
+
+        } else {
+            if (store.state.setup) {
+                const token = store.state.access_token
+                $axios.setToken(token, 'Bearer')
+
+                config.headers = {
+                    common: {
+                        Authorization: token,
+                    }
+                }
+
+                store.commit('setup');
+                store.commit('setAccess_token', null)
+            }
+
+        }
+        return config;
+    })
 }
+
+//setar resposta de /validateToken no servidor

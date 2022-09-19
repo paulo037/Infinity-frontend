@@ -84,6 +84,7 @@ export default {
                     },
                 })
                 .then((response) => {
+                    console.log(response)
                     this.login_loading = false;
 
                     this.toasted({
@@ -96,10 +97,10 @@ export default {
                     }
                 })
                 .catch((e) => {
-                    e.response.data
+                    this.login_loading = false;
+                    e.data
                         ? this.toasted({ text: e.response.data })
                         : this.toasted({ text: e });
-                    this.login_loading = false;
                 });
         },
 
