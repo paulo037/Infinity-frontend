@@ -1,55 +1,61 @@
 
-export default function ({ $axios, res, $cookies, store }, inject) {
+export default function ({ $axios,  $cookies, store }) {
 
 
     $axios.onResponse((config) => {
         if (config.config.url == "/signin" || config.config.url == "/validateToken") {
 
             const token = config.data.access_token
-            config.data.access_token = true
-            config.data.refresh_token = true
 
             $axios.setToken(token, 'Bearer')
-
-            if (store.state.setup) {
-                store.commit('setAccess_token', token)
-            }
-
-
-
+            
+            store.commit('setAccess_token', token)
         }
-        return config;
 
     });
 
 
     $axios.onRequest((config) => {
-
         if (process.server) {
 
+          
+            // console.log('request from server', config.url)
+
             const token = $cookies.get('access_token')
+
             config.headers = {
                 common: {
-                    Authorization: token,
+                    Authorization: `Bearer ${token}`,
                 }
             }
 
-        } else {
-            if (store.state.setup) {
-                const token = store.state.access_token
-                $axios.setToken(token, 'Bearer')
+            const valid = $cookies.get('auth._token_expiration.cookie')
 
-                config.headers = {
-                    common: {
-                        Authorization: token,
-                    }
-                }
+            const maxAge = Math.floor((valid - Date.now()) / 1000);
 
-                store.commit('setup');
-                store.commit('setAccess_token', null)
-            }
+            $cookies.set('access_token', token, {
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+                maxAge: maxAge,
+            })
 
+        }else{
+
+            if ((store.state.setup)){
+               const token = store.state.access_token
+               if (token){
+                   $axios.setToken(token, 'Bearer')
+                   store.commit('setup')
+                   store.commit('setAccess_token', null)
+               }
+   
+           }
+        //    console.log('request from client', config.url)
         }
+
+
+
         return config;
     })
 }

@@ -75,17 +75,19 @@ export default {
 
         strategies: {
             localStorage: false,
-            local: {
-                scheme: 'refresh',
-                
+            local: false,
+            cookie: {
+                cookie: {
+                    name: 'access_token',
+                },
+                // scheme: 'refresh',
+
                 autoLogout: true,
 
-                refreshToken: {
-                    property: 'refresh_token',
-                    data: 'refresh_token',
-                    tokenRequired: true,
-                    maxAge: 60 * 60 * 24,
-                },
+                // refreshToken: {
+                //     tokenRequired: false,
+                //     type: false,
+                // },
 
                 token: {
                     property: 'access_token',
@@ -93,6 +95,7 @@ export default {
                     tokenRequired: true,
                     global: true,
                 },
+
                 user: {
                     property: 'user',
                 },
@@ -100,10 +103,11 @@ export default {
 
 
                 endpoints: {
-                    login: { url: '/signin', method: 'post', withCredentials: true },
+                    login: { url: '/signin', method: 'post' },
                     logout: false,
                     user: { url: '/validateToken', method: 'post', withCredentials: true },
-                    refresh: { url: '/refreshToken', method: 'post', withCredentials: true },
+                    // refresh: { url: '/refreshToken', method: 'post', withCredentials: true },
+                    
                 },
 
             }

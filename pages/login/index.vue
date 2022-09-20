@@ -77,7 +77,7 @@ export default {
         async login() {
             this.login_loading = true;
             this.$auth
-                .loginWith("local", {
+                .loginWith("cookie", {
                     data: {
                         email: this.user.email,
                         password: this.user.password,

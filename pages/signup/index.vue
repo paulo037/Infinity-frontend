@@ -138,7 +138,7 @@ export default {
                     });
 
                     this.$auth
-                        .loginWith("local", {
+                        .loginWith("cookie", {
                             data: {
                                 email: this.user.email,
                                 password: this.user.password,
