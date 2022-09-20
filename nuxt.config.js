@@ -78,18 +78,18 @@ export default {
             local: {
                 scheme: 'refresh',
 
-                autoLogout: true,
+                autoLogout: false,
 
                 refreshToken: {
                     property: 'refresh_token',
                     data: 'refresh_token',
                     tokenRequired: true,
-                    maxAge: 60 * 60 * 48,
+                    maxAge: 60 * 60 * 24,
                 },
 
                 token: {
                     property: 'access_token',
-                    maxAge: 60 * 60 * 3,
+                    maxAge: 60 * 60,
                     tokenRequired: true,
                     global: true,
                 },

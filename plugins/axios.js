@@ -1,5 +1,5 @@
 
-export default function ({ $axios, $cookies, store }) {
+export default function ({ $axios, $cookies, store, route, redirect }) {
 
 
     $axios.onResponse((config) => {
@@ -14,25 +14,49 @@ export default function ({ $axios, $cookies, store }) {
 
             store.commit('setAccess_token', access_token)
 
-            let token_config = {
+            let access_token_age = $cookies.get('auth._token_expiration.local')
+            let refresh_token_age = $cookies.get('auth._refresh_token_expiration.local')
+
+
+            access_token_age = Math.floor((access_token_age - new Date().getTime()) / 1000)
+            refresh_token_age = Math.floor((refresh_token_age - new Date().getTime()) / 1000)
+
+
+
+
+            let access_token_config = {
                 httpOnly: false,
                 path: '/',
-                sameSite: true
+                sameSite: true,
+                maxAge: 60
+            }
+
+            let refresh_token_config = {
+                httpOnly: false,
+                path: '/',
+                sameSite: true,
+                maxAge: 1200
             }
 
 
             if (process.server) {
-                token_config.httpOnly = true
+                access_token_config.httpOnly = true
+                refresh_token_config.httpOnly = true
             }
 
-            $cookies.set('access_token', access_token, token_config)
-            $cookies.set('refresh_token', refresh_token, token_config)
+            $cookies.set('access_token', access_token, access_token_config)
+            $cookies.set('refresh_token', refresh_token, refresh_token_config)
 
             config.data.access_token = true
             config.data.refresh_token = true
 
             if (config.config.url == "/refreshToken" && process.client) {
-                window.location.reload();
+                if (store.state.load) {
+                    redirect(route.path)
+                    store.commit('setLoad', false)
+                }
+                const reload = store.state.reload
+                window.location.href = `${process.env.BASE_FRONT}${reload}`
             }
         }
 

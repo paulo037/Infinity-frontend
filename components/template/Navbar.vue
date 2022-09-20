@@ -1,10 +1,12 @@
 <template>
     <v-app-bar height="60px" class="nav_background text--accent" elevation="1">
         <v-toolbar-title>
-            <v-card to="/" class="nav_background px-2" flat align="center">
-                <span class="font-weight-light primary--text">Infinity</span>
-                <span class="primary--text"> Modas</span>
-            </v-card>
+            <nuxt-link to="/" style="text-decoration:none">
+                <v-card class="nav_background px-2" flat align="center">
+                    <span class="font-weight-light primary--text">Infinity</span>
+                    <span class="primary--text"> Modas</span>
+                </v-card>
+            </nuxt-link>
         </v-toolbar-title>
 
         <v-spacer></v-spacer>

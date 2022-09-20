@@ -7,7 +7,8 @@ export const state = () => ({
     color: "",
     back_url: "",
     setup: true,
-    refresh_token: null,
+    reload: '/',
+    load: false,
     access_token: null,
 
 })
@@ -21,8 +22,13 @@ export const mutations = {
         state.isMenuOpen = !state.isMenuOpen
     },
 
-    setRefresh_token(state, payload){
-        state.refresh_token = payload
+    setReload(state, payload){
+        state.reload = payload
+    },
+
+
+    setLoad(state, payload){
+        state.load = payload
     },
 
 
