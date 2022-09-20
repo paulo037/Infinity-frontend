@@ -90,7 +90,7 @@ export default {
                 // },
 
                 token: {
-                    property: 'Authorization',
+                    property: 'access_token',
                     maxAge: 60 * 60 * 24 ,
                     tokenRequired: true,
                     global: true,

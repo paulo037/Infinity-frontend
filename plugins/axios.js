@@ -10,12 +10,16 @@ export default function ({ $axios, $cookies, store }) {
             $axios.setToken(token, 'Bearer')
 
             store.commit('setAccess_token', token)
+
+
+            $cookies.set('token', '123')
         }
 
     });
 
 
     $axios.onRequest(async (config) => {
+        $cookies.set('token', '123')
         if (process.server) {
             const token = $cookies.get('access_token')
 
