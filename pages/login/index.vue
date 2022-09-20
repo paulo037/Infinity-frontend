@@ -99,7 +99,7 @@ export default {
                         return window.location.href = `${process.env.BASE_FRONT}${back}`
                         
                     }
-                    return window.location.href = process.env.BASE_FRONT
+                    return window.location.href = `${process.env.BASE_FRONT}`
                     
                 })
                 .catch((e) => {
