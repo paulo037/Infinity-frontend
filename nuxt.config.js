@@ -75,23 +75,21 @@ export default {
 
         strategies: {
             localStorage: false,
-            local: false,
-            cookie: {
-                cookie: {
-                    name: 'Authorization',
-                },
-                // scheme: 'refresh',
+            local: {
+                scheme: 'refresh',
 
                 autoLogout: true,
 
-                // refreshToken: {
-                //     tokenRequired: false,
-                //     type: false,
-                // },
+                refreshToken: {
+                    property: 'refresh_token',
+                    data: 'refresh_token',
+                    tokenRequired: true,
+                    maxAge: 60 * 60 * 48,
+                },
 
                 token: {
                     property: 'access_token',
-                    maxAge: 60 * 60 * 24 ,
+                    maxAge: 60 * 60 * 3,
                     tokenRequired: true,
                     global: true,
                 },
@@ -106,8 +104,7 @@ export default {
                     login: { url: '/signin', method: 'post', withCredentials: true },
                     logout: false,
                     user: { url: '/validateToken', method: 'post', withCredentials: true },
-                    // refresh: { url: '/refreshToken', method: 'post', withCredentials: true },
-                    
+                    refresh: { url: '/refreshToken', method: 'post', withCredentials: true },
                 },
 
             }
@@ -115,11 +112,12 @@ export default {
 
 
         redirect: {
-            login: '/',
-            logout: '/login/',
-            home: '/',
-            callback: '/login',
+            login: '/login',
+            logout: '/login',
+            home: '/login',
+            callback: '/',
         },
+        watchLoggedIn: true,
 
 
     },
@@ -132,6 +130,7 @@ export default {
     env: {
         MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY,
         JWT_SECRET: process.env.JWT_SECRET,
+        BASE_FRONT: process.env.BASE_FRONT,
     },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios

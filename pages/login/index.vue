@@ -77,24 +77,30 @@ export default {
         async login() {
             this.login_loading = true;
             this.$auth
-                .loginWith("cookie", {
+                .loginWith("local", {
                     data: {
                         email: this.user.email,
                         password: this.user.password,
                     },
                 })
                 .then((response) => {
-                    console.log(response)
-                    this.login_loading = false;
+
+                   
 
                     this.toasted({
                         text: "Login realizado com sucesso!",
                         color: "success",
                     });
+
                     if (this.$store.state.back_url) {
-                        this.$router.push(this.$store.state.back_url);
+                        const back = this.$store.state.back_url
                         this.$store.commit("SetBack_url", null);
+                        
+                        return window.location.href = `${process.env.BASE_FRONT}${back}`
+                        
                     }
+                    return window.location.href = process.env.BASE_FRONT
+                    
                 })
                 .catch((e) => {
                     this.login_loading = false;
