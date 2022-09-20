@@ -12,9 +12,5 @@ export default async ({ redirect, store, $auth, route }) => {
     if (!$auth.strategy.token.status().valid() && $auth.loggedIn && $auth.strategy.refreshToken.status().valid()) {
         store.commit('setReload', route.path)
         store.commit('setLoad', true)
-    }else{
-        store.commit('setBeforeReload', route.path)
     }
-
-
 }

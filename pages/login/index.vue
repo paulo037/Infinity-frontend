@@ -95,12 +95,9 @@ export default {
                     if (this.$store.state.back_url) {
                         const back = this.$store.state.back_url
                         this.$store.commit("SetBack_url", null);
-                        
-                        return window.location.href = `${process.env.BASE_FRONT}${back}`
-                        
+                        return window.open(`${process.env.BASE_FRONT}${back}`, "_self")                        
                     }
-                    return window.location.href = `${process.env.BASE_FRONT}`
-                    
+                    return window.open(`${process.env.BASE_FRONT}`, "_self")                    
                 })
                 .catch((e) => {
                     this.login_loading = false;

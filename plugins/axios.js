@@ -54,9 +54,9 @@ export default function ({ $axios, $cookies, store, route, redirect }) {
                 if (store.state.load) {
                     redirect(route.path)
                     store.commit('setLoad', false)
+                    const reload = store.state.reload
+                    window.open(`${process.env.BASE_FRONT}${reload}`, "_self")
                 }
-                const reload = store.state.reload
-                window.location.href = `${process.env.BASE_FRONT}${reload}`
             }
         }
 
