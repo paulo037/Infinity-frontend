@@ -78,7 +78,7 @@ export default {
             local: false,
             cookie: {
                 cookie: {
-                    name: 'access_token',
+                    name: 'Authorization',
                 },
                 // scheme: 'refresh',
 
@@ -90,8 +90,8 @@ export default {
                 // },
 
                 token: {
-                    property: 'access_token',
-                    maxAge: 60 * 60 * 3 ,
+                    property: 'Authorization',
+                    maxAge: 60 * 60 * 24 ,
                     tokenRequired: true,
                     global: true,
                 },
@@ -103,7 +103,7 @@ export default {
 
 
                 endpoints: {
-                    login: { url: '/signin', method: 'post' },
+                    login: { url: '/signin', method: 'post', withCredentials: true },
                     logout: false,
                     user: { url: '/validateToken', method: 'post', withCredentials: true },
                     // refresh: { url: '/refreshToken', method: 'post', withCredentials: true },
