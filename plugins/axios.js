@@ -14,7 +14,7 @@ export default function ({ $axios, $cookies, store }) {
 
             store.commit('setAccess_token', access_token)
 
-            let token_config =  token_config = {
+            let token_config = {
                 httpOnly: false,
                 path: '/',
                 sameSite: true
