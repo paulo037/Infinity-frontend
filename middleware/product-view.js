@@ -1,4 +1,4 @@
-export default async ({ route, $axios, redirect, store, $auth }) => {
+export default async ({ route, $axios, redirect, store}) => {
 
     const name = route.params ? route.params.name : null
 

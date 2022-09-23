@@ -1,6 +1,6 @@
 
 
-export default async ({ redirect, store, $auth, route }) => {
+export default async ({ redirect, store, $auth, route, from }) => {
 
     if (!$auth.strategy.token.status().valid() && $auth.loggedIn && !$auth.strategy.refreshToken.status().valid()) {
         $auth.logout()

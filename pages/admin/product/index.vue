@@ -156,8 +156,8 @@ export default {
       await this.$axios
         .$delete(`product/${this.id}`)
         .catch((e) => {
-          this.text = e.response.data
-            ? e.response.data
+          this.text = e.data
+            ? e.data
             : "Houve um erro ao tentar apagar o produto";
           this.id = null;
         })

@@ -1,8 +1,10 @@
 <template>
-    <div class="d-flex justify-center">
-        <div></div>
-
-        <v-card outlined class="pa-5" style="max-width: 700px; flex-grow: 2">
+    <div align="center">
+        <h1 class="text-left pb-5" style="max-width: 700px">
+            {{ $route.params.mode != "new-address" ? "Editar" : "Criar" }}
+            Endereço
+        </h1>
+        <v-card outlined class="pa-5" style="max-width: 700px">
             <v-form>
                 <v-row style="width: -webkit-fill-available">
                     <v-col class="pl-0" cols="12" md="6">
@@ -81,7 +83,6 @@
                             label="Telefone para contato"
                             v-mask="'(##) #########'"
                             v-model="address.telephone"
-                            
                         ></v-text-field>
                     </v-col>
                 </v-row>
@@ -101,50 +102,24 @@
                 </v-row>
             </v-form>
         </v-card>
-
-        <div></div>
     </div>
 </template>
 
 <script>
-import { send } from 'q';
-
 export default {
     data() {
         return {
-            address: {
-                user_name: null,
-                cep: null,
-                state: null,
-                city: null,
-                district: null,
-                street: null,
-                telephone: null,
-                number: null,
-            },
+            mode: this.$route.params ? this.$route.params.mode : null,
+            address: this.$store.getters["user/getAddress"],
 
             rules: {
-                required: (value) => !!value || "Campo obrigatório.",
+                required: (value) =>
+                    (!!value && value != "") || "Campo obrigatório.",
             },
         };
     },
 
-    props: {
-        id: String,
-    },
-
-    async fetch() {
-        if (this.$route.query.edit) {
-            this.address = await this.$axios.$get(`/address/${this.$route.query.id}`)
-        }
-    },
-
-
-    methods:{
-        async send(){
-            
-        }
-    },
+    middleware: "address-edit-and-new",
 
     watch: {
         async "address.cep"() {
@@ -153,15 +128,20 @@ export default {
                 await this.$axios
                     .get(`address/cep/${cep}`)
                     .then((response) => {
+                        const { localidade, uf, logradouro, bairro } =
+                            response.data;
                         console.log(response);
-                        this.address.city = response.data.localidade;
-                        this.address.state = response.data.uf;
-                        this.address.street = response.data.logradouro;
-                        this.address.district = response.data.bairro;
+                        this.address.city =
+                            localidade != "" ? localidade : this.address.city;
+                        this.address.state = uf != "" ? uf : this.address.state;
+                        this.address.street =
+                            logradouro != "" ? logradouro : this.address.street;
+                        this.address.district =
+                            bairro != "" ? bairro : this.address.district;
                     })
                     .catch((e) =>
                         this.$store.commit("toasted", {
-                            text: e.response.data ? e.response.data : e,
+                            text: e.data ? e.data : e,
                         })
                     );
             }

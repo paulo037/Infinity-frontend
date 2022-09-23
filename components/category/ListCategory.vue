@@ -32,7 +32,7 @@ export default {
     async fetch() {
         this.category = await this.$axios.$get(`category/`).catch((e) =>
             this.$store.commit("toasted", {
-                text: e.response.data ? e.response.data : e,
+                text: e.data ? e.data : e,
             })
         );
     },

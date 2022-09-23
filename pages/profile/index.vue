@@ -9,7 +9,7 @@
                     <v-card-title
                         class="font-weight-bold text-h5 d-flex justify-start"
                     >
-                        {{ user.first_name }} {{ user.last_name }}
+                        {{ $auth.user.first_name }} {{ $auth.user.last_name }}
                     </v-card-title>
                 </v-col>
             </v-row>

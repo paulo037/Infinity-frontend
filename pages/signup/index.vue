@@ -151,15 +151,15 @@ export default {
                             }
                         })
                         .catch((e) =>
-                            e.response.data
-                                ? this.toasted({ text: e.response.data })
+                            e.data
+                                ? this.toasted({ text: e.data })
                                 : this.toasted({ text: e })
                         );
                 })
                 .catch((e) => {
                     this.login_loading = false;
-                    e.response.data
-                        ? this.toasted({ text: e.response.data })
+                    e.data
+                        ? this.toasted({ text: e.data })
                         : this.toasted({ text: e });
                 });
         },

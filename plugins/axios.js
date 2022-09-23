@@ -48,7 +48,7 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
             config.data.access_token = true
             config.data.refresh_token = true
 
-            if (config.config.url == "/refreshToken" && process.client) {
+            if (config.config.url == "/refreshToken") {
                 if (store.state.load) {
                     const reload = store.state.reload
                     store.commit('setLoad', false)
@@ -63,21 +63,26 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
 
 
     $axios.onRequest(async (config) => {
+        const refresh_token = await $cookies.get('refresh_token')
+
         if (process.server) {
-            const token = $cookies.get('access_token')
+
+            const token = await $cookies.get('access_token')
+
             if (token) {
                 await $axios.setToken(token, 'Bearer')
-            } else if (config.url != "/refreshToken") {
-                console.log("notoken")
+            } else if (config.url == "/validateToken" && refresh_token) {
                 await $axios.post("/refreshToken")
             }
 
         } else {
             const token = store.state.access_token
+
             if (token) {
                 await $axios.setToken(token, 'Bearer')
                 store.commit('setAccess_token', null)
-
+            } else if (config.url == "/validateToken" && !$axios.defaults.headers.common.Authorization) {
+                await $axios.post("/refreshToken")
             }
 
         }

@@ -113,8 +113,8 @@ export default {
             this.product = await this.$axios
                 .$get(`product/${this.$route.params.id}`)
                 .catch((e) => {
-                    e.response.data
-                        ? this.toasted({ text: e.response.data })
+                    e.data
+                        ? this.toasted({ text: e.data })
                         : this.toasted({ text: e });
                 });
 
@@ -172,8 +172,8 @@ export default {
                     this.$router.push("/admin/product");
                 })
                 .catch((e) => {
-                    e.response.data
-                        ? this.toasted({ text: e.response.data })
+                    e.data
+                        ? this.toasted({ text: e.data })
                         : this.toasted({ text: e });
                 });
         },
@@ -203,8 +203,8 @@ export default {
                     this.$router.push("/admin/product");
                 })
                 .catch((e) => {
-                    e.response.data
-                        ? this.toasted({ text: e.response.data })
+                    e.data
+                        ? this.toasted({ text: e.data })
                         : this.toasted({ text: e });
                 });
         },
@@ -227,8 +227,8 @@ export default {
                         },
                     })
                     .catch((e) => {
-                        e.response.data
-                            ? this.toasted({ text: e.response.data })
+                        e.data
+                            ? this.toasted({ text: e.data })
                             : this.toasted({ text: e });
                     })
                     .then((images) => {
@@ -240,8 +240,8 @@ export default {
             await this.$axios
                 .$delete(`product/${this.$route.params.id}`)
                 .catch((e) => {
-                    e.response.data
-                        ? this.toasted({ text: e.response.data })
+                    e.data
+                        ? this.toasted({ text: e.data })
                         : this.toasted({ text: e });
                 })
                 .then((e) => {

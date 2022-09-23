@@ -71,7 +71,7 @@ export default {
             .$get(`product/category/${this.id}`)
             .catch((e) =>
                 this.$store.commit("toasted", {
-                    text: e.response.data ? e.response.data : e,
+                    text: e.data ? e.data : e,
                 })
             );
 

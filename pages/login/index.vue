@@ -102,7 +102,7 @@ export default {
                 .catch((e) => {
                     this.login_loading = false;
                     e.data
-                        ? this.toasted({ text: e.response.data })
+                        ? this.toasted({ text: e.data })
                         : this.toasted({ text: e });
                 });
         },

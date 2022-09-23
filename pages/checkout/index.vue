@@ -490,7 +490,7 @@ export default {
             })
             .catch((e) =>
                 this.toasted({
-                    text: e.response.data ? e.response.data : e,
+                    text: e.data ? e.data : e,
                 })
             );
     },
@@ -583,7 +583,7 @@ export default {
                 })
                 .catch((e) =>
                     this.toasted({
-                        text: e.response.data ? e.response.data : e,
+                        text: e.data ? e.data : e,
                     })
                 );
         },
