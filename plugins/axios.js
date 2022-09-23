@@ -1,8 +1,8 @@
 
-export default function ({ $axios, $cookies, store, route, redirect }) {
+export default async function ({ $axios, $cookies, store, from, redirect }) {
 
 
-    $axios.onResponse((config) => {
+    $axios.onResponse(async (config) => {
         if (config.config.url == "/signin" || config.config.url == "/validateToken" || config.config.url == "/refreshToken") {
 
             const access_token = config.data.access_token
@@ -10,32 +10,30 @@ export default function ({ $axios, $cookies, store, route, redirect }) {
 
 
 
-            $axios.setToken(access_token, 'Bearer')
+            await $axios.setToken(access_token, 'Bearer')
 
             store.commit('setAccess_token', access_token)
 
-            let access_token_age = $cookies.get('auth._token_expiration.local')
-            let refresh_token_age = $cookies.get('auth._refresh_token_expiration.local')
+            let access_token_age = await $cookies.get('auth._token_expiration.local')
+            let refresh_token_age = await $cookies.get('auth._refresh_token_expiration.local')
 
 
             access_token_age = Math.floor((access_token_age - new Date().getTime()) / 1000)
             refresh_token_age = Math.floor((refresh_token_age - new Date().getTime()) / 1000)
 
 
-
-
             let access_token_config = {
                 httpOnly: false,
                 path: '/',
                 sameSite: true,
-                maxAge: 60
+                maxAge: access_token_age
             }
 
             let refresh_token_config = {
                 httpOnly: false,
                 path: '/',
                 sameSite: true,
-                maxAge: 1200
+                maxAge: refresh_token_age
             }
 
 
@@ -44,17 +42,16 @@ export default function ({ $axios, $cookies, store, route, redirect }) {
                 refresh_token_config.httpOnly = true
             }
 
-            $cookies.set('access_token', access_token, access_token_config)
-            $cookies.set('refresh_token', refresh_token, refresh_token_config)
+            await $cookies.set('access_token', access_token, access_token_config)
+            await $cookies.set('refresh_token', refresh_token, refresh_token_config)
 
             config.data.access_token = true
             config.data.refresh_token = true
 
             if (config.config.url == "/refreshToken" && process.client) {
                 if (store.state.load) {
-                    redirect(route.path)
-                    store.commit('setLoad', false)
                     const reload = store.state.reload
+                    store.commit('setLoad', false)
                     window.open(`${process.env.BASE_FRONT}${reload}`, "_self")
                 }
             }
@@ -66,16 +63,19 @@ export default function ({ $axios, $cookies, store, route, redirect }) {
 
 
     $axios.onRequest(async (config) => {
-
         if (process.server) {
             const token = $cookies.get('access_token')
-
-            $axios.setToken(token, 'Bearer')
+            if (token) {
+                await $axios.setToken(token, 'Bearer')
+            } else if (config.url != "/refreshToken") {
+                console.log("notoken")
+                await $axios.post("/refreshToken")
+            }
 
         } else {
             const token = store.state.access_token
             if (token) {
-                $axios.setToken(token, 'Bearer')
+                await $axios.setToken(token, 'Bearer')
                 store.commit('setAccess_token', null)
 
             }

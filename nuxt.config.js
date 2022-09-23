@@ -77,7 +77,7 @@ export default {
             localStorage: false,
             local: {
                 scheme: 'refresh',
-
+                
                 autoLogout: false,
 
                 refreshToken: {
@@ -101,10 +101,10 @@ export default {
 
 
                 endpoints: {
-                    login: { url: '/signin', method: 'post', withCredentials: true },
+                    login: { url: '/signin', method: 'post' },
                     logout: false,
-                    user: { url: '/validateToken', method: 'post', withCredentials: true },
-                    refresh: { url: '/refreshToken', method: 'post', withCredentials: true },
+                    user: { url: '/validateToken', method: 'post' },
+                    refresh: { url: '/refreshToken', method: 'post' },
                 },
 
             }
