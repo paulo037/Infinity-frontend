@@ -104,7 +104,7 @@ export default {
                     login: { url: '/signin', method: 'post' },
                     logout: false,
                     user: { url: '/validateToken', method: 'post' },
-                    refresh: { url: `${process.env.BASE_FRONT}/server/refreshTokens`, method: 'post' },
+                    refresh: { url: `${process.env.BASE_FRONT}/server/refreshToken`, method: 'post' },
                 },
 
             }
@@ -126,7 +126,7 @@ export default {
         middleware: ['token']
     },
 
-    serverMiddleware: [ { path: '/server', handler: '~/server-middleware/index.js' }, "redirect-ssl"],
+    serverMiddleware: process.env.NODE_ENV !== 'production' ? [{ path: '/server', handler: '~/server-middleware/index.js' }] : [{ path: '/server', handler: '~/server-middleware/index.js' }, "redirect-ssl"],
 
     env: {
         MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY,
