@@ -84,12 +84,12 @@ export default {
                     property: 'refresh_token',
                     data: 'refresh_token',
                     tokenRequired: true,
-                    maxAge: 60 * 60 * 24,
+                    maxAge: 60 * 60 * 48,
                 },
 
                 token: {
                     property: 'access_token',
-                    maxAge: 20,
+                    maxAge: 60 * 60,
                     tokenRequired: true,
                     global: true,
                 },
