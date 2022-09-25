@@ -4,7 +4,19 @@ export default async ({ route, $axios, redirect, store, $auth }) => {
 
     if (!mode) redirect("/profile/address")
 
-    if (mode == "new-address") return;
+    if (mode == "new-address") {
+        await store.commit("user/setAddress", {
+            user_name: null,
+            cep: null,
+            state: null,
+            city: null,
+            district: null,
+            street: null,
+            telephone: null,
+            number: null,
+        })
+        return
+    }
 
     await $axios
         .get(`/address/${route.query.target}`)

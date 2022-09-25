@@ -7,7 +7,7 @@ export default async ({ route, $axios, redirect, store, $auth }) => {
             addresses = a.data;
         })
         .catch((e) =>
-            redirect('profile')
+            redirect('/')
         );
 
 

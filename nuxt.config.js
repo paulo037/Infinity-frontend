@@ -77,7 +77,7 @@ export default {
             localStorage: false,
             local: {
                 scheme: 'refresh',
-                
+
                 autoLogout: false,
 
                 refreshToken: {
@@ -126,6 +126,7 @@ export default {
         middleware: ['token']
     },
 
+    serverMiddleware: [ { path: '/server', handler: '~/server-middleware/index.js' },],
 
     env: {
         MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY,

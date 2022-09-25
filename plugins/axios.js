@@ -43,6 +43,7 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
                 refresh_token_config.httpOnly = true
             }
 
+
             await $cookies.set('access_token', access_token, access_token_config)
             await $cookies.set('refresh_token', refresh_token, refresh_token_config)
 
@@ -69,21 +70,27 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
 
         console.log(config.url, !!token, !!refresh_token)
 
+        if (config.url == `${process.env.BASE_FRONT}/server/tokens` || config.url == "/refreshToken")return config;
+        
         if (process.server) {
 
             if (token) {
                 await $axios.setToken(token, 'Bearer')
             } else if (config.url == "/validateToken" && refresh_token) {
-                await $axios.post("/refreshToken", { refresh_token: refresh_token })
+                await $axios.post(`${process.env.BASE_FRONT}/server/tokens`).then(async (response) => {
+                    await $axios.post("/refreshToken", response.data.access_token)
+                })
             }
-
+            
         } else {
-            console.log(store.state.access_token, store.state.refresh_token )
+            console.log(store.state.access_token, store.state.refresh_token)
             if (token) {
                 await $axios.setToken(token, 'Bearer')
                 store.commit('setAccess_token', null)
             } else if (config.url == "/validateToken" && !$axios.defaults.headers.common.Authorization) {
-                await $axios.post("/refreshToken", { refresh_token: refresh_token })
+                await $axios.post(`${process.env.BASE_FRONT}/server/tokens`).then(async (response) => {
+                    await $axios.post("/refreshToken", response.data.access_token)
+                })
             }
 
         }

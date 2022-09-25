@@ -95,6 +95,7 @@
                             block
                             width="200px"
                             height="50px"
+                            @click="save"
                         >
                             salvar
                         </v-btn>
@@ -106,6 +107,8 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
     data() {
         return {
@@ -139,11 +142,48 @@ export default {
                         this.address.district =
                             bairro != "" ? bairro : this.address.district;
                     })
-                    .catch((e) =>
+                    .catch((e) =>{
+
                         this.$store.commit("toasted", {
-                            text: e.data ? e.data : e,
+                            text: "CEP não encontrado!",
                         })
+
+                        this.address.cep = ""
+                    }
+                        
                     );
+            }
+        },
+    },
+
+    methods: {
+        ...mapMutations(["toasted"]),
+        async save() {
+            if (!this.address.user_name || this.address.user_name == "") {
+                return this.toasted({text: "Preencha seu nome completo!"});
+            }
+            if (!this.address.cep || this.address.cep == "") {
+                return this.toasted({text: "Preencha o CEP do enderço!"});
+            }
+            if (!this.address.state || this.address.state == "") {
+                return this.toasted({ text: "Preencha o nome estado!"});
+            }
+            if (!this.address.city || this.address.city == "") {
+                return this.toasted({ text: "Preencha o nome da cidade!"});
+            }
+            if (!this.address.district || this.address.district == "") {
+                return this.toasted({ text: "Preencha o nome do bairro!"});
+            }
+            if (!this.address.street || this.address.street == "") {
+                return this.toasted({ text: "Preencha  o nome da rua!"});
+            }
+
+            if (!this.address.telephone || this.address.telephone == "") {
+                return this.toasted({ text: "Preencha o número para contato!"});
+            }
+
+            if (!this.address.number || this.address.number == "") {
+                return this.toasted({ text: "Preencha o número referente a sua casa!"});
             }
         },
     },
