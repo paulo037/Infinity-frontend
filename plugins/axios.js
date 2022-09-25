@@ -25,14 +25,14 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
             let access_token_config = {
                 httpOnly: false,
                 path: '/',
-                // sameSite: true,
+                sameSite: true,
                 maxAge: access_token_age
             }
 
             let refresh_token_config = {
                 httpOnly: false,
                 path: '/',
-                // sameSite: true,
+                sameSite: true,
                 maxAge: refresh_token_age
             }
 
@@ -63,11 +63,12 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
 
 
     $axios.onRequest(async (config) => {
-        const refresh_token = await $cookies.get('refresh_token')
-
+        const token = !!store.state.access_token ? store.state.access_token : await $cookies.get('access_token')
+        const refresh_token = !!store.state.refresh_token ? store.state.refresh_token : await $cookies.get('refresh_token')
+        
+        console.log(config.url, !!token, !!refresh_token)
+        
         if (process.server) {
-
-            const token = await $cookies.get('access_token')
 
             if (token) {
                 await $axios.setToken(token, 'Bearer')
@@ -76,7 +77,6 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
             }
 
         } else {
-            const token = store.state.access_token
 
             if (token) {
                 await $axios.setToken(token, 'Bearer')
