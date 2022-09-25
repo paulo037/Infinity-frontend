@@ -1,5 +1,5 @@
 
-const URL_REFRESH_TOKEN = `${process.env.BASE_FRONT}/server/refreshTokens`
+const URL_REFRESH_TOKEN = `${process.env.BASE_FRONT}/server/refreshToken`
 
 export default async function ({ $axios, $cookies, store, from, redirect }) {
 
