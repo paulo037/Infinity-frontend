@@ -78,7 +78,7 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
             }
 
         } else {
-
+            console.log(store.state.access_token, store.state.refresh_token )
             if (token) {
                 await $axios.setToken(token, 'Bearer')
                 store.commit('setAccess_token', null)
