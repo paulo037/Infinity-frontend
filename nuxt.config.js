@@ -89,7 +89,7 @@ export default {
 
                 token: {
                     property: 'access_token',
-                    maxAge: 60 * 60,
+                    maxAge: 30,
                     tokenRequired: true,
                     global: true,
                 },
@@ -104,7 +104,7 @@ export default {
                     login: { url: '/signin', method: 'post' },
                     logout: false,
                     user: { url: '/validateToken', method: 'post' },
-                    refresh: { url: '/refreshToken', method: 'post' },
+                    refresh: { url: `${process.env.BASE_FRONT}/server/refreshTokens`, method: 'post' },
                 },
 
             }
