@@ -25,14 +25,14 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
             let access_token_config = {
                 httpOnly: false,
                 path: '/',
-                sameSite: true,
+                // sameSite: true,
                 maxAge: access_token_age
             }
 
             let refresh_token_config = {
                 httpOnly: false,
                 path: '/',
-                sameSite: true,
+                // sameSite: true,
                 maxAge: refresh_token_age
             }
 
