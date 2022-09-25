@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/tokens', async (req, res) => {
     const {access_token, refresh_token} = req.cookies
-    res.json({access_token, refresh_token})
+    res.json({access_token: access_token, refresh_token:refresh_token})
 })
 
 
