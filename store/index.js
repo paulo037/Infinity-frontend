@@ -10,7 +10,7 @@ export const state = () => ({
     reload: '/',
     load: false,
     access_token: null,
-
+    refresh_token: null,
 })
 export const mutations = {
 
@@ -34,6 +34,10 @@ export const mutations = {
 
     setAccess_token(state, payload){
         state.access_token = payload
+    },
+
+    setRefresh_token(state, payload){
+        state.refresh_token = payload
     },
 
     toasted(state, payload) {

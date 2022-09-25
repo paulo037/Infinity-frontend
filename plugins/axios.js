@@ -13,6 +13,7 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
             await $axios.setToken(access_token, 'Bearer')
 
             store.commit('setAccess_token', access_token)
+            store.commit('setRefresh_token', refresh_token)
 
             let access_token_age = await $cookies.get('auth._token_expiration.local')
             let refresh_token_age = await $cookies.get('auth._refresh_token_expiration.local')
@@ -67,7 +68,7 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
         const refresh_token = !!store.state.refresh_token ? store.state.refresh_token : await $cookies.get('refresh_token')
         
         console.log(config.url, !!token, !!refresh_token)
-        
+
         if (process.server) {
 
             if (token) {
