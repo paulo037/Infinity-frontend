@@ -126,7 +126,7 @@ export default {
         middleware: ['token']
     },
 
-    serverMiddleware: [ { path: '/server', handler: '~/server-middleware/index.js' },],
+    serverMiddleware: [ { path: '/server', handler: '~/server-middleware/index.js' }, "redirect-ssl"],
 
     env: {
         MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY,

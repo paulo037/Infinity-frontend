@@ -27,6 +27,7 @@
         "express-session": "^1.17.3",
         "jsonwebtoken": "^8.5.1",
         "nuxt": "^2.15.8",
+        "redirect-ssl": "^3.0.0",
         "universal-cookie": "^4.0.4",
         "uuid": "^9.0.0",
         "v-currency-field": "^3.1.1",
