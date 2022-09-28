@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 import MdiLinkVue from "./MdiLink.vue";
 
 export default {
@@ -145,10 +145,9 @@ export default {
         changeMenuVisible() {
             this.$store.commit("changeMenu");
         },
-        ...mapMutations(["toasted"]),
 
         logout() {
-            this.toasted({
+            this.$toasted({
                 text: "Logout realizado com sucesso!",
                 color: "success",
             });

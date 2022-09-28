@@ -80,7 +80,6 @@
 
 <script>
 import ToastedVue from "~/components/template/Toasted.vue";
-import { mapMutations } from "vuex";
 
 export default {
     components: {
@@ -132,7 +131,7 @@ export default {
                 })
                 .then(() => {
                     this.login_loading = false;
-                    this.toasted({
+                    this.$toasted({
                         text: "Conta criada com sucesso!",
                         color: "success",
                     });
@@ -151,20 +150,24 @@ export default {
                             }
                         })
                         .catch((e) =>
-                            e.data
-                                ? this.toasted({ text: e.data })
-                                : this.toasted({ text: e })
+                            this.$toasted({
+                                text: e.response.data
+                                    ? e.response.data
+                                    : "Ocorreu um erro inesperado!",
+                            })
                         );
                 })
                 .catch((e) => {
                     this.login_loading = false;
-                    e.data
-                        ? this.toasted({ text: e.data })
-                        : this.toasted({ text: e });
-                });
-        },
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    })
 
-        ...mapMutations(["toasted"]),
+                }
+                );
+        },
 
         validateUser() {
             let valido = true;
@@ -178,11 +181,11 @@ export default {
 
         validateName() {
             if (this.user.first_name == "") {
-                this.toasted({ text: "Nome inválido!" });
+                this.$toasted({ text: "Nome inválido!" });
                 return false;
             }
             if (this.user.last_name == "") {
-                this.toasted({ text: "Sobrenome inválido!" });
+                this.$toasted({ text: "Sobrenome inválido!" });
                 return false;
             }
             return true;
@@ -214,7 +217,7 @@ export default {
             if (Resto != parseInt(cpf.substring(10, 11))) valido = false;
 
             if (!valido) {
-                this.toasted({ text: "CPF inválido!" });
+                this.$toasted({ text: "CPF inválido!" });
             }
             return valido;
         },
@@ -226,24 +229,24 @@ export default {
             let valido = pattern.test(this.user.email);
 
             if (!valido) {
-                this.toasted({ text: "E-mail inválido!" });
+                this.$toasted({ text: "E-mail inválido!" });
             }
             return valido;
         },
 
         validatePassword() {
             if (this.user.password.length < 8) {
-                this.toasted({ text: "Senha inválido!" });
+                this.$toasted({ text: "Senha inválido!" });
                 return false;
             }
 
             if (this.user.confirm_password < 8) {
-                this.toasted({ text: "Confirmação de senha inválido!" });
+                this.$toasted({ text: "Confirmação de senha inválido!" });
                 return false;
             }
 
             if (this.user.password != this.user.confirm_password) {
-                this.toasted({ text: "Senhas não conferem!" });
+                this.$toasted({ text: "Senhas não conferem!" });
                 return false;
             }
 

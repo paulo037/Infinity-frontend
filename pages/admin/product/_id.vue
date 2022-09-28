@@ -112,11 +112,13 @@ export default {
         if (this.$route.params.id != "new-product") {
             this.product = await this.$axios
                 .$get(`product/${this.$route.params.id}`)
-                .catch((e) => {
-                    e.data
-                        ? this.toasted({ text: e.data })
-                        : this.toasted({ text: e });
-                });
+                .catch((e) =>
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    })
+                );
 
             let pDescription = this.product.description;
 
@@ -150,7 +152,6 @@ export default {
         ...mapMutations({
             initialColor: "admin/product/initialColor",
             initialSizes: "admin/product/initialSizes",
-            toasted: "toasted",
         }),
         async save() {
             this.product.colors = this.$store.state.admin.product.sizes;
@@ -165,17 +166,19 @@ export default {
                     product: this.product,
                 })
                 .then((e) => {
-                    this.toasted({
+                    this.$toasted({
                         text: "Modificações salvas!",
                         color: "success",
                     });
                     this.$router.push("/admin/product");
                 })
-                .catch((e) => {
-                    e.data
-                        ? this.toasted({ text: e.data })
-                        : this.toasted({ text: e });
-                });
+                .catch((e) =>
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    })
+                );
         },
         async create() {
             this.product.colors = this.$store.state.admin.product.sizes;
@@ -186,7 +189,7 @@ export default {
                     product: this.product,
                 })
                 .then((p) => {
-                    this.toasted({
+                    this.$toasted({
                         text: "Produto criado com sucesso!",
                         color: "success",
                     });
@@ -202,11 +205,13 @@ export default {
                     this.initialColor([]);
                     this.$router.push("/admin/product");
                 })
-                .catch((e) => {
-                    e.data
-                        ? this.toasted({ text: e.data })
-                        : this.toasted({ text: e });
-                });
+                .catch((e) =>
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    })
+                );
         },
         async uploadImages() {
             let formData = new FormData();
@@ -226,11 +231,13 @@ export default {
                             "Content-Type": "multipart/form-data",
                         },
                     })
-                    .catch((e) => {
-                        e.data
-                            ? this.toasted({ text: e.data })
-                            : this.toasted({ text: e });
-                    })
+                    .catch((e) =>
+                        this.$toasted({
+                            text: e.response.data
+                                ? e.response.data
+                                : "Ocorreu um erro inesperado!",
+                        })
+                    )
                     .then((images) => {
                         this.parseImages(images);
                     });
@@ -239,13 +246,15 @@ export default {
         async deleteProduct() {
             await this.$axios
                 .$delete(`product/${this.$route.params.id}`)
-                .catch((e) => {
-                    e.data
-                        ? this.toasted({ text: e.data })
-                        : this.toasted({ text: e });
-                })
+                .catch((e) =>
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    })
+                )
                 .then((e) => {
-                    this.toasted({
+                    this.$toasted({
                         text: "Produto deletado sucesso!",
                         color: "success",
                     });
@@ -259,12 +268,12 @@ export default {
             );
 
             if (this.product.name === "" || !this.product.name) {
-                this.toasted({ text: "Adicione um nome ao produto!" });
+                this.$toasted({ text: "Adicione um nome ao produto!" });
                 return false;
             }
 
             if (!reg.test(this.product.price)) {
-                this.toasted({
+                this.$toasted({
                     text: "Adicione um preço válido para o produto!",
                 });
                 return false;
@@ -277,14 +286,14 @@ export default {
             this.product.price = parseFloat(this.product.price);
 
             if (this.product.price <= 0) {
-                this.toasted({
+                this.$toasted({
                     text: "Adicione um preço válido para o produto!",
                 });
                 return false;
             }
 
             if (this.product.colors.length < 1) {
-                this.toasted({ text: "Adicione pelo menos um tamanho!" });
+                this.$toasted({ text: "Adicione pelo menos um tamanho!" });
                 return false;
             }
 

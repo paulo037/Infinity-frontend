@@ -46,7 +46,7 @@
                         <v-col class="d-flex justify-center">
                             <v-rating
                                 :value="
-                                    product.sold >= 1
+                                    product.rating
                                         ? parseFloat(getRating())
                                         : 5
                                 "
@@ -60,9 +60,9 @@
 
                             <div class="grey--text ms-4 d-inline-block pt-1">
                                 {{
-                                    product.sold >= 1
+                                    product.rating
                                         ? `${parseFloat(
-                                              this.product.rating
+                                              product.rating
                                           ).toFixed(1)}(${product.sold})`
                                         : "(5)"
                                 }}
@@ -79,13 +79,8 @@
                     <ProductQuantity
                         :max="max"
                         :quantity="quantity"
-                        v-on:increment="
-                            this.quantity =
-                                this.quantity == this.max
-                                    ? this.quantity
-                                    : this.quantity + 1
-                        "
-                        v-on:decrement="this.quantity--"
+                        v-on:increment="increment"
+                        v-on:decrement="decrement"
                         class="pb-0"
                     />
 
@@ -186,7 +181,6 @@
             label="Produtos semelhantes"
             :id="category"
         />
-
     </div>
 </template>
 
@@ -199,7 +193,7 @@ import Price from "@/components/product/Price.vue";
 import ProductQuantity from "@/components/product/ProductQuantity.vue";
 import Payment from "~/components/product/Payment.vue";
 import { v4 } from "uuid";
-import {sign } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 
 export default {
     middleware: ["product-view"],
@@ -260,15 +254,13 @@ export default {
         ...mapMutations(["toasted", "SetBack_url"]),
 
         async checkout() {
-
             if (!this.$auth.loggedIn) {
-                this.toasted({
+                this.$toasted({
                     text: "Entre ou crie uma conta para comprar produtos!",
                 });
                 this.SetBack_url(this.$router.history.current.path);
                 return this.$router.push("/login");
             }
-
 
             const reference = v4();
 
@@ -281,9 +273,8 @@ export default {
                     image: this.product.images[0].url,
                     size: this.product.colors[this.size_selected].size,
                     color: this.product.colors[this.size_selected].color,
-                }
-            ]
-            
+                },
+            ];
 
             localStorage.setItem(
                 "reference",
@@ -295,18 +286,15 @@ export default {
                 sign(JSON.stringify(items), process.env.JWT_SECRET)
             );
 
-
             await this.$router.push({
                 path: "/checkout",
                 query: { reference: reference, type: "unique" },
             });
         },
 
-       
-
         addCart() {
             if (!this.$auth.loggedIn) {
-                this.toasted({
+                this.$toasted({
                     text: "Entre ou crie uma conta para adicionar produtos ao carrinho!",
                 });
 
@@ -325,17 +313,19 @@ export default {
             this.$axios
                 .post("/cart", { cart: newCart })
                 .then(() => {
-                    this.toasted({
+                    this.$toasted({
                         text: `${this.$route.params.name} adicionado ao carrinho!`,
                         color: "success",
                     });
                     this.$store.commit("addNumberOfProductsInCart");
                 })
                 .catch((e) =>
-                    this.toasted({
-                        text: e.data ? e.data : e,
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
                     })
-                );
+                )
         },
 
         getRating() {
@@ -372,6 +362,15 @@ export default {
             );
             return this.product.colors.indexOf(item);
         },
+
+        increment() {
+            this.quantity =  this.quantity == this.max ? this.quantity : this.quantity + 1;
+        },
+        
+        decrement(){
+            this.quantity =  this.quantity > 1 ? this.quantity - 1 : this.quantity ;
+           
+        }
     },
 
     watch: {
@@ -435,6 +434,7 @@ export default {
                     item.size_id ==
                         this.product.colors[this.size_selected].size_id
             );
+
 
             return choice;
         },

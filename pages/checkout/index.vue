@@ -113,27 +113,22 @@
                                             </td>
 
                                             <td>
-                                                <div style="cursor: pointer">
-                                                    <span
-                                                        @click="
-                                                            choseAddressModel = true
+                                                <span
+                                                    style="
+                                                        cursor: pointer;
+                                                        height: 50px;
                                                         "
-                                                        class="primary--text"
-                                                    >
-                                                        Criar ou editar um
-                                                        endereço
-                                                    </span>
-                                                    <v-icon
-                                                        class="primary--text"
-                                                    >
-                                                        mdi-arrow-right-bold</v-icon
-                                                    >
-                                                </div>
+                                                    class="primary--text"
+                                                    @click=" choseAddressModel = true "
+                                                >
+                                                    Alterar endereço
+                                                </span>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </v-simple-table>
                             </v-card>
+
                             <div class="d-flex justify-end">
                                 <v-btn
                                     class="accent white--text font-weight-bold"
@@ -157,218 +152,7 @@
                             <div class="text-h5 pb-5" v-if="address">
                                 Confira cada item do seu pedido
                             </div>
-
-                            <v-card max-width="900px" class="mb-10" outlined>
-                                <v-simple-table class="secondary third--text">
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                class="
-                                                    text-left
-                                                    third--text
-                                                    px-8
-                                                "
-                                            >
-                                                PRODUTO
-                                            </th>
-
-                                            <th
-                                                class="
-                                                    text-left
-                                                    third--text
-                                                    hidden-xs-only
-                                                    pa-0
-                                                "
-                                            >
-                                                QUANTIDADE
-                                            </th>
-                                            <th
-                                                class="
-                                                    text-left
-                                                    third--text
-                                                    text-center
-                                                    hidden-xs-only
-                                                "
-                                            >
-                                                PREÇO
-                                            </th>
-                                            <th class="pa-0"></th>
-                                        </tr>
-                                    </thead>
-                                    <!-- Para Celular -->
-                                    <tbody class="hidden-sm-and-up pa-0">
-                                        <tr
-                                            v-for="(item, index) in products"
-                                            :key="index"
-                                        >
-                                            <td class="pa-0">
-                                                <v-card
-                                                    class="
-                                                        d-flex
-                                                        align-start
-                                                        pa-0
-                                                        ma-2
-                                                        secondary
-                                                    "
-                                                    flat
-                                                >
-                                                    <v-container
-                                                        class="
-                                                            d-flex
-                                                            align-start
-                                                        "
-                                                    >
-                                                        <router-link
-                                                            :to="`/product/${item.name}`"
-                                                        >
-                                                            <v-img
-                                                                class="
-                                                                    d-inline-block
-                                                                "
-                                                                :src="
-                                                                    item.image
-                                                                "
-                                                                max-width="80px"
-                                                                height="80px"
-                                                            ></v-img>
-                                                        </router-link>
-                                                        <div class="text ml-5">
-                                                            <span
-                                                                class="
-                                                                    primary--text
-                                                                    font-weight-bold
-                                                                    text-body-1
-                                                                "
-                                                            >
-                                                                {{
-                                                                    name_formated(
-                                                                        item.name
-                                                                    )
-                                                                }}
-                                                            </span>
-                                                            <span
-                                                                class="
-                                                                    text-body-2
-                                                                    font-weight-bold
-                                                                "
-                                                            >
-                                                                <br />
-                                                                R$:
-                                                                {{ item.price }}
-                                                            </span>
-
-                                                            <div>
-                                                                <span>
-                                                                    Quantidade:
-                                                                    {{
-                                                                        item.quantity
-                                                                    }}</span
-                                                                >
-                                                            </div>
-                                                            <span>
-                                                                Cor:
-                                                                {{ item.color }}
-                                                            </span>
-
-                                                            <div>
-                                                                Tamanho:
-                                                                {{ item.size }}
-                                                            </div>
-                                                        </div>
-                                                    </v-container>
-                                                </v-card>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <!-- Para Computadores -->
-                                    <tbody class="hidden-xs-only">
-                                        <tr
-                                            v-for="(item, index) in products"
-                                            :key="index"
-                                        >
-                                            <td>
-                                                <v-card
-                                                    class="
-                                                        d-flex
-                                                        align-top
-                                                        py-5
-                                                        ma-2
-                                                        secondary
-                                                    "
-                                                    width="260px"
-                                                    flat
-                                                    :to="`/product/${item.name}`"
-                                                >
-                                                    <v-img
-                                                        class="
-                                                            d-inline-block
-                                                            mx-5
-                                                            rounded-sm
-                                                        "
-                                                        :src="item.image"
-                                                        max-width="80px"
-                                                        height="80px"
-                                                    ></v-img>
-                                                    <div>
-                                                        <span
-                                                            class="
-                                                                primary--text
-                                                                font-weight-bold
-                                                                text-body-1
-                                                            "
-                                                        >
-                                                            {{
-                                                                name_formated(
-                                                                    item.name
-                                                                )
-                                                            }}
-                                                        </span>
-                                                        <span
-                                                            class="
-                                                                text-subtitle-3
-                                                            "
-                                                        >
-                                                            <br />
-                                                            Tamanho:
-                                                            {{ item.size }}
-                                                        </span>
-
-                                                        <span
-                                                            class="
-                                                                text-subtitle-3
-                                                            "
-                                                        >
-                                                            <br />
-                                                            Cor:
-                                                            {{ item.color }}
-                                                        </span>
-                                                    </div>
-                                                </v-card>
-                                            </td>
-
-                                            <td>
-                                                <span
-                                                    class="
-                                                        font-weight-light
-                                                        pa-2
-                                                    "
-                                                    v-text="item.quantity"
-                                                ></span>
-                                            </td>
-                                            <td
-                                                class="
-                                                    hidden-xs-only
-                                                    primary--text
-                                                    text-subtitle-1 text-center
-                                                "
-                                            >
-                                                R$:
-                                                {{ item.price }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </v-simple-table>
-                            </v-card>
+                            <ShowProductListVue :products="products" :head="true"/>
                             <div class="d-flex justify-end">
                                 <v-btn
                                     class="accent white--text font-weight-bold"
@@ -398,14 +182,14 @@
                                 >
                                     <p class="pa-5 ma-0">
                                         O valor total do seu pedido foi de
-                                        {{ getPrice(amout) }}. Assim que for
-                                        confirmado o pagamento, realizaremos o
+                                        {{ getPrice(amout) }}. Assim que 
+                                        confirmarmos o pagamento realizaremos o
                                         envio.
                                     </p>
 
                                     <p class="pa-5 ma-0 text-body-2">
                                         Você pode ver os seus pedidos na aba
-                                        "Pedidos".
+                                        "Pedidos" no seu perfil.
                                     </p>
                                 </div>
                             </v-card>
@@ -450,7 +234,7 @@
                 color="blue"
                 v-if="preference_loading"
                 :size="60"
-                style="position: fixed; top: 98px;  z-index: 50"
+                style="position: fixed; top: 98px; z-index: 50"
             ></v-progress-circular>
         </v-dialog>
     </div>
@@ -458,12 +242,13 @@
 
 <script>
 import ChoseAddress from "@/components/product/ChoseAddress.vue";
+import ShowProductListVue from "~/components/product/ShowProductList.vue";
 import verify from "jsonwebtoken/verify";
-import { mapMutations } from "vuex";
 
 export default {
     components: {
         ChoseAddress,
+        ShowProductListVue
     },
 
     data() {
@@ -484,15 +269,18 @@ export default {
 
     async fetch() {
         await this.$axios
-            .get("/address")
+            .get("/addresses")
             .then((a) => {
+                console.log(a);
                 this.addresses = a.data;
             })
             .catch((e) =>
-                this.toasted({
-                    text: e.data ? e.data : e,
-                })
-            );
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    })
+                )
     },
 
     mounted() {
@@ -507,7 +295,7 @@ export default {
                 process.env.JWT_SECRET
             );
         } else {
-            this.toasted({
+            this.$toasted({
                 text: "Checkout não encontrado!",
             });
 
@@ -531,7 +319,6 @@ export default {
     },
 
     methods: {
-        ...mapMutations(["toasted"]),
 
         getPrice(amout) {
             return ` R$ ${amout.toFixed(2).replace(".", ",")}`;
@@ -582,17 +369,18 @@ export default {
                     this.$store.commit("setNumberOfProductsInCart", 0);
                 })
                 .catch((e) =>
-                    this.toasted({
-                        text: e.data ? e.data : e,
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
                     })
-                );
+                )
         },
     },
 };
 </script>
 
 <style>
-
 .v-dialog--active {
     height: 100%;
     width: 100%;

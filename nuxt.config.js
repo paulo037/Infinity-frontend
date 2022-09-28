@@ -44,7 +44,8 @@ export default {
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
         '~plugins/vue-the-mask.js',
-        '~/plugins/axios',
+        '~/plugins/axios.js',
+        '~/plugins/toasted.js',
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -89,7 +90,7 @@ export default {
 
                 token: {
                     property: 'access_token',
-                    maxAge: 30,
+                    maxAge: 60 * 60 * 3,
                     tokenRequired: true,
                     global: true,
                 },
@@ -141,6 +142,12 @@ export default {
         credentials: true,
     },
 
+
+    loading: {
+        color: "#ffa000",
+        height: '1px'
+    },
+
     // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
     vuetify: {
         customVariables: ['~/assets/variables.scss'],
@@ -170,7 +177,10 @@ export default {
             },
 
         }
+
     },
+
+
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {

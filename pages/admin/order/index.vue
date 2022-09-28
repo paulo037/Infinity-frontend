@@ -119,7 +119,7 @@ export default {
         };
     },
     async fetch() {
-        this.orders = await this.$axios.$get("order");
+        this.orders = await this.$axios.$get("orders");
     },
 
     methods: {

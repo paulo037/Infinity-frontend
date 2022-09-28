@@ -14,7 +14,7 @@
     <v-icon
       color="sencondary"
       class="accent rounded-circle"
-      @click="quantity == max ? toasted(payload) : $emit('increment')"
+      @click="quantity == max ? $toasted(payload) : $emit('increment')"
     >
       mdi-plus
     </v-icon>
@@ -24,16 +24,13 @@
 
 <script>
 
-import { mapMutations } from 'vuex';
 export default {
   data() {
     return {
       payload: {text: "Quantidade máxima já selecionada."}
     };
   },
-  methods:{
-    ...mapMutations(["toasted"]),
-  },
+
   props: {
     quantity: Number,
     max: Number,

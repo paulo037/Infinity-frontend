@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 
 export default {
     async mounted() {
@@ -150,7 +150,7 @@ export default {
             this.$store.commit("changeMenu");
         },
         logout() {
-            this.toasted({
+            this.$toasted({
                 text: "Logout realizado com sucesso!",
                 color: "success",
             });
@@ -172,7 +172,6 @@ export default {
             }
         },
 
-        ...mapMutations(["toasted"]),
     },
     computed: {
         ...mapState({

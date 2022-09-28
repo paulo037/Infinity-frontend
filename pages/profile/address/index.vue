@@ -1,5 +1,8 @@
 <template>
     <div align="center">
+        <div align="left"  style="max-width: 1000px">
+            <v-icon @click="$router.push('/profile')" x-large>mdi-arrow-left-bold</v-icon>
+        </div>
         <v-col cols="12" sm="8" class="pa-0" style="max-width: 800px">
             <h1 class="text-left pb-5">Endereços</h1>
             <v-card style="max-width: 800px" class="d-block">
@@ -72,19 +75,15 @@
 </template>
 
 <script>
-import ChoseAddress from "~/components/product/ChoseAddress.vue";
 
 export default {
-    components: {
-        ChoseAddress,
-    },
+
     middleware: "address",
     data() {
         return {
             addresses: this.$store.state.user.addresses,
         };
     },
-  
 };
 </script>
 

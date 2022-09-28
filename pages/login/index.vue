@@ -1,11 +1,12 @@
 <template>
     <div align="center">
-        <v-dialog v-model="login_loading" style="">
+        <v-dialog v-model="login_loading">
             <v-progress-circular
                 indeterminate
                 color="accent"
                 v-if="login_loading"
                 :size="60"
+                style="position: fixed; top: 98px; left: 48%; z-index: 50"
             ></v-progress-circular>
         </v-dialog>
 
@@ -59,7 +60,6 @@
 
 
 <script>
-import { mapMutations } from "vuex";
 
 export default {
     data() {
@@ -84,30 +84,32 @@ export default {
                     },
                 })
                 .then((response) => {
-
-                   
-
-                    this.toasted({
+                    this.$toasted({
                         text: "Login realizado com sucesso!",
                         color: "success",
                     });
 
                     if (this.$store.state.back_url) {
-                        const back = this.$store.state.back_url
+                        const back = this.$store.state.back_url;
                         this.$store.commit("SetBack_url", null);
-                        return window.open(`${process.env.BASE_FRONT}${back}`, "_self")                        
+                        return window.open(
+                            `${process.env.BASE_FRONT}${back}`,
+                            "_self"
+                        );
                     }
-                    return window.open(`${process.env.BASE_FRONT}`, "_self")                    
+                    return window.open(`${process.env.BASE_FRONT}`, "_self");
                 })
                 .catch((e) => {
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    });
+
                     this.login_loading = false;
-                    e.data
-                        ? this.toasted({ text: e.data })
-                        : this.toasted({ text: e });
                 });
         },
 
-        ...mapMutations(["toasted"]),
     },
 };
 </script>

@@ -1,14 +1,5 @@
 <template>
     <div>
-        <v-dialog v-model="preference_loading">
-            <v-progress-circular
-                indeterminate
-                color="blue"
-                v-if="preference_loading"
-                :size="60"
-                style="position: fixed; top: 98px; left: 48%; z-index: 50"
-            ></v-progress-circular>
-        </v-dialog>
         <client-only>
             <div align="center" v-if="products.length == 0 && !page_loading">
                 <v-card
@@ -128,7 +119,7 @@
                                                             28
                                                                 ? item.name.substring(
                                                                       0,
-                                                                      25
+                                                                      22
                                                                   ) + "..."
                                                                 : item.name
                                                         }}
@@ -246,10 +237,10 @@
                                                     "
                                                 >
                                                     {{
-                                                        item.name.length > 28
+                                                        item.name.length > 25
                                                             ? item.name.substring(
                                                                   0,
-                                                                  25
+                                                                  22
                                                               ) + "..."
                                                             : item.name
                                                     }}
@@ -372,30 +363,30 @@
         </client-only>
 
         <div align="center" v-if="page_loading">
-                <v-card max-width="900px" class="pa-2">
-                    <v-card class="primary--text secondary py-2">
-                        <span class="text-h5"> CARRINHO | </span>
-                        <v-icon class="primary--text pb-3">mdi-cart</v-icon>
-                    </v-card>
-                    <v-divider class="third"></v-divider>
-                    <v-skeleton-loader
-                        class="mx-auto"
-                        type="image"
-                    ></v-skeleton-loader>
+            <v-card max-width="900px" class="pa-2">
+                <v-card class="primary--text secondary py-2">
+                    <span class="text-h5"> CARRINHO | </span>
+                    <v-icon class="primary--text pb-3">mdi-cart</v-icon>
                 </v-card>
-            </div>
+                <v-divider class="third"></v-divider>
+                <v-skeleton-loader
+                    class="mx-auto"
+                    type="image"
+                ></v-skeleton-loader>
+            </v-card>
+        </div>
     </div>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+
 import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
 
 export default {
     async mounted() {
         if (!this.$auth.loggedIn) {
-            this.toasted({
+            this.$toasted({
                 text: "Entre ou crie uma conta para ver seu carrinho!",
             });
             this.$store.commit(
@@ -412,7 +403,6 @@ export default {
     data() {
         return {
             products: [],
-            preference_loading: false,
             choseAddressModel: false,
             addresses: [],
             selected: [0],
@@ -423,7 +413,7 @@ export default {
     methods: {
         async checkout() {
             if (!this.$auth.loggedIn) {
-                this.toasted({
+                this.$toasted({
                     text: "Entre ou crie uma conta para comprar produtos!",
                 });
                 this.$store.commit(
@@ -482,10 +472,12 @@ export default {
                     }
                 })
                 .catch((e) =>
-                    this.toasted({
-                        text: e.data ? e.data : e,
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
                     })
-                );
+                )
         },
 
         async increment(index) {
@@ -505,10 +497,12 @@ export default {
                         this.products[index].quantity++;
                 })
                 .catch((e) =>
-                    this.toasted({
-                        text: e.data ? e.data : e,
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
                     })
-                );
+                )
         },
 
         changeActive(index) {
@@ -529,20 +523,21 @@ export default {
                 .delete("/cart", { data: { cart: cart } })
                 .then(() => {
                     this.$store.commit("decrementNumberOfProductsInCart");
-                    this.toasted({
+                    this.$toasted({
                         text: `O produto ${name} foi removido do carrinho`,
                         color: "success",
                     });
                     this.products.splice(index, 1);
                 })
                 .catch((e) =>
-                    this.toasted({
-                        text: e.data ? e.data : e,
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
                     })
-                );
+                )
         },
 
-        ...mapMutations(["toasted"]),
     },
 
     computed: {

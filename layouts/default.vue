@@ -33,6 +33,9 @@
         </v-main>
 
         <Footer />
+
+
+       
     </v-app>
 </template>
 
@@ -45,6 +48,8 @@ import Sidbar from "@/components/template/Sidebar.vue";
 import Footer from "@/components/template/Footer.vue";
 
 export default {
+ 
+
     name: "App",
     components: {
         Navbar,
@@ -57,9 +62,14 @@ export default {
             switch1: true,
         };
     },
+ 
 };
 </script>
 
 
 <style>
+
+.nuxt-progress{
+    color: blue !important;
+}
 </style>

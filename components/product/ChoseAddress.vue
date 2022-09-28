@@ -1,25 +1,19 @@
 <template>
     <div>
-        <v-dialog v-model="model" max-width="520px" persistent>
+        <v-dialog
+            v-model="model"
+            max-width="520px"
+            persistent
+            style="max-height: fit-content !important"
+        >
             <v-card>
                 <div
                     class="text--right d-flex"
                     @click="$emit('back')"
                     style="cursor: pointer"
                 >
-                    <v-icon
-                        class="
-                            accent--text
-                            rounded-0
-                            m
-                            a-1
-                            rounded-tl
-                            text--right
-                        "
-                        >mdi-arrow-left-bold</v-icon
-                    >
                 </div>
-                <div class="pa-5 pt-0">
+                <div class="pa-5">
                     <span class="text-h6">
                         <wbr /> Em <wbr /> qual endereço você <wbr />quer
                         <wbr />receber<wbr /> o <wbr />seu <wbr />produto?
@@ -29,11 +23,7 @@
                 <v-divider></v-divider>
                 <v-simple-table>
                     <tbody>
-                        <tr
-                            
-                            v-for="(address, index) in addresses"
-                            :key="index"
-                        >
+                        <tr v-for="(address, index) in addresses" :key="index">
                             <td style="width: 20px">
                                 <v-icon>mdi-home</v-icon>
                             </td>
@@ -88,7 +78,7 @@
                     class="accent third--text font-weight-bold mt-10"
                     height="50px"
                     block
-                    >continuar</v-btn
+                    >Salvar</v-btn
                 >
             </v-card>
         </v-dialog>
@@ -117,4 +107,7 @@ export default {
 </script>
 
 <style>
+.v-dialog--active{
+    height: auto !important;
+}
 </style>

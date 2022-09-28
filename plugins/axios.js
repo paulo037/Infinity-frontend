@@ -68,8 +68,7 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
 
     $axios.onRequest(async (config) => {
         const token = !!store.state.access_token ? store.state.access_token : await $cookies.get('access_token')
-        const refresh_token = !!store.state.refresh_token ? store.state.refresh_token : await $cookies.get('refresh_token')
-        console.log(config.url)
+        const refresh_token = !!store.state.refresh_token ? store.state.refresh_token : await $cookies.get('refresh_token') 
         if (config.url == URL_REFRESH_TOKEN) return config;
 
         if (process.server) {

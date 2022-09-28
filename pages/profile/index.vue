@@ -116,7 +116,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
 
 export default {
     data() {
@@ -127,7 +126,7 @@ export default {
 
     methods: {
         logout() {
-            this.toasted({
+            this.$toasted({
                 text: "Logout realizado com sucesso!",
                 color: "success",
             });
@@ -135,7 +134,6 @@ export default {
             this.$auth.logout();
         },
 
-        ...mapMutations(["toasted"]),
     },
 };
 </script>

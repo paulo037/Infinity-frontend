@@ -1,5 +1,10 @@
 <template>
     <div align="center">
+        <div align="left" style="max-width: 1000px">
+            <v-icon @click="$router.push('/profile/address')" x-large
+                >mdi-arrow-left-bold</v-icon
+            >
+        </div>
         <h1 class="text-left pb-5" style="max-width: 700px">
             {{ $route.params.mode != "new-address" ? "Editar" : "Criar" }}
             Endereço
@@ -107,7 +112,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
 
 export default {
     data() {
@@ -142,49 +146,105 @@ export default {
                         this.address.district =
                             bairro != "" ? bairro : this.address.district;
                     })
-                    .catch((e) =>{
-
-                        this.$store.commit("toasted", {
+                    .catch((e) => {
+                        this.$toasted({
                             text: "CEP não encontrado!",
-                        })
-
-                        this.address.cep = ""
-                    }
-                        
-                    );
+                        });
+                        this.address.cep = "";
+                    });
             }
         },
     },
 
     methods: {
-        ...mapMutations(["toasted"]),
-        async save() {
+        addressValid() {
             if (!this.address.user_name || this.address.user_name == "") {
-                return this.toasted({text: "Preencha seu nome completo!"});
+                this.$toasted({ text: "Preencha seu nome completo!" });
+                return false;
             }
-            if (!this.address.cep || this.address.cep == "") {
-                return this.toasted({text: "Preencha o CEP do enderço!"});
+            if (
+                !this.address.cep ||
+                this.address.cep == "" ||
+                this.address.cep.length != 9
+            ) {
+                this.$toasted({ text: "Preencha o CEP do enderço!" });
+                return false;
             }
             if (!this.address.state || this.address.state == "") {
-                return this.toasted({ text: "Preencha o nome estado!"});
+                this.$toasted({ text: "Preencha o nome estado!" });
+                return false;
             }
             if (!this.address.city || this.address.city == "") {
-                return this.toasted({ text: "Preencha o nome da cidade!"});
+                this.$toasted({ text: "Preencha o nome da cidade!" });
+                return false;
             }
             if (!this.address.district || this.address.district == "") {
-                return this.toasted({ text: "Preencha o nome do bairro!"});
+                this.$toasted({ text: "Preencha o nome do bairro!" });
+                return false;
             }
             if (!this.address.street || this.address.street == "") {
-                return this.toasted({ text: "Preencha  o nome da rua!"});
+                this.$toasted({ text: "Preencha  o nome da rua!" });
+                return false;
             }
 
             if (!this.address.telephone || this.address.telephone == "") {
-                return this.toasted({ text: "Preencha o número para contato!"});
+                this.$toasted({ text: "Preencha o número para contato!" });
+                return false;
             }
 
             if (!this.address.number || this.address.number == "") {
-                return this.toasted({ text: "Preencha o número referente a sua casa!"});
+                this.$toasted({
+                    text: "Preencha o número referente a sua casa!",
+                });
+                return false;
             }
+
+            return true;
+        },
+
+        async save() {
+            const regNumber = /[^0-9]+/g;
+
+            if (!this.addressValid()) return;
+            this.address.cep = this.address.cep.replace(regNumber, "");
+            this.address.telephone = this.address.telephone.replace(
+                regNumber,
+                ""
+            );
+
+            if (this.mode == "new-address") {
+                await this.$axios
+                    .$post(`address/new-address`, {
+                        address: this.address,
+                    })
+                    .then(() => {
+                        this.$toasted({
+                            text: "Endereço criado com sucesso!",
+                            color: "success",
+                        });
+                        this.$router.push("/profile/address");
+                        return;
+                    });
+                this.address.cep = "";
+                return;
+            }
+
+            await this.$axios
+                .$put(`address/${this.address.id}`, { address: this.address })
+                .then(() => {
+                    this.$toasted({
+                        text: "Endereço atualizado com sucesso!",
+                        color: "success",
+                    });
+                    this.$router.push("/profile/address");
+                })
+                .catch((e) =>
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    })
+                );
         },
     },
 };

@@ -69,11 +69,8 @@ export default {
     async fetch() {
         this.products = await this.$axios
             .$get(`product/category/${this.id}`)
-            .catch((e) =>
-                this.$store.commit("toasted", {
-                    text: e.data ? e.data : e,
-                })
-            );
+           .catch((e) => this.$toasted({ text: e.response.data ?  e.response.data : "Ocorreu um erro inesperado!"}));
+        console.log(this.products);
 
         this.loading = false;
     },

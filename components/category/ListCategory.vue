@@ -30,11 +30,9 @@ export default {
         };
     },
     async fetch() {
-        this.category = await this.$axios.$get(`category/`).catch((e) =>
-            this.$store.commit("toasted", {
-                text: e.data ? e.data : e,
-            })
-        );
+        this.category = await this.$axios
+            .$get(`category/`)
+            .catch((e) => this.$toasted({ text: e.response.data ?  e.response.data : "Ocorreu um erro inesperado!"}));
     },
     props: {
         label: String,

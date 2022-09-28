@@ -26,7 +26,7 @@
                 <v-card-text style="text-align: start">
                     <v-row class="mx-0">
                         <v-rating
-                            :value="sold >= 1 ? rating : 5"
+                            :value=" rating ? rating : 5"
                             color="amber"
                             dense
                             half-increments
@@ -34,7 +34,7 @@
                             size="16"
                         ></v-rating>
 
-                        <div class="grey--text ms-4">
+                        <div class="grey--text ms-4" v-if="rating && sold">
                             {{
                                 sold >= 1
                                     ? `${rating.toFixed(1)}(${sold})`
