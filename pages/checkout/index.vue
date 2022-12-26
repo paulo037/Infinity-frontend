@@ -117,9 +117,11 @@
                                                     style="
                                                         cursor: pointer;
                                                         height: 50px;
-                                                        "
+                                                    "
                                                     class="primary--text"
-                                                    @click=" choseAddressModel = true "
+                                                    @click="
+                                                        choseAddressModel = true
+                                                    "
                                                 >
                                                     Alterar endereço
                                                 </span>
@@ -152,10 +154,18 @@
                             <div class="text-h5 pb-5" v-if="address">
                                 Confira cada item do seu pedido
                             </div>
-                            <ShowProductListVue :products="products" :head="true"/>
+                            <ShowProductListVue
+                                :products="products"
+                                :head="true"
+                            />
                             <div class="d-flex justify-end">
                                 <v-btn
-                                    class="accent white--text font-weight-bold"
+                                    class="
+                                        accent
+                                        white--text
+                                        font-weight-bold
+                                        mt-5
+                                    "
                                     width="200px"
                                     height="50px"
                                     @click="step = 3"
@@ -182,7 +192,7 @@
                                 >
                                     <p class="pa-5 ma-0">
                                         O valor total do seu pedido foi de
-                                        {{ getPrice(amout) }}. Assim que 
+                                        {{ getPrice(amout) }}. Assim que
                                         confirmarmos o pagamento realizaremos o
                                         envio.
                                     </p>
@@ -248,7 +258,7 @@ import verify from "jsonwebtoken/verify";
 export default {
     components: {
         ChoseAddress,
-        ShowProductListVue
+        ShowProductListVue,
     },
 
     data() {
@@ -275,12 +285,12 @@ export default {
                 this.addresses = a.data;
             })
             .catch((e) =>
-                    this.$toasted({
-                        text: e.response.data
-                            ? e.response.data
-                            : "Ocorreu um erro inesperado!",
-                    })
-                )
+                this.$toasted({
+                    text: e.response.data
+                        ? e.response.data
+                        : "Ocorreu um erro inesperado!",
+                })
+            );
     },
 
     mounted() {
@@ -319,7 +329,6 @@ export default {
     },
 
     methods: {
-
         getPrice(amout) {
             return ` R$ ${amout.toFixed(2).replace(".", ",")}`;
         },
@@ -366,7 +375,9 @@ export default {
                 .then((response) => {
                     this.preferece_id = response.id;
                     this.preference_loading = false;
-                    this.$store.commit("setNumberOfProductsInCart", 0);
+                    if (this.$route.query.type == "cart") {
+                        this.$store.commit("setNumberOfProductsInCart", 0);
+                    }
                 })
                 .catch((e) =>
                     this.$toasted({
@@ -374,7 +385,7 @@ export default {
                             ? e.response.data
                             : "Ocorreu um erro inesperado!",
                     })
-                )
+                );
         },
     },
 };

@@ -379,7 +379,6 @@
 </template>
 
 <script>
-
 import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
 
@@ -429,7 +428,7 @@ export default {
 
             this.products.forEach((p) => {
                 items.push({
-                    product_id: p.product_id.toString(),
+                    product_id: p.product_id,
                     quantity: p.quantity,
                     size: p.size,
                     color: p.color,
@@ -477,7 +476,7 @@ export default {
                             ? e.response.data
                             : "Ocorreu um erro inesperado!",
                     })
-                )
+                );
         },
 
         async increment(index) {
@@ -502,7 +501,7 @@ export default {
                             ? e.response.data
                             : "Ocorreu um erro inesperado!",
                     })
-                )
+                );
         },
 
         changeActive(index) {
@@ -535,9 +534,8 @@ export default {
                             ? e.response.data
                             : "Ocorreu um erro inesperado!",
                     })
-                )
+                );
         },
-
     },
 
     computed: {

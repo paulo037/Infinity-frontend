@@ -1,5 +1,5 @@
 <template>
-    <v-card class="ma-10 mt-0 pt-0">
+    <v-card class="ma-0 mt-0 pt-0">
         <v-tabs v-model="tab" class="pa-5 pb-0">
             <v-tab
                 v-for="(item, index) in tabs"

@@ -17,19 +17,19 @@
 
             <div v-else v-for="(order, index) in orders" :key="index">
                 <div style="max-width: 800px" align="left">
-                    {{ getBrazilianDate(order[0].date) }}
+                    {{ getBrazilianDate(order.created_at) }}
                 </div>
                 <div class="d-flex justify-space-between align-end">
                     <span
                         :class="`${
-                            status[order[0].status + 1].color
+                            status[order.status + 1].color
                         }--text font-weight-bold pb-2`"
                     >
-                        {{ status[order[0].status + 1].text }}
+                        {{ status[order.status + 1].text }}
                     </span>
                     <span class="pb-5">
                         <v-icon
-                            v-if="order[0].status + 1 < 2"
+                            v-if="order.status + 1 < 2"
                             class="red--text"
                             @click="deleteOrder(index)"
                             style="cursor: pointer"
@@ -37,15 +37,31 @@
                         >
                     </span>
                 </div>
-                <ShowProductListVue :products="order" :head="false" />
+                <div class="mb-10">
+                    <ShowProductListVue
+                        :products="order.products"
+                        :head="false"
+                    />
+                    <div class="d-flex justify-end">
+                        <v-btn
+                            class="accent white--text font-weight-bold mt-5"
+                            width="200px"
+                            height="50px"
+                            @click="checkout(index)"
+                            v-if="order.status + 1 < 2"
+                            >Concluir Pagamento</v-btn
+                        >
+                    </div>
+                </div>
             </div>
         </v-card>
     </div>
 </template>
 
 <script>
-import stringify from "uuid/dist/stringify";
 import ShowProductListVue from "~/components/product/ShowProductList.vue";
+import { v4 } from "uuid";
+import { sign } from "jsonwebtoken";
 
 export default {
     components: {
@@ -81,9 +97,11 @@ export default {
 
     async fetch() {
         this.orders = await this.$axios.$get("order");
+
         this.orders = this.orders.sort(
             (a, b) =>
-                new Date(b[0].date).getTime() - new Date(a[0].date).getTime()
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
         );
     },
 
@@ -97,7 +115,7 @@ export default {
 
         async deleteOrder(index) {
             await this.$axios
-                .$delete(`/order/${this.orders[index][0].id}`)
+                .$delete(`/order/${this.orders[index].id}`)
                 .then(() => {
                     this.$toasted({
                         text: "Pedido excluido!",
@@ -112,6 +130,54 @@ export default {
                             : "Ocorreu um erro inesperado!",
                     })
                 );
+        },
+
+        async checkout(index) {
+            if (!this.$auth.loggedIn) {
+                this.$toasted({
+                    text: "Entre ou crie uma conta para comprar produtos!",
+                });
+                this.$store.commit(
+                    "SetBack_url",
+                    this.$router.history.current.path
+                );
+                return this.$router.push("/login");
+            }
+
+            const products = this.orders[index].products;
+            // await this.$axios.$delete(`/order/${this.orders[index].id}`);
+            const reference = v4();
+
+            let items = [];
+            console.log(this.orders[index])
+
+            products.forEach((p) => {
+                items.push({
+                    product_id: p.product_id,
+                    quantity: p.quantity,
+                    size: p.size,
+                    color: p.color,
+                    name: p.name,
+                    price: p.price,
+                    image: p.image,
+                });
+            });
+            
+
+            localStorage.setItem(
+                "reference",
+                sign(reference, process.env.JWT_SECRET)
+            );
+
+            localStorage.setItem(
+                "checkout",
+                sign(JSON.stringify(items), process.env.JWT_SECRET)
+            );
+
+            await this.$router.push({
+                path: "/checkout",
+                query: { reference: reference, type: "order" },
+            });
         },
     },
 };

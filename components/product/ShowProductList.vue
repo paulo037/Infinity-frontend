@@ -1,5 +1,5 @@
 <template>
-    <v-card max-width="900px" class="mb-10" outlined>
+    <v-card max-width="900px"  outlined>
         <v-simple-table class="secondary third--text">
             <thead v-if="head">
                 <tr>

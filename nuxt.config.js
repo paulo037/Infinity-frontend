@@ -103,7 +103,7 @@ export default {
 
                 endpoints: {
                     login: { url: '/signin', method: 'post' },
-                    logout: false,
+                    logout: { url: `${process.env.BASE_FRONT}/server/logout`, method: 'post' },
                     user: { url: '/validateToken', method: 'post' },
                     refresh: { url: `${process.env.BASE_FRONT}/server/refreshToken`, method: 'post' },
                 },

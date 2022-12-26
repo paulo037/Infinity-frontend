@@ -5,3 +5,7 @@ tbody tr:hover {
     margin: 0  !important;;
 }
 
+.v-btn {
+    text-transform: unset !important;
+}
+

@@ -24,5 +24,14 @@ app.post('/refreshToken', async (req, res) => {
 })
 
 
+app.post('/logout', async (req, res) => {
+
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');   
+    res.send().status(200)
+    
+})
+ 
+
 
 export default app
