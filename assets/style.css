@@ -9,3 +9,7 @@ tbody tr:hover {
     text-transform: unset !important;
 }
 
+.v-text-field__details {
+    display: none !important;
+}
+

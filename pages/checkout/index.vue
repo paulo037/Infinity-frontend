@@ -281,7 +281,6 @@ export default {
         await this.$axios
             .get("/addresses")
             .then((a) => {
-                console.log(a);
                 this.addresses = a.data;
             })
             .catch((e) =>

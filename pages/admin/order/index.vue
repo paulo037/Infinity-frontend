@@ -172,7 +172,6 @@ export default {
     },
     async fetch() {
         this.orders = await this.$axios.$get("orders");
-        console.log(this.orders_with_filter)
         this.orders = this.orders.sort(
             (a, b) =>
                 new Date(b.created_at).getTime() -
@@ -197,12 +196,11 @@ export default {
     watch: {
         status_filter() {
             this.orders_with_filter = [];
-            if (this.status_filter == null | this.status_filter == "" | this.status_filter == 'Todos') {
+            if (this.status_filter == null || this.status_filter == "" || this.status_filter == 'Todos') {
                 this.orders_with_filter = this.orders;
                 return;
             }
             this.orders.forEach((element) => {
-                console.log(this.status[element.status + 1].text , this.status_filter)
                 if (this.status[element.status + 1].text == this.status_filter) {
                     this.orders_with_filter.push(element);
                 }

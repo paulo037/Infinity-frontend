@@ -1,69 +1,170 @@
 <template>
-  <v-card outlined class="my-5">
-    <div class="primary--text text-center d-block text-h5 mt-5">Cores</div>
-    <v-row justify="center" class="mb-5 pt-5">
-      <v-col cols="9" sm="6" class="pb-0 mb-0">
-        <v-text-field
-          v-model="message4"
-          label="Valor"
-          outlined
-          dense
-        ></v-text-field>
-      </v-col>
+    <v-card outlined class="my-5">
+        <div class="primary--text text-center d-block text-h5 mt-5">
+            Tamanhos
+        </div>
+        <v-row justify="center" class="mb-5 pt-5" v-if="!edit">
+            <v-col cols="9" sm="6" class="pb-0 mb-0">
+                <v-text-field
+                    v-model="newColor"
+                    label="Nome"
+                    outlined
+                    dense
+                ></v-text-field>
+            </v-col>
 
-      <v-col cols="10" sm="3">
-        <v-btn block class="accent" @click="pushCategory"> adicionar </v-btn>
-      </v-col>
-    </v-row>
-    <v-divider></v-divider>
-    <v-data-table
-      :items="categories"
-      :headers="headers"
-      :hide-default-header="true"
-      hide-default-footer
-    >
-      <template  #[`item.actions`]="{ item }">
-        <v-icon @click="deleteCategory(item.name)" class="mr-2 accent--text">
-          mdi-pencil
-        </v-icon>
+            <v-col cols="10" sm="3">
+                <v-btn block class="accent" @click="create()">
+                    adicionar
+                </v-btn>
+            </v-col>
+        </v-row>
 
-        <v-icon @click="deleteCategory(item.name)" class="mr-2 red--text">
-          mdi-delete
-        </v-icon>
-      </template>
-    </v-data-table>
-  </v-card>
+        <v-row justify="center" class="mb-5 pt-5" v-else>
+            <v-col cols="9" sm="6" class="pb-0 mb-0">
+                <v-text-field
+                    v-model="colors[index].value"
+                    label="Valor"
+                    outlined
+                    dense
+                ></v-text-field>
+            </v-col>
+
+            <v-col cols="10" sm="2">
+                <v-btn block class="accent" @click="update"> Salvar </v-btn>
+            </v-col>
+
+            <v-col cols="10" sm="2">
+                <v-btn
+                    block
+                    class="red"
+                    @click="
+                        edit = false;
+                        colors[index].value = updateColor;
+                    "
+                >
+                    Cancelar
+                </v-btn>
+            </v-col>
+        </v-row>
+        <v-divider></v-divider>
+        <v-data-table
+            :items="colors"
+            :headers="headers"
+            :hide-default-header="true"
+            hide-default-footer
+        >
+            <template #[`item.value`]="{ item }">
+                <span>{{ item.value }}</span>
+            </template>
+
+            <template #[`item.actions`]="{ item, index }">
+                <v-icon @click="remove(item.value)" class="mr-2 red--text">
+                    mdi-delete
+                </v-icon>
+                <v-icon @click="editItem(index)" class="mr-2 accent--text">
+                    mdi-pencil
+                </v-icon>
+            </template>
+        </v-data-table>
+    </v-card>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      categories: [],
-      newCategory: null,
-      headers: [
-        { value: "value", sortable: false, align: "center" },
-        { value: "actions", sortable: false, align: "center" },
-      ],
-    };
-  },
-  async fetch() {
-    this.categories = await this.$axios.$get(`size`);
-  },
-
-  methods: {
-    deleteCategory(name) {
-      this.items.forEach((c, index) => {
-        if (c.name == name) this.items.splice(index, 1);
-      });
+    data() {
+        return {
+            colors: [],
+            newColor: "",
+            updateColor: "",
+            headers: [
+                { value: "value", sortable: false, align: "center" },
+                { value: "actions", sortable: false, align: "center" },
+            ],
+            edit: false,
+            index: 0,
+        };
     },
 
-    pushCategory() {
-      this.items.push(this.categories.find((c) => c.name == this.newCategory));
-      this.newCategory = null;
+    async fetch() {
+        this.colors = await this.$axios.$get(`color`);
     },
-  },
-  computed: {},
+
+    methods: {
+        async remove(value) {
+            const color = this.colors.find((c) => c.value == value)
+            if(color);
+            await this.$axios
+                .$delete(`color/${color.id}`)
+                .then(() => {
+                    this.$toasted({
+                        text: "Tamanho deletado com sucesso!",
+                        color: "success",
+                    });
+                    this.colors.splice(this.colors.indexOf(color), 1)
+                })
+                .catch((e) =>
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    })
+                );
+            
+        },
+
+        editItem(index) {
+            this.index = index;
+            this.edit = true;
+            this.updateColor = this.colors[this.index].value;
+        },
+
+        async update() {
+            await this.$axios
+                .$put(`color`, { color: this.colors[this.index] })
+                .then(() => {
+                    this.$toasted({
+                        text: "Categoria atualizada com sucesso!",
+                        color: "success",
+                    });
+                    this.edit = false;
+                })
+                .catch((e) =>
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
+                    })
+                );
+        },
+
+        async create() {
+            if (
+                !this.colors.find((c) => c.value == this.newColor) &&
+                (this.newColor != "")
+            ) {
+                await this.$axios
+                    .$post(`color`, { color: this.newColor })
+                    .then((id) => {
+                        this.$toasted({
+                            text: "Categoria criada com sucesso!",
+                            color: "success",
+                        });
+                        this.colors.push({ value: this.newColor, id });
+                    })
+                    .catch((e) =>
+                        this.$toasted({
+                            text: e.response.data
+                                ? e.response.data
+                                : "Ocorreu um erro inesperado!",
+                        })
+                    );
+            }
+
+            this.newColor = "";
+        },
+    },
+    computed: {},
 };
 </script>
 

@@ -64,10 +64,10 @@ export default {
     props: {
         price: Number,
         name: String,
-        rating: Number | NaN,
+        rating: Number || NaN,
         image: String,
         id: String,
-        sold: Number | NaN,
+        sold: Number || NaN,
     },
 
     methods: {

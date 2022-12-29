@@ -30,7 +30,7 @@
                             <td class="py-5">
                                 <span class="text-h6"
                                     >{{ address.street }} -
-                                    {{ address.number ? address.number : "SN" }}
+                                    {{ address.number ? address.number : "SN" }} - {{ address.complement }}
                                 </span>
                                 <br />
                                 <span class="py-5 text-body-2"

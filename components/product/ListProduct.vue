@@ -70,7 +70,6 @@ export default {
         this.products = await this.$axios
             .$get(`product/category/${this.id}`)
            .catch((e) => this.$toasted({ text: e.response.data ?  e.response.data : "Ocorreu um erro inesperado!"}));
-        console.log(this.products);
 
         this.loading = false;
     },

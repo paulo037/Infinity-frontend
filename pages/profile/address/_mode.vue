@@ -62,6 +62,14 @@
                             v-model="address.district"
                         ></v-text-field>
                     </v-col>
+
+                    <v-col class="justify-space-between pl-0" cols="12" md="6">
+                        <v-text-field
+                            outlined
+                            label="Complemento"
+                            v-model="address.complement"
+                        ></v-text-field>
+                    </v-col>
                 </v-row>
                 <v-row class="justify-space-between">
                     <v-col class="justify-space-between pl-0" cols="12" md="6">
@@ -112,7 +120,6 @@
 </template>
 
 <script>
-
 export default {
     data() {
         return {
@@ -137,7 +144,6 @@ export default {
                     .then((response) => {
                         const { localidade, uf, logradouro, bairro } =
                             response.data;
-                        console.log(response);
                         this.address.city =
                             localidade != "" ? localidade : this.address.city;
                         this.address.state = uf != "" ? uf : this.address.state;

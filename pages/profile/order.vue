@@ -145,11 +145,10 @@ export default {
             }
 
             const products = this.orders[index].products;
-            // await this.$axios.$delete(`/order/${this.orders[index].id}`);
+            await this.$axios.$delete(`/order/${this.orders[index].id}`);
             const reference = v4();
 
             let items = [];
-            console.log(this.orders[index])
 
             products.forEach((p) => {
                 items.push({

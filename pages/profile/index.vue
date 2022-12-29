@@ -116,13 +116,7 @@
 </template>
 
 <script>
-
 export default {
-    data() {
-        return {
-            user: { first_name: "Paulo", last_name: "Henrique" },
-        };
-    },
 
     methods: {
         logout() {
@@ -133,8 +127,8 @@ export default {
 
             this.$auth.logout();
         },
-
     },
+
 };
 </script>
 

@@ -191,7 +191,6 @@ import ListProduct from "@/components/product/ListProduct.vue";
 import SkeletonProductBuy from "~/components/product/SkeletonProductBuy.vue";
 import Price from "@/components/product/Price.vue";
 import ProductQuantity from "@/components/product/ProductQuantity.vue";
-import Payment from "~/components/product/Payment.vue";
 import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
 
@@ -203,7 +202,6 @@ export default {
         ListProduct,
         ProductQuantity,
         Price,
-        Payment,
     },
 
     data() {

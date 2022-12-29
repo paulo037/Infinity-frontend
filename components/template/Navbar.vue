@@ -14,7 +14,7 @@
         <v-text-field
             v-model="term"
             placeholder="Buscar Produtos"
-            class="mt-6 primary--text"
+            class=" primary--text"
             dense
             outlined
             @keydown="enter"

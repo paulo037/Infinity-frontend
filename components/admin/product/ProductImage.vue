@@ -54,7 +54,9 @@
                             small
                             class="rounded-0 ma-0 mr-15 d-block accent--text"
                             @click="makePrimary(index)"
-                            :class=" item.primary ? 'accent--text' : 'white--text' "
+                            :class="
+                                item.primary ? 'accent--text' : 'white--text'
+                            "
                         >
                             mdi-star
                         </v-icon>
@@ -71,7 +73,6 @@
                 </tr>
             </tbody>
         </v-simple-table>
-
     </v-card>
 </template>
 
@@ -107,18 +108,18 @@ export default {
 
         onFileChanged(e) {
             let file = e.target.files[0];
+            if (file) {
+                let item = {};
 
-            let item = {};
-
-            if (this.items.length == 0) {
-                item.primary = true;
-            } else {
-                item.primary = false;
+                if (this.items.length == 0) {
+                    item.primary = true;
+                } else {
+                    item.primary = false;
+                }
+                item.name = file.name;
+                item.file = file;
+                this.items.push(item);
             }
-            item.name = file.name;
-            item.file = file;
-            this.items.push(item);
-            console.log(this.items);
         },
         createURL(img) {
             return URL.createObjectURL(img);
@@ -134,7 +135,6 @@ export default {
         makePrimary(index) {
             if (this.items.length === 1) return;
             this.items.forEach((image, i) => {
-                console.log(image);
                 if (i === index) {
                     this.items[i].primary = true;
                 } else {
