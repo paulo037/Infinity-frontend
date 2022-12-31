@@ -10,7 +10,12 @@
                 class="secondary mx-8 pa-8 justify-center"
                 elevation="5"
             >
-                <span class="primary--text text-h6">
+                <span class="primary--text text-h6" v-if="category">
+                    Nenhum resultado para a categoria "{{ category }}"
+                </span>
+
+
+                <span class="primary--text text-h6" v-else>
                     Nenhum resultado para "{{ term }}"
                 </span>
                 <div>

@@ -11,8 +11,7 @@
                     class="text--right d-flex"
                     @click="$emit('back')"
                     style="cursor: pointer"
-                >
-                </div>
+                ></div>
                 <div class="pa-5">
                     <span class="text-h6">
                         <wbr /> Em <wbr /> qual endereço você <wbr />quer
@@ -30,7 +29,12 @@
                             <td class="py-5">
                                 <span class="text-h6"
                                     >{{ address.street }} -
-                                    {{ address.number ? address.number : "SN" }} - {{ address.complement }}
+                                    {{ address.number ? address.number : "SN" }}
+                                    {{
+                                        address.complement != ""
+                                            ? "-" + address.complement
+                                            : ""
+                                    }}
                                 </span>
                                 <br />
                                 <span class="py-5 text-body-2"
@@ -58,28 +62,32 @@
                 </v-simple-table>
                 <v-divider class="pb-5"></v-divider>
 
-                <div>
+                <div class="text-right px-5">
                     <router-link
                         class="
                             primary--text
-                            pl-5
-                            text-left text-decoration-none
+                            text-end text-decoration-none
                             third--text
                         "
                         to="/profile/address"
+                        @click="
+                            $store.commit(
+                                'SetBack_url',
+                                $router.history.current.path
+                            )
+                        "
                     >
                         <span> Criar ou editar um endereço </span>
                         <v-icon>mdi-arrow-right-bold</v-icon>
                     </router-link>
                 </div>
-
-                <v-btn
-                    @click="$emit('buy')"
-                    class="accent third--text font-weight-bold mt-10"
-                    height="50px"
-                    block
-                    >Salvar</v-btn
-                >
+                <div class="text-center">
+                    <v-btn
+                        @click="$emit('buy')"
+                        class="accent third--text font-weight-bold my-5"
+                        >Salvar alterações</v-btn
+                    >
+                </div>
             </v-card>
         </v-dialog>
     </div>
@@ -107,7 +115,7 @@ export default {
 </script>
 
 <style>
-.v-dialog--active{
+.v-dialog--active {
     height: auto !important;
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
     <div class="secondary">
-        <list-product label="Lançamentos" :id="c1" />
+        <list-product label="Lançamentos" :name="launch" />
         <list-category label="Categorias" class="py-10 pb-15" />
 
-        <list-product label="Produtos Mais Vendidos" :id="c2" />
+        <list-product label="Produtos Mais Vendidos" :name="bestSeller" />
     </div>
 </template>
 
@@ -19,8 +19,8 @@ export default {
 
     data() {
         return {
-            c1: "9bcf9dfc-f0ba-4b48-9b82-b4fb13893a2b",
-            c2: "a00d1ae9-b32c-4dea-acb0-062ec4a1cc07",
+            launch: "Lançamentos",
+            bestSeller: "Produtos Mais Vendidos",
         };
     },
 };

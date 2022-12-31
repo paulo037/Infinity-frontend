@@ -24,7 +24,7 @@
                         >
                             <v-icon> mdi-account-circle </v-icon>
                             <v-list-item-title class="ml-5 primary--text"
-                                >PERFIL</v-list-item-title
+                                >Perfil</v-list-item-title
                             >
                         </v-btn>
                     </NuxtLink>

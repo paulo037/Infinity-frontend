@@ -96,10 +96,10 @@
 
                 <v-card-actions class="flex justify-space-between">
                     <v-btn class="red white--text" @click="dialog = false">
-                        CANCELAR
+                        Cancelar
                     </v-btn>
                     <v-btn class="green white--text" @click="deleteProduct()">
-                        CONFIRMAR
+                        Confirmar
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -156,7 +156,7 @@ export default {
 
             status: [
                 { text: "Pagamento Recusado", color: "red" },
-                { text: "Pagamento Pendente", color: "yellow" },
+                { text: "Pagamento Pendente", color: "darken3" },
                 { text: "Pagamento Aprovado", color: "success" },
                 { text: "Pedido enviado", color: "success" },
                 { text: "Entregue", color: "success" },

@@ -38,13 +38,13 @@
 
                 <v-card-actions class="flex justify-space-between">
                     <v-btn class="red white--text" @click="dialog = false">
-                        CANCELAR
+                        Cancelar
                     </v-btn>
                     <v-btn
                         class="green white--text"
                         @click="changePermission()"
                     >
-                        CONFIRMAR
+                        Confirmar
                     </v-btn>
                 </v-card-actions>
             </v-card>

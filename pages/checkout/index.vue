@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <v-card outlined elevation="2">
+    <div align="center">
+        <v-card outlined elevation="2" style="max-width: 1000px">
             <v-stepper v-model="step" flat>
                 <v-stepper-header style="box-shadow: none !important">
                     <v-stepper-step
@@ -55,7 +55,15 @@
 
                                 <v-icon x-large> mdi-google-maps </v-icon>
 
-                                <div class="my-10">
+                                <div
+                                    class="my-10"
+                                    @click="
+                                        $store.commit(
+                                            'SetBack_url',
+                                            $router.history.current.path
+                                        )
+                                    "
+                                >
                                     <router-link
                                         class="
                                             accent--text
@@ -134,8 +142,6 @@
                             <div class="d-flex justify-end">
                                 <v-btn
                                     class="accent white--text font-weight-bold"
-                                    width="200px"
-                                    height="50px"
                                     :disabled="
                                         address == undefined ? true : false
                                     "
@@ -166,8 +172,6 @@
                                         font-weight-bold
                                         mt-5
                                     "
-                                    width="200px"
-                                    height="50px"
                                     @click="step = 3"
                                 >
                                     Continue
@@ -192,8 +196,8 @@
                                 >
                                     <p class="pa-5 ma-0">
                                         O valor total do seu pedido foi de
-                                        {{ getPrice(amout) }}. Assim que
-                                        confirmarmos o pagamento realizaremos o
+                                        {{ getPrice(amout) }}. Assim que for
+                                        confirmado o pagamento realizaremos o
                                         envio.
                                     </p>
 
@@ -204,23 +208,13 @@
                                 </div>
                             </v-card>
 
-                            <div class="third--text text-body-2 mb-5" outlined>
-                                <p>
-                                    Ao clicar em "Pagar" você será direcionado
-                                    para uma nova aba, onde irá realizar o
-                                    pagamento.
-                                </p>
-                            </div>
-
                             <div class="d-flex justify-center">
                                 <v-btn
                                     class="accent white--text font-weight-bold"
-                                    width="200px"
-                                    height="50px"
                                     @click="buy"
-                                    :disabled="preference_loading"
+                                    :disabled="$store.state.loading"
                                 >
-                                    Pagar
+                                    {{ text }}
                                 </v-btn>
                             </div>
                         </div>
@@ -237,16 +231,6 @@
             v-on:back="choseAddressModel = false"
             v-on:selectedChange="(s) => (selected = s)"
         />
-
-        <v-dialog v-model="preference_loading" persistent>
-            <v-progress-circular
-                indeterminate
-                color="blue"
-                v-if="preference_loading"
-                :size="60"
-                style="position: fixed; top: 98px; z-index: 50"
-            ></v-progress-circular>
-        </v-dialog>
     </div>
 </template>
 
@@ -264,7 +248,6 @@ export default {
     data() {
         return {
             preferece_id: null,
-            preference_loading: false,
 
             choseAddressModel: null,
 
@@ -272,6 +255,7 @@ export default {
             selected: [0], //address selected
 
             step: 1,
+            text: " Concluir Compra",
 
             products: [],
         };
@@ -341,22 +325,43 @@ export default {
         },
 
         async buy() {
+            this.text = "Já é quase seu...";
             var mp = new MercadoPago(process.env.MP_PUBLIC_KEY, {
                 locale: "pt-BR",
             });
 
-            await this.createPreference();
+            if (this.preferece_id) {
+                mp.checkout({
+                    preference: {
+                        id: this.preferece_id,
+                    },
+                    autoOpen: true,
+                });
+                return;
+            }
 
-            mp.checkout({
-                preference: {
-                    id: this.preferece_id,
-                },
-                autoOpen: true,
-            });
+            const created = await this.createPreference();
+
+            if (created) {
+                mp.checkout({
+                    preference: {
+                        id: this.preferece_id,
+                    },
+                    autoOpen: true,
+                });
+            } else {
+                this.preferece_id = null;
+                this.$router.go(-1);
+            }
+            this.text = " Concluir Compra";
         },
 
         async createPreference() {
-            this.preference_loading = true;
+            let created = false;
+            this.$store.commit("setLoading", {
+                loading: true,
+                loading_color: "blue",
+            });
             const products = this.products.map((element) => {
                 delete element.name;
                 delete element.price;
@@ -373,18 +378,23 @@ export default {
                 })
                 .then((response) => {
                     this.preferece_id = response.id;
-                    this.preference_loading = false;
                     if (this.$route.query.type == "cart") {
                         this.$store.commit("setNumberOfProductsInCart", 0);
                     }
+                    created = true;
                 })
-                .catch((e) =>
+                .catch((e) => {
                     this.$toasted({
                         text: e.response.data
                             ? e.response.data
                             : "Ocorreu um erro inesperado!",
-                    })
-                );
+                    });
+                });
+
+            this.$store.commit("setLoading", {
+                loading: false,
+            });
+            return created;
         },
     },
 };

@@ -51,15 +51,13 @@
           <v-col cols="12" sm="5" md="12" lg="5" class="px-0">
             <v-btn
               class="primary secondary--text"
-              height="50px"
+             
               disabled
               append
               nuxt
-              width="200px"
-              block
             >
               <span style="text-align: start"
-                >adicionar<br />
+                >Adicionar<br />
                 ao carrinho</span
               >
               <v-divider vertical class="secondary mx-2"></v-divider>
@@ -70,10 +68,8 @@
             <v-btn
               class="primary secondary--text"
               block
-              width="200px"
-              height="50px"
               disabled
-              >COMPRAR
+              >Comprar Agora
             </v-btn>
           </v-col>
         </v-row>

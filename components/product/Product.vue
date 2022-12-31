@@ -45,8 +45,8 @@
 
                     <Price
                         :price="price"
-                        :size1="'body-2'"
-                        :size2="'subtitle-1'"
+                        :size1="'subtitle-1'"
+                        :size2="'h6'"
                     />
                 </v-card-text>
             </v-card>

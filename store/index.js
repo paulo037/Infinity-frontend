@@ -11,8 +11,15 @@ export const state = () => ({
     load: false,
     access_token: null,
     refresh_token: null,
+    loading: false,
+    loading_color: "primary"
 })
 export const mutations = {
+
+    setLoading(state, payload){
+        state.loading = payload.loading
+        state.loading_color = payload.loading_color ? payload.loading_color :  "primary"
+    },
 
     setup(state){
         state.setup = false

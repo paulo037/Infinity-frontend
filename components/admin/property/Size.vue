@@ -10,13 +10,12 @@
                     label="Nome"
                     outlined
                     dense
+                    class="no-details"
                 ></v-text-field>
             </v-col>
 
-            <v-col cols="10" sm="3">
-                <v-btn block class="accent" @click="create()">
-                    adicionar
-                </v-btn>
+            <v-col cols="10" sm="3" class="text-center">
+                <v-btn class="accent" @click="create()"> Adicionar </v-btn>
             </v-col>
         </v-row>
 
@@ -27,16 +26,12 @@
                     label="Valor"
                     outlined
                     dense
+                    class="no-details"
                 ></v-text-field>
             </v-col>
 
-            <v-col cols="10" sm="2">
-                <v-btn block class="accent" @click="update"> Salvar </v-btn>
-            </v-col>
-
-            <v-col cols="10" sm="2">
+            <v-col cols="10" sm="2" class="text-center">
                 <v-btn
-                    block
                     class="red"
                     @click="
                         edit = false;
@@ -44,6 +39,11 @@
                     "
                 >
                     Cancelar
+                </v-btn>
+            </v-col>
+            <v-col cols="10" sm="2" class="text-center">
+                <v-btn class="accent" @click="update">
+                    Salvar alterações
                 </v-btn>
             </v-col>
         </v-row>
@@ -92,8 +92,8 @@ export default {
 
     methods: {
         async remove(value) {
-            const size = this.sizes.find((c) => c.value == value)
-            if(size);
+            const size = this.sizes.find((c) => c.value == value);
+            if (size);
             await this.$axios
                 .$delete(`size/${size.id}`)
                 .then(() => {
@@ -101,7 +101,7 @@ export default {
                         text: "Tamanho deletado com sucesso!",
                         color: "success",
                     });
-                    this.sizes.splice(this.sizes.indexOf(size), 1)
+                    this.sizes.splice(this.sizes.indexOf(size), 1);
                 })
                 .catch((e) =>
                     this.$toasted({
@@ -110,7 +110,6 @@ export default {
                             : "Ocorreu um erro inesperado!",
                     })
                 );
-            
         },
 
         editItem(index) {
@@ -141,7 +140,7 @@ export default {
         async create() {
             if (
                 !this.sizes.find((c) => c.value == this.newSize) &&
-                (this.newSize != "")
+                this.newSize != ""
             ) {
                 await this.$axios
                     .$post(`size`, { size: this.newSize })

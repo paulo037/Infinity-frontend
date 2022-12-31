@@ -8,7 +8,7 @@
           max-height="330"
           color="secondary"
           :elevation="hover ? 16 : 0"
-          @click="$router.push({ path: 'search', query: { category: id }});"
+          @click="$router.push({ path: 'search', query: { category: name }});"
         >
           <v-img
             height="180"

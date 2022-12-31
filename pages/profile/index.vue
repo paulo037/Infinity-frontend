@@ -21,7 +21,7 @@
                     <v-col class="d-flex justify-start">
                         <v-icon class="third--text" large> mdi-account </v-icon>
                         <v-card-title class="third--text"
-                            >Seus Dados</v-card-title
+                            >Dados</v-card-title
                         >
                     </v-col>
 
@@ -43,7 +43,7 @@
                             mdi-package-variant-closed
                         </v-icon>
                         <v-card-title class="third--text"
-                            >Seus Pedidos</v-card-title
+                            >Pedidos</v-card-title
                         >
                     </v-col>
 

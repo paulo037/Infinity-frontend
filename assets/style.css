@@ -1,15 +1,18 @@
 tbody tr:hover {
     background-color: transparent !important;
 }
-.row{
-    margin: 0  !important;;
+
+.row {
+    margin: 0 !important;
+    ;
 }
 
 .v-btn {
     text-transform: unset !important;
+    /* min-width: 150px !important; */
+    padding: 20px !important;
 }
 
-.v-text-field__details {
+.no-details * .v-text-field__details {
     display: none !important;
 }
-

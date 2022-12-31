@@ -1,15 +1,5 @@
 <template>
     <div align="center">
-        <v-dialog v-model="login_loading">
-            <v-progress-circular
-                indeterminate
-                color="accent"
-                v-if="login_loading"
-                :size="60"
-                style="position: fixed; top: 98px; left: 48%; z-index: 50"
-            ></v-progress-circular>
-        </v-dialog>
-
         <v-card max-width="500px" class="secondary mb-8 pa-8" elevation="20">
             <header class="third--text text-h4 mb-8">CADASTRAR</header>
             <v-form ref="form" class="text-left">
@@ -62,14 +52,9 @@
                     outlined
                 ></v-text-field>
 
-                <v-container width="100%" class="my-8 text-center">
-                    <v-btn
-                        align="center"
-                        height="50px"
-                        class="primary px-10"
-                        @click="createUser"
-                    >
-                        CONTINUAR
+                <v-container class="text-center">
+                    <v-btn align="center" class="primary" @click="createUser">
+                        Continuar
                     </v-btn>
                 </v-container>
             </v-form>
@@ -124,13 +109,14 @@ export default {
     methods: {
         async createUser() {
             if (!this.validateUser()) return;
-            this.login_loading = true;
-            this.$axios
+            this.$store.commit("setLoading", {
+                loading: true,
+            });
+            await this.$axios
                 .$post(`signup/`, {
                     user: this.user,
                 })
                 .then(() => {
-                    this.login_loading = false;
                     this.$toasted({
                         text: "Conta criada com sucesso!",
                         color: "success",
@@ -146,7 +132,7 @@ export default {
                         .then((response) => {
                             if (this.$store.state.back_url) {
                                 this.$router.push(this.$store.state.back_url);
-                                this.$store.commit("SetBack_url", null);
+                                this.$store.commit("SetBack_url", '/');
                             }
                         })
                         .catch((e) =>
@@ -158,15 +144,15 @@ export default {
                         );
                 })
                 .catch((e) => {
-                    this.login_loading = false;
                     this.$toasted({
                         text: e.response.data
                             ? e.response.data
                             : "Ocorreu um erro inesperado!",
-                    })
-
-                }
-                );
+                    });
+                });
+            this.$store.commit("setLoading", {
+                loading: false,
+            });
         },
 
         validateUser() {

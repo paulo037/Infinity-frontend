@@ -21,9 +21,7 @@
 
                     <v-col cols="10" sm="6" md="3" class="pb-10">
                         <v-btn
-                            block
                             color="accent"
-                            nuxt
                             to="/admin/product/new-product"
                         >
                             Criar novo produto
@@ -98,10 +96,10 @@
 
                 <v-card-actions class="flex justify-space-between">
                     <v-btn class="red white--text" @click="dialog = false">
-                        CANCELAR
+                        Cancelar
                     </v-btn>
                     <v-btn class="green white--text" @click="deleteProduct()">
-                        CONFIRMAR
+                        Confirmar
                     </v-btn>
                 </v-card-actions>
             </v-card>

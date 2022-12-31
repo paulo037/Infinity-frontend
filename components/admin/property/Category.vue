@@ -10,15 +10,14 @@
                     label="Nome"
                     outlined
                     dense
-                    class="ml-5"
+                    class="no-details ml-5"
                 ></v-text-field>
-                <div class="d-flex mt-5 justify-center">
+                <div class="d-flex mt-5 justify-center align-center">
                     <v-btn
                         color="primary"
                         :loading="isSelecting"
                         outlined
                         @click="handleFileImport"
-                        max-width="300px"
                     >
                         {{
                             newCategory.image.file == null
@@ -50,17 +49,15 @@
                 </div>
             </v-col>
 
-            <v-col cols="4" sm="3">
+            <v-col cols="4" sm="3" class="text-center">
                 <v-btn
-                    block
                     class="accent"
-                    max-width="300px"
                     @click="create()"
                     :disabled="
                         newCategory.name == '' || newCategory.image.file == null
                     "
                 >
-                    adicionar
+                    Adicionar
                 </v-btn>
             </v-col>
         </v-row>
@@ -72,15 +69,15 @@
                     label="Valor"
                     outlined
                     dense
+                    class="no-details"
                 ></v-text-field>
 
-                <div class="d-flex mt-5 justify-center">
+                <div class="d-flex mt-5 justify-center align-center">
                     <v-btn
                         color="primary"
                         :loading="isSelecting"
                         outlined
                         @click="handleFileImport"
-                        max-width="300px"
                     >
                         Mudar Imagem
                     </v-btn>
@@ -108,13 +105,8 @@
                 </div>
             </v-col>
 
-            <v-col cols="10" sm="2">
-                <v-btn block class="accent" @click="update"> Salvar </v-btn>
-            </v-col>
-
-            <v-col cols="10" sm="2">
+            <v-col cols="10" sm="2" class="text-center">
                 <v-btn
-                    block
                     class="red"
                     @click="
                         edit = false;
@@ -122,6 +114,11 @@
                     "
                 >
                     Cancelar
+                </v-btn>
+            </v-col>
+            <v-col cols="10" sm="2" class="text-center">
+                <v-btn class="accent" @click="update">
+                    Salvar alterações
                 </v-btn>
             </v-col>
         </v-row>
@@ -282,7 +279,6 @@ export default {
                     },
                 })
                 .then((category) => {
-                    console.log();
                     this.$toasted({
                         text: "Categoria atualizada com sucesso!",
                         color: "success",

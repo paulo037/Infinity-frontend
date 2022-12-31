@@ -43,9 +43,14 @@
                         <span class="text-h5"> CARRINHO | </span>
                         <v-icon class="primary--text pb-3">mdi-cart</v-icon>
                     </v-card>
-                    <v-divider class="third"></v-divider>
+                    <v-divider
+                        class=""
+                        style="
+                            border-bottom: thin solid rgba(255, 255, 255, 0.12);
+                        "
+                    ></v-divider>
 
-                    <v-simple-table class="secondary third--text mb-5">
+                    <v-simple-table class="secondary third--text mb-5 mt-5">
                         <template v-slot:default>
                             <thead>
                                 <tr>
@@ -317,7 +322,12 @@
                         </template>
                     </v-simple-table>
 
-                    <v-divider class="third"></v-divider>
+                    <v-divider
+                        class=""
+                        style="
+                            border-bottom: thin solid rgba(255, 255, 255, 0.12);
+                        "
+                    ></v-divider>
 
                     <v-container class="py-5">
                         <v-layout row wrap align-top justify-center>
@@ -348,14 +358,16 @@
                         </v-layout>
                     </v-container>
 
-                    <v-divider class="third"></v-divider>
+                    <v-divider
+                        class=""
+                        style="
+                            border-bottom: thin solid rgba(255, 255, 255, 0.12);
+                        "
+                    ></v-divider>
+
                     <v-container class="text-center text-h5 primary--text pa-8">
-                        <v-btn
-                            class="primary white--text"
-                            width="60%"
-                            height="50px"
-                            @click="checkout"
-                            >COMPRAR
+                        <v-btn class="primary white--text" @click="checkout"
+                            >Comprar Agora
                         </v-btn>
                     </v-container>
                 </v-card>
@@ -395,7 +407,7 @@ export default {
             return this.$router.push("/login");
         }
 
-        this.products = await this.$axios.$get(`cart/${this.$auth.user.id}`);
+        this.products = await this.$axios.$get(`cart`);
         this.page_loading = false;
     },
 
@@ -456,7 +468,6 @@ export default {
 
         async decrement(index) {
             const cart = {
-                user_id: this.$auth.user.id,
                 product_id: this.products[index].product_id,
                 size_id: this.products[index].size_id,
                 color_id: this.products[index].color_id,
@@ -482,7 +493,6 @@ export default {
         async increment(index) {
             const quantity = this.products[index].quantity;
             const cart = {
-                user_id: this.$auth.user.id,
                 product_id: this.products[index].product_id,
                 size_id: this.products[index].size_id,
                 color_id: this.products[index].color_id,
@@ -510,7 +520,6 @@ export default {
 
         async deleteProduct(index) {
             const cart = {
-                user_id: this.$auth.user.id,
                 product_id: this.products[index].product_id,
                 size_id: this.products[index].size_id,
                 color_id: this.products[index].color_id,

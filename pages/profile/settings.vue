@@ -6,7 +6,7 @@
             >
         </div>
 
-        <h1 class="text-left pb-5 ma-0" style="max-width: 800px">Seus Dados</h1>
+        <h1 class="text-left pb-5 ma-0" style="max-width: 800px">Dados</h1>
         <v-card style="max-width: 800px" outlined class="pa-5 px-10">
             <div align="center" v-if="$fetchState.pending">
                 <v-skeleton-loader
@@ -116,7 +116,7 @@
                     mx-5
                 "
                 @click="updateUser"
-                >Salvar</v-btn
+                >Salvar alterações</v-btn
             >
         </v-card>
     </div>

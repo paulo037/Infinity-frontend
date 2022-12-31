@@ -6,15 +6,13 @@
         <v-row>
             <v-col class="pa-0">
                 <v-row justify="center">
-                    <v-col cols="12" sm="10" xl="6" class="pa-1">
+                    <v-col cols="12" sm="10" xl="6" class="pa-1 text-center">
                         <v-btn
                             color="primary"
                             :loading="isSelecting"
-                            block
                             outlined
                             @click="handleFileImport"
-                            max-width="300px"
-                            class="mb-5 pa-0"
+                            class="mb-5"
                         >
                             Adicionar<wbr /> Imagem
                         </v-btn>

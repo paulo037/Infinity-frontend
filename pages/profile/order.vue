@@ -5,9 +5,11 @@
                 >mdi-arrow-left-bold</v-icon
             >
         </div>
+        <div align="center" style="max-width: 800px">
+            <h1 class="text-left pb-5 ma-0" style="max-width: 800px">
+                Pedidos
+            </h1>
 
-        <h1 class="text-left pb-5 ma-0" style="max-width: 800px">Pedidos</h1>
-        <v-card style="max-width: 800px" outlined class="pa-5 px-10">
             <div align="center" v-if="$fetchState.pending">
                 <v-skeleton-loader
                     class="mx-auto"
@@ -15,46 +17,63 @@
                 ></v-skeleton-loader>
             </div>
 
-            <div v-else v-for="(order, index) in orders" :key="index">
-                <div style="max-width: 800px" align="left">
-                    {{ getBrazilianDate(order.created_at) }}
-                </div>
+            <v-card
+                v-else
+                v-for="(order, index) in orders"
+                :key="index"
+                class="pa-5 mb-10"
+                outlined
+            >
                 <div class="d-flex justify-space-between align-end">
-                    <span
-                        :class="`${
-                            status[order.status + 1].color
-                        }--text font-weight-bold pb-2`"
-                    >
-                        {{ status[order.status + 1].text }}
-                    </span>
-                    <span class="pb-5">
+                    <div align="left">
+                        <div>
+                            {{ getBrazilianDate(order.created_at) }}
+                        </div>
+                        <div
+                            :class="`${
+                                status[order.status + 1].color
+                            }--text font-weight-bold pb-2 text-left`"
+                        >
+                            {{ status[order.status + 1].text }}
+                        </div>
+                    </div>
+                    <span>
                         <v-icon
                             v-if="order.status + 1 < 2"
-                            class="red--text"
+                            class="red--text mb-5"
                             @click="deleteOrder(index)"
                             style="cursor: pointer"
                             >mdi-delete</v-icon
                         >
+                        <span v-else-if="order.status >= 2" class="pb-1">
+                            <span class="font-itaic pr-2">
+                                Código de rastreio:
+                            </span>
+                            <span class="text-body-2 font-weight-bold">
+                                {{ order.tracking_code }}
+                            </span>
+                        </span>
                     </span>
                 </div>
-                <div class="mb-10">
+                <div>
                     <ShowProductListVue
                         :products="order.products"
                         :head="false"
                     />
-                    <div class="d-flex justify-end">
+                    <div class="d-flex justify-center">
                         <v-btn
                             class="accent white--text font-weight-bold mt-5"
-                            width="200px"
-                            height="50px"
                             @click="checkout(index)"
-                            v-if="order.status + 1 < 2"
-                            >Concluir Pagamento</v-btn
+                            >{{
+                                order.status >= 1
+                                    ? "Comprar novamente"
+                                    : "Concluir Pagamento"
+                            }}</v-btn
                         >
                     </div>
                 </div>
-            </div>
-        </v-card>
+            </v-card>
+        </div>
     </div>
 </template>
 
@@ -87,7 +106,7 @@ export default {
 
             status: [
                 { text: "Pagamento Recusado", color: "red" },
-                { text: "Pagamento Pendente", color: "yellow" },
+                { text: "Pagamento Pendente", color: "darken3" },
                 { text: "Pagamento Aprovado", color: "success" },
                 { text: "Pedido enviado", color: "success" },
                 { text: "Entregue", color: "success" },
@@ -145,7 +164,9 @@ export default {
             }
 
             const products = this.orders[index].products;
-            await this.$axios.$delete(`/order/${this.orders[index].id}`);
+            if (this.orders[index].status < 1) {
+                await this.$axios.$delete(`/order/${this.orders[index].id}`);
+            }
             const reference = v4();
 
             let items = [];
@@ -161,7 +182,6 @@ export default {
                     image: p.image,
                 });
             });
-            
 
             localStorage.setItem(
                 "reference",

@@ -43,22 +43,22 @@
         <v-row justify="center">
             <v-col cols="8" sm="4" md="3" v-if="creating">
                 <v-btn
-                    block
+                   min-width="150px"
                     color="green"
                     @click="create()"
                     class="white--text"
                 >
-                    CRIAR
+                    Criar
                 </v-btn>
             </v-col>
 
             <v-col cols="6" sm="6" md="3" v-if="!creating">
-                <v-btn block color="green" @click="save()"> SALVAR </v-btn>
+                <v-btn block color="green" @click="save()"> Salvar alterações </v-btn>
             </v-col>
 
             <v-col cols="6" sm="6" md="3" v-if="!creating">
                 <v-btn block color="red" @click="deleteProduct()">
-                    EXCLUIR
+                    Excluir
                 </v-btn>
             </v-col>
         </v-row>
@@ -136,7 +136,6 @@ export default {
                     });
                 }
             });
-
             this.initialColor(colors);
             this.initialSizes(this.product.colors);
 

@@ -62,13 +62,13 @@ export default {
     },
 
     props: {
-        id: String,
+        name: String,
         label: String,
     },
 
     async fetch() {
         this.products = await this.$axios
-            .$get(`product/category/${this.id}`)
+            .$get(`product/category/${this.name}`)
            .catch((e) => this.$toasted({ text: e.response.data ?  e.response.data : "Ocorreu um erro inesperado!"}));
 
         this.loading = false;

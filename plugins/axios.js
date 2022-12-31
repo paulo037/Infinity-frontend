@@ -5,6 +5,7 @@ export default async function ({ $axios, $cookies, store, from, redirect }) {
 
 
     $axios.onResponse(async (config) => {
+       
         if (config.config.url == "/signin" || config.config.url == "/validateToken" || config.config.url == URL_REFRESH_TOKEN) {
 
             const access_token = config.data.access_token

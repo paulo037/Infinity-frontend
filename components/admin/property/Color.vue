@@ -1,7 +1,7 @@
 <template>
     <v-card outlined class="my-5">
         <div class="primary--text text-center d-block text-h5 mt-5">
-            Tamanhos
+            Cores
         </div>
         <v-row justify="center" class="mb-5 pt-5" v-if="!edit">
             <v-col cols="9" sm="6" class="pb-0 mb-0">
@@ -10,13 +10,12 @@
                     label="Nome"
                     outlined
                     dense
+                    class="no-details"
                 ></v-text-field>
             </v-col>
 
-            <v-col cols="10" sm="3">
-                <v-btn block class="accent" @click="create()">
-                    adicionar
-                </v-btn>
+            <v-col cols="10" sm="3" class="text-center">
+                <v-btn class="accent" @click="create()"> Adicionar </v-btn>
             </v-col>
         </v-row>
 
@@ -27,16 +26,12 @@
                     label="Valor"
                     outlined
                     dense
+                    class="no-details"
                 ></v-text-field>
             </v-col>
 
-            <v-col cols="10" sm="2">
-                <v-btn block class="accent" @click="update"> Salvar </v-btn>
-            </v-col>
-
-            <v-col cols="10" sm="2">
+            <v-col cols="10" sm="2" class="text-center">
                 <v-btn
-                    block
                     class="red"
                     @click="
                         edit = false;
@@ -44,6 +39,11 @@
                     "
                 >
                     Cancelar
+                </v-btn>
+            </v-col>
+            <v-col cols="10" sm="2" class="text-center">
+                <v-btn class="accent" @click="update">
+                    Salvar alterações
                 </v-btn>
             </v-col>
         </v-row>
@@ -92,8 +92,8 @@ export default {
 
     methods: {
         async remove(value) {
-            const color = this.colors.find((c) => c.value == value)
-            if(color);
+            const color = this.colors.find((c) => c.value == value);
+            if (color);
             await this.$axios
                 .$delete(`color/${color.id}`)
                 .then(() => {
@@ -101,7 +101,7 @@ export default {
                         text: "Tamanho deletado com sucesso!",
                         color: "success",
                     });
-                    this.colors.splice(this.colors.indexOf(color), 1)
+                    this.colors.splice(this.colors.indexOf(color), 1);
                 })
                 .catch((e) =>
                     this.$toasted({
@@ -110,7 +110,6 @@ export default {
                             : "Ocorreu um erro inesperado!",
                     })
                 );
-            
         },
 
         editItem(index) {
@@ -141,7 +140,7 @@ export default {
         async create() {
             if (
                 !this.colors.find((c) => c.value == this.newColor) &&
-                (this.newColor != "")
+                this.newColor != ""
             ) {
                 await this.$axios
                     .$post(`color`, { color: this.newColor })

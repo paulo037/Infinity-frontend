@@ -1,15 +1,5 @@
 <template>
     <div align="center">
-        <v-dialog v-model="preference_loading">
-            <v-progress-circular
-                indeterminate
-                color="blue"
-                v-if="preference_loading"
-                :size="60"
-                style="position: fixed; top: 98px; left: 48%; z-index: 50"
-            ></v-progress-circular>
-        </v-dialog>
-
         <SkeletonProductBuy v-if="$fetchState.pending || page_loading" />
 
         <v-row justify="center" v-else style="max-width: 1600px">
@@ -46,9 +36,7 @@
                         <v-col class="d-flex justify-center">
                             <v-rating
                                 :value="
-                                    product.rating
-                                        ? parseFloat(getRating())
-                                        : 5
+                                    product.rating ? parseFloat(getRating()) : 5
                                 "
                                 color="amber"
                                 dense
@@ -61,9 +49,9 @@
                             <div class="grey--text ms-4 d-inline-block pt-1">
                                 {{
                                     product.rating
-                                        ? `${parseFloat(
-                                              product.rating
-                                          ).toFixed(1)}(${product.sold})`
+                                        ? `${parseFloat(product.rating).toFixed(
+                                              1
+                                          )}(${product.sold})`
                                         : "(5)"
                                 }}
                             </div>
@@ -76,88 +64,95 @@
                         :size2="'h4'"
                     />
 
-                    <ProductQuantity
-                        :max="max"
-                        :quantity="quantity"
-                        v-on:increment="increment"
-                        v-on:decrement="decrement"
-                        class="pb-0"
-                    />
+                    <div v-if="product.colors.length > 0">
+                        <ProductQuantity
+                            :max="max"
+                            :quantity="quantity"
+                            v-on:increment="increment"
+                            v-on:decrement="decrement"
+                            class="pb-0"
+                        />
 
-                    <v-container class="px-12 py-1">
-                        <div class="py-2 px-1 d-inline">Cor:</div>
-                        <v-select
-                            :items="colors"
-                            :disabled="colors.length == 1"
-                            item-text="value"
-                            class="d-inline-block"
-                            dense
-                            outlined
-                            v-model="color"
-                        ></v-select>
-                    </v-container>
+                        <v-container class="px-12 py-1">
+                            <div class="py-2 px-1 d-inline">Cor:</div>
+                            <v-select
+                                :items="colors"
+                                :disabled="colors.length == 1"
+                                item-text="value"
+                                class="d-inline-block no-details pt-1"
+                                dense
+                                outlined
+                                v-model="color"
+                            ></v-select>
+                        </v-container>
 
-                    <v-container class="px-0 py-1">
-                        <div>Tamanho:</div>
-                        <v-btn
-                            light
-                            rounded
-                            color="sencondary"
-                            class="rounded-circle ma-2"
-                            min-width="30px"
-                            min-height="30px"
-                            height="30px"
-                            width="30px"
-                            v-for="size in sizes"
-                            :key="size.value"
-                            v-bind:class="{
-                                'accent secondary--text':
-                                    size_selected == indexOfSize(size),
-                                white: size_selected != indexOfSize(size),
-                            }"
-                            @click="size_selected = indexOfSize(size)"
-                        >
-                            {{ size.value }}
-                        </v-btn>
-                    </v-container>
-
-                    <v-row justify="space-around">
-                        <v-col cols="10" sm="5" md="7" lg="5" class="px-0">
+                        <v-container class="px-0 py-1">
+                            <div>Tamanho:</div>
                             <v-btn
-                                class="accent white--text"
-                                height="50px"
-                                append
-                                width="200px"
-                                block
-                                @click="addCart"
+                                light
+                                rounded
+                                color="sencondary"
+                                class="rounded-circle ma-2"
+                                min-width="26px"
+                                min-height="26px"
+                                height="26px"
+                                width="26px"
+                                style="padding: 16px !important"
+                                v-for="size in sizes"
+                                :key="size.value"
+                                v-bind:class="{
+                                    'accent secondary--text':
+                                        size_selected == indexOfSize(size),
+                                    white: size_selected != indexOfSize(size),
+                                }"
+                                @click="size_selected = indexOfSize(size)"
                             >
-                                <span
-                                    class="font-weight-bold"
-                                    style="text-align: start"
-                                    >adicionar<br />
-                                    ao carrinho</span
+                                {{ size.value }}
+                            </v-btn>
+                        </v-container>
+
+                        <v-row justify="space-around">
+                            <v-col cols="10" sm="5" md="7" lg="5" class="px-0">
+                                <v-btn
+                                    class="accent white--text pa-5"
+                                    append
+                                    @click="addCart"
                                 >
-                                <v-divider
-                                    vertical
-                                    class="white mx-2"
-                                ></v-divider>
-                                <v-icon class="text--end">
-                                    mdi-cart-plus
-                                </v-icon>
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="10" sm="5" lg="5" md="7" class="px-0">
-                            <v-btn
-                                class="accent white--text font-weight-bold"
-                                block
-                                width="200px"
-                                height="50px"
-                                @click="checkout"
-                                :disabled="preference_loading"
-                                >COMPRAR
-                            </v-btn>
-                        </v-col>
-                    </v-row>
+                                    <span
+                                        class="font-weight-bold"
+                                        style="text-align: start"
+                                        >Adicionar<br />
+                                        ao carrinho</span
+                                    >
+                                    <v-divider
+                                        vertical
+                                        class="white mx-2"
+                                    ></v-divider>
+                                    <v-icon class="text--end">
+                                        mdi-cart-plus
+                                    </v-icon>
+                                </v-btn>
+                            </v-col>
+                            <v-col cols="10" sm="5" lg="5" md="7" class="px-0">
+                                <v-btn
+                                    class="
+                                        accent
+                                        white--text
+                                        font-weight-bold
+                                        pa-5
+                                    "
+                                    @click="checkout"
+                                    >Comprar Agora
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </div>
+
+                    <div class="my-16" v-else>
+                        <span class="text-h6 red--text font-weight-bold">
+                            Produto Esgotado!
+                        </span>
+                    </div>
                 </v-card>
             </v-col>
 
@@ -179,7 +174,7 @@
             class="pt-16"
             v-if="category != null"
             label="Produtos semelhantes"
-            :id="category"
+            :name="category"
         />
     </div>
 </template>
@@ -207,7 +202,9 @@ export default {
     data() {
         return {
             //product properties
-            product: {},
+            product: {
+                colors: [],
+            },
             category: null,
             size_selected: 1,
             quantity: 1,
@@ -215,7 +212,6 @@ export default {
             color: null,
 
             preferece_id: null,
-            preference_loading: false,
 
             choseAddressModel: null,
 
@@ -240,12 +236,15 @@ export default {
 
         this.product = await this.$axios.$get(`product/${product_id}`);
 
-        this.category = this.product.categories[0].id;
-        this.color = this.product.colors[0].color;
-        this.size_selected = this.getSizeSelected();
-
-        if (this.product.images.length === 0)
-            this.product.images.push({ url: "/noImage.png" });
+        if (this.product.colors.length > 0) {
+            this.color = this.product.colors[0].color;
+            this.size_selected = this.getSizeSelected();
+            if (this.product.categories.length > 0) {
+                this.category = this.product.categories[0].name;
+            }
+            if (this.product.images.length === 0)
+                this.product.images.push({ url: "/noImage.png" });
+        }
     },
 
     methods: {
@@ -301,7 +300,6 @@ export default {
                 return this.$router.push("/login");
             }
             const newCart = {
-                user_id: this.$auth.user.id,
                 product_id: this.product.id,
                 size_id: this.choice.size_id,
                 color_id: this.choice.color_id,
@@ -316,6 +314,7 @@ export default {
                         color: "success",
                     });
                     this.$store.commit("addNumberOfProductsInCart");
+                    return this.$router.push("/cart");
                 })
                 .catch((e) =>
                     this.$toasted({
@@ -323,7 +322,7 @@ export default {
                             ? e.response.data
                             : "Ocorreu um erro inesperado!",
                     })
-                )
+                );
         },
 
         getRating() {
@@ -362,13 +361,14 @@ export default {
         },
 
         increment() {
-            this.quantity =  this.quantity == this.max ? this.quantity : this.quantity + 1;
+            this.quantity =
+                this.quantity == this.max ? this.quantity : this.quantity + 1;
         },
-        
-        decrement(){
-            this.quantity =  this.quantity > 1 ? this.quantity - 1 : this.quantity ;
-           
-        }
+
+        decrement() {
+            this.quantity =
+                this.quantity > 1 ? this.quantity - 1 : this.quantity;
+        },
     },
 
     watch: {
@@ -432,7 +432,6 @@ export default {
                     item.size_id ==
                         this.product.colors[this.size_selected].size_id
             );
-
 
             return choice;
         },

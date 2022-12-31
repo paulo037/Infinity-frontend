@@ -18,10 +18,9 @@
         </v-card>
     </div>
 </template>
-
-<script>
-export default {};
+  
+  <script>
+export default {
+    props: ["error"],
+};
 </script>
-
-<style>
-</style>

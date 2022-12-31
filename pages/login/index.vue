@@ -1,15 +1,5 @@
 <template>
     <div align="center">
-        <v-dialog v-model="login_loading">
-            <v-progress-circular
-                indeterminate
-                color="accent"
-                v-if="login_loading"
-                :size="60"
-                style="position: fixed; top: 98px; left: 48%; z-index: 50"
-            ></v-progress-circular>
-        </v-dialog>
-
         <v-card max-width="500px" class="secondary mb-8 pa-8" elevation="20">
             <header class="third--text text-h4 mb-8">LOGIN</header>
 
@@ -43,12 +33,11 @@
                 <v-container width="100%" class="my-8 text-center">
                     <v-btn
                         align="center"
-                        height="40px"
                         class="primary px-10"
                         @click="login"
-                        :disabled="login_loading"
+                        :disabled="$store.state.loading"
                     >
-                        CONTINUAR
+                        Continuar
                     </v-btn>
                 </v-container>
             </v-form>
@@ -60,7 +49,6 @@
 
 
 <script>
-
 export default {
     data() {
         return {
@@ -69,14 +57,15 @@ export default {
                 password: "",
             },
             show_password: null,
-            login_loading: false,
         };
     },
 
     methods: {
         async login() {
-            this.login_loading = true;
-            this.$auth
+            this.$store.commit("setLoading", {
+                loading: true,
+            });
+            await this.$auth
                 .loginWith("local", {
                     data: {
                         email: this.user.email,
@@ -91,7 +80,7 @@ export default {
 
                     if (this.$store.state.back_url) {
                         const back = this.$store.state.back_url;
-                        this.$store.commit("SetBack_url", null);
+                        this.$store.commit("SetBack_url", "/");
                         return window.open(
                             `${process.env.BASE_FRONT}${back}`,
                             "_self"
@@ -105,11 +94,12 @@ export default {
                             ? e.response.data
                             : "Ocorreu um erro inesperado!",
                     });
-
-                    this.login_loading = false;
                 });
-        },
 
+            this.$store.commit("setLoading", {
+                loading: false,
+            });
+        },
     },
 };
 </script>

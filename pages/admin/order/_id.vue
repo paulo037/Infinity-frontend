@@ -12,7 +12,7 @@
                 :disabled="save_disabled"
                 class="accent white--text font-weight-bold hidden-sm-and-down"
                 @click="save"
-                >Salvar</v-btn
+                >Salvar alterações</v-btn
             >
             <div class="d-flex justify-center">
                 <div style="width: 250px">
@@ -22,7 +22,7 @@
                         :disabled="save_disabled"
                         class="d-md-none accent white--text font-weight-bold"
                         @click="save"
-                        >Salvar</v-btn
+                        >Salvar alterações</v-btn
                     >
                 </div>
             </div>
@@ -65,7 +65,7 @@
                             Código de rastreio:
                         </span>
                         <v-text-field
-                            class="d-inline-block pa-0 ma-0"
+                            class="d-inline-block pa-0 ma-0 no-details"
                             style="max-width: 210px"
                             dense
                             v-model="order.tracking_code"
@@ -85,7 +85,7 @@
                         <v-select
                             :items="status"
                             item-text="text"
-                            class="d-inline-block pa-0 ma-0"
+                            class="d-inline-block pa-0 ma-0 no-details"
                             style="max-width: 210px"
                             dense
                             :color="`${status[order.status + 1].color}`"
@@ -119,7 +119,6 @@
                     <div></div>
                 </v-card>
 
-
                 <v-card outlined class="pa-5 my-5">
                     <div class="text-h5 font-weight-bold">Endereço</div>
                     <v-divider class="pb-2"></v-divider>
@@ -151,12 +150,10 @@
                             class="text-body-1 pa-0 py-1"
                             v-if="order.complement != null"
                         >
-                        
-                        <span class="font-weight-bold"> Complemento: </span>
+                            <span class="font-weight-bold"> Complemento: </span>
                             {{ order.complement }}
                         </v-col>
-                        <v-col md="6" cols="12" class="text-body-1 pa-0 py-1"
-                            >
+                        <v-col md="6" cols="12" class="text-body-1 pa-0 py-1">
                             <span class="font-weight-bold"> Celular: </span>
                             {{
                                 order.telephone.replace(
@@ -242,7 +239,7 @@ export default {
 
             status: [
                 { text: "Pagamento Recusado", color: "red" },
-                { text: "Pagamento Pendente", color: "yellow" },
+                { text: "Pagamento Pendente", color: "darken3" },
                 { text: "Pagamento Aprovado", color: "success" },
                 { text: "Pedido enviado", color: "success" },
                 { text: "Entregue", color: "success" },
@@ -322,4 +319,5 @@ export default {
 </script>
 
 <style>
+  
 </style>

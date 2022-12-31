@@ -17,7 +17,6 @@
 export default {
     data() {
         return {
-            timeout: 2000,
             show: false
         };
     },
@@ -26,6 +25,15 @@ export default {
         text: String,
         snackbar: Boolean,
         color: String,
+    },
+
+    computed:{
+        timeout(){
+            let time = this.text.split(" ").length * 300
+            time = time < 2000 ? 2000 : time
+            time = time > 10000 ? 10000 : time
+            return time 
+        }
     },
 
 

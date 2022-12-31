@@ -3,17 +3,20 @@
         <v-card class="secondary primary--text text-center" tile>
             <v-card-text>
                 <v-divider class="pb-5"></v-divider>
-                <v-btn
+                
+                <a
                     v-for="icon in icons"
-                    :href="icon.link"
+                   
                     :key="icon.icon"
-                    class="mx-4 third--text"
-                    icon
+                    :href="icon.link"
+                    target="_blank"
+                    class="ma-5"
+                    style="text-decoration: none;"
                 >
                     <v-icon size="24px">
                         {{ icon.icon }}
                     </v-icon>
-                </v-btn>
+                </a>
             </v-card-text>
 
             <v-card-text class="third--text pt-0">
@@ -45,10 +48,9 @@ export default {
             },
 
             {
-                icon:  "mdi-instagram",
+                icon: "mdi-instagram",
                 link: "https://instagram.com/infinitymodasmg?igshid=YmMyMTA2M2Y=",
             },
-           
         ],
     }),
 };

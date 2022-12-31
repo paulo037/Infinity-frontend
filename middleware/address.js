@@ -12,7 +12,7 @@ export default async ({ route, $axios, redirect, store, $auth }) => {
 
 
     if (addresses.length == 0) {
-        redirect("profile/address/new-address")
+        redirect("/profile/address/new-address")
     } else {
         store.commit("user/setAddresses", addresses)
     }

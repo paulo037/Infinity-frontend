@@ -1,7 +1,15 @@
 <template>
     <div align="center">
         <div align="left" style="max-width: 1000px">
-            <v-icon @click="$router.push('/profile/address')" x-large
+            <v-icon
+                @click="
+                    $router.push(
+                        $route.params.mode == 'new-address'
+                            ? '/profile'
+                            : '/profile/addresses'
+                    )
+                "
+                x-large
                 >mdi-arrow-left-bold</v-icon
             >
         </div>
@@ -105,12 +113,9 @@
                         <v-btn
                             color="primary"
                             class="accent third--text font-weight-bold"
-                            block
-                            width="200px"
-                            height="50px"
                             @click="save"
                         >
-                            salvar
+                            Salvar alterações
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -228,7 +233,7 @@ export default {
                             text: "Endereço criado com sucesso!",
                             color: "success",
                         });
-                        this.$router.push("/profile/address");
+                        this.$router.go(-1);
                         return;
                     });
                 this.address.cep = "";
@@ -242,7 +247,15 @@ export default {
                         text: "Endereço atualizado com sucesso!",
                         color: "success",
                     });
-                    this.$router.push("/profile/address");
+                    if (this.$store.state.back_ur == "/checkout") {
+                        this.$store.commit("SetBack_url", "");
+                        return this.$router.go(-1);
+                    }
+                    this.$router.push(
+                        $route.params.mode == "new-address"
+                            ? "/profile"
+                            : "/profile/addresses"
+                    );
                 })
                 .catch((e) =>
                     this.$toasted({

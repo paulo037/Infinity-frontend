@@ -28,14 +28,20 @@
             :color="$store.state.color"
         ></toasted-vue>
 
+        <v-dialog v-model="$store.state.loading" persistent class="d-flex align-center justify-center">
+            <v-progress-circular
+                indeterminate
+                :color="$store.state.loading_color"
+                :size="60"
+                style="position: fixed; top: 98px; z-index: 50"
+            ></v-progress-circular>
+        </v-dialog>
+
         <v-main class="secondary pa-5 d-flex">
             <Nuxt class="pa-0"> </Nuxt>
         </v-main>
 
         <Footer />
-
-
-       
     </v-app>
 </template>
 
@@ -48,8 +54,6 @@ import Sidbar from "@/components/template/Sidebar.vue";
 import Footer from "@/components/template/Footer.vue";
 
 export default {
- 
-
     name: "App",
     components: {
         Navbar,
@@ -60,16 +64,25 @@ export default {
     data() {
         return {
             switch1: true,
+            preference_loading:true
         };
     },
- 
 };
 </script>
 
 
 <style>
-
-.nuxt-progress{
+.nuxt-progress {
     color: blue !important;
+}
+
+.v-dialog--active {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    max-height: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

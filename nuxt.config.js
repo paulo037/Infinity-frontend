@@ -156,13 +156,16 @@ export default {
             themes: {
                 dark: {
                     primary: colors.amber.darken2, // dourado
+                    primary_hover: colors.orange.darken3, // dourado
+                    darken3: colors.orange.darken3, // dourado
                     secondary: colors.grey.darken4, // black
                     third: colors.grey.lighten5, //branco
                     accent: colors.amber.darken2, // #3F51B5
                     disabled_text: colors.grey.lighten2,
                     disabled: colors.orange.lighten2,
                     nav_background: colors.grey.darken4, // black
-                    nav_text: colors.amber.darken2, // black
+                    nav_text: colors.amber.darken4, // black
+
                 },
                 light: {
                     primary: colors.grey.darken4, // black
@@ -173,6 +176,9 @@ export default {
                     disabled: colors.orange.lighten2,
                     nav_background: colors.amber.lighten1, // dourado
                     nav_text: colors.amber.darken2, // black
+                    primary_hover: colors.grey.darken3, // dourado
+                    darken3: colors.orange.darken3, // dourado
+
                 },
             },
 
