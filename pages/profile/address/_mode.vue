@@ -6,7 +6,7 @@
                     $router.push(
                         $route.params.mode == 'new-address'
                             ? '/profile'
-                            : '/profile/addresses'
+                            : '/profile/address'
                     )
                 "
                 x-large
