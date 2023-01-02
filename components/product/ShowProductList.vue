@@ -1,19 +1,20 @@
 <template>
-    <v-card max-width="900px"  outlined>
+    <v-card max-width="900px" outlined>
         <v-simple-table class="secondary third--text">
             <thead v-if="head">
                 <tr>
-                    <th class="text-left third--text px-8">PRODUTO</th>
-
-                    <th class="text-left third--text hidden-xs-only pa-0">
-                        QUANTIDADE
+                    <th class="third--text pl-8">Produto</th>
+                    <th class="text-center third--text" v-if="show_rating">
+                        Avaliação
+                    </th>
+                    <th class="text-center third--text hidden-xs-only pa-0">
+                        Quantidade
                     </th>
                     <th
                         class="text-left third--text text-center hidden-xs-only"
                     >
-                        PREÇO
+                        Preço
                     </th>
-                    <th class="pa-0"></th>
                 </tr>
             </thead>
             <!-- Para Celular -->
@@ -73,11 +74,11 @@
             <!-- Para Computadores -->
             <tbody class="hidden-xs-only">
                 <tr v-for="(item, index) in products" :key="index">
-                    <td>
+                    <td class="pr-0">
                         <v-card
                             class="d-flex align-top py-5 ma-2 secondary"
-                            width="260px"
                             flat
+                            max-width=""
                             :to="`/product/${item.name}`"
                         >
                             <v-img
@@ -87,7 +88,6 @@
                                 height="80px"
                             ></v-img>
 
-                            
                             <div>
                                 <span
                                     class="
@@ -113,12 +113,43 @@
                         </v-card>
                     </td>
 
+                    <td v-if="show_rating">
+                        <div class="text-center">
+                            <v-rating
+                                :value="item.rating"
+                                v-model="rating[index]"
+                                color="amber"
+                                dense
+                                half-increments
+                                size="15"
+                                class="d-inline-block"
+                            ></v-rating>
+                        </div>
+
+                        <div class="text-center">
+                            <v-btn
+                                v-if="item.rating != rating[index]"
+                                class="text-center primary_hover rounded"
+                                @click="avaliate(index)"
+                                small
+                                width="60px"
+                                style="
+                                    height: 30px !important;
+                                    padding: 0px !important;
+                                "
+                            >
+                                Avaliar
+                            </v-btn>
+                        </div>
+                    </td>
                     <td>
-                        <span
-                            class="font-weight-light pa-2"
-                            
+                        <span class="font-weight-light pa-2">
+                            {{
+                                item.quantity > 1
+                                    ? `${item.quantity} unidades`
+                                    : `${item.quantity} unidade`
+                            }}</span
                         >
-                    {{item.quantity > 1 ? `${item.quantity} unidades` : `${item.quantity} unidade`}}</span>
                     </td>
                     <td
                         class="
@@ -127,8 +158,7 @@
                             text-subtitle-1 text-center
                         "
                     >
-                        R$:
-                        {{ item.price }}
+                        {{ formatMoney(item.price) }}
                     </td>
                 </tr>
             </tbody>
@@ -138,10 +168,19 @@
 
 <script>
 export default {
+    data() {
+        return {
+            rating: [],
+        };
+    },
 
+    fetch() {
+        this.rating = this.products.map((p) => p.rating);
+    },
     props: {
         products: [],
         head: Boolean,
+        show_rating: Boolean,
     },
 
     methods: {
@@ -152,9 +191,23 @@ export default {
 
             return "";
         },
+
+        formatMoney(value) {
+            return `R$ ${value.toFixed(2).toString().replace(".", ",")}`;
+        },
+
+        avaliate(index) {
+            const rating = this.rating[index];
+            this.products[index].rating = rating;
+            const id = this.products[index].id;
+            this.$axios.$put(`order/rating/${id}`, { rating });
+        },
     },
 };
 </script>
 
-<style>
+<style scoped>
+td {
+    text-align: center;
+}
 </style>

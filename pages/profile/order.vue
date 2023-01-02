@@ -59,6 +59,7 @@
                     <ShowProductListVue
                         :products="order.products"
                         :head="false"
+                        :show_rating="true"
                     />
                     <div class="d-flex justify-center">
                         <v-btn

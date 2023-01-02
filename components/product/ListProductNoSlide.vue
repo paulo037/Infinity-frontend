@@ -36,8 +36,8 @@
             >
                 <Product
                     :name="product.name"
-                    :rating="parseFloat(product.rating)"
-                    :price="parseFloat(product.price)"
+                    :rating="product.rating"
+                    :price="product.price"
                     :sold="parseInt(product.sold)"
                     :image="product.image"
                     :id="product.id"

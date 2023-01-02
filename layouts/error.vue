@@ -1,5 +1,5 @@
 <template>
-    <div align="center">
+    <div align="center" v-if="error.statusCode === 404">
         <v-card
             align="center"
             max-width="500px"

@@ -1,9 +1,9 @@
  <template>
     <v-app>
-        <Navbar :hide="false" />
-
-        <Sidbar :hide="false" />
-        <v-container fluid class="text-right ma-0 pa-0 secondary">
+        <v-container fluid class="d-flex justify-space-between ma-0 pa-0 secondary">
+            <NuxtLink to="/" style="text-decoration: none">
+                <v-icon large class="primary--text pl-10">mdi-arrow-left-bold</v-icon>
+            </NuxtLink>
             <v-switch
                 v-model="switch1"
                 class="
@@ -14,7 +14,6 @@
                     text-right
                     d-inline-block
                 "
-                
                 width="100%"
                 color="primary"
                 input-value="true"
@@ -29,7 +28,11 @@
             :color="$store.state.color"
         ></toasted-vue>
 
-        <v-dialog v-model="$store.state.loading" persistent class="d-flex align-center justify-center">
+        <v-dialog
+            v-model="$store.state.loading"
+            persistent
+            class="d-flex align-center justify-center"
+        >
             <v-progress-circular
                 indeterminate
                 :color="$store.state.loading_color"
@@ -65,7 +68,7 @@ export default {
     data() {
         return {
             switch1: true,
-            preference_loading:true
+            preference_loading: true,
         };
     },
 };

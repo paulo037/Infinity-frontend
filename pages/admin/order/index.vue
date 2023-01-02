@@ -109,6 +109,7 @@
 
 
  <script>
+import { stringify } from 'uuid';
 export default {
     data() {
         return {
@@ -182,7 +183,7 @@ export default {
 
     methods: {
         formatMoney(value) {
-            return `R$ ${parseFloat(value).toFixed(2).replace(".", ",")}`;
+            return `R$ ${(value.toFixed(2).toString()).replace(".", ",")}`;
         },
 
         getBrazilianDate(date_miliseconds) {

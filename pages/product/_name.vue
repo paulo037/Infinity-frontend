@@ -36,7 +36,7 @@
                         <v-col class="d-flex justify-center">
                             <v-rating
                                 :value="
-                                    product.rating ? parseFloat(getRating()) : 5
+                                    product.rating ?   product.rating : 5
                                 "
                                 color="amber"
                                 dense
@@ -49,7 +49,7 @@
                             <div class="grey--text ms-4 d-inline-block pt-1">
                                 {{
                                     product.rating
-                                        ? `${parseFloat(product.rating).toFixed(
+                                        ? `${(product.rating).toFixed(
                                               1
                                           )}(${product.sold})`
                                         : "(5)"
@@ -59,7 +59,7 @@
                     </v-row>
 
                     <Price
-                        :price="parseFloat(product.price)"
+                        :price="product.price"
                         :size1="'h6'"
                         :size2="'h4'"
                     />
@@ -323,12 +323,6 @@ export default {
                             : "Ocorreu um erro inesperado!",
                     })
                 );
-        },
-
-        getRating() {
-            return this.product.rating
-                ? parseFloat(this.product.rating).toFixed(1)
-                : 5;
         },
 
         getSizeSelected() {
