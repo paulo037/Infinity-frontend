@@ -42,7 +42,7 @@
 
         <v-row justify="center">
             <v-col cols="8" sm="4" md="3" v-if="creating">
-                <v-btn
+                <v-btn  
                    min-width="150px"
                     color="green"
                     @click="create()"
@@ -52,14 +52,15 @@
                 </v-btn>
             </v-col>
 
-            <v-col cols="6" sm="6" md="3" v-if="!creating">
-                <v-btn block color="green" @click="save()"> Salvar alterações </v-btn>
-            </v-col>
-
+            
             <v-col cols="6" sm="6" md="3" v-if="!creating">
                 <v-btn block color="red" @click="deleteProduct()">
                     Excluir
                 </v-btn>
+            </v-col>
+
+            <v-col cols="6" sm="6" md="3" v-if="!creating">
+                <v-btn block color="green" @click="save()"> Salvar alterações </v-btn>
             </v-col>
         </v-row>
     </v-form>
@@ -97,12 +98,7 @@ export default {
     }),
 
     computed: {
-        text() {
-            return this.$store.state.admin.product.text;
-        },
-        dialog() {
-            return this.$store.state.admin.product.dialog;
-        },
+      
         sizes() {
             return this.$store.state.admin.product.sizes;
         },

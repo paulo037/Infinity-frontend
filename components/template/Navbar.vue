@@ -98,6 +98,7 @@
                             >
                                 mdi-account-circle
                             </v-icon>
+                            
                         </v-hover>
                     </v-btn>
                 </NuxtLink>

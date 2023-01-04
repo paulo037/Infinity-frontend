@@ -158,6 +158,7 @@ export default {
                     primary: colors.amber.darken2, // dourado
                     primary_hover: colors.orange.darken3, // dourado
                     darken3: colors.orange.darken3, // dourado
+                    darken4: colors.amber.lighten1, // dourado
                     secondary: colors.grey.darken4, // black
                     third: colors.grey.lighten5, //branco
                     accent: colors.amber.darken2, // #3F51B5
@@ -178,6 +179,7 @@ export default {
                     nav_text: colors.amber.darken2, // black
                     primary_hover: colors.grey.darken3, // dourado
                     darken3: colors.orange.darken3, // dourado
+                    darken4: colors.amber.lighten1, // dourado
 
                 },
             },

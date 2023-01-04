@@ -8,7 +8,7 @@ export default async ({ $auth, redirect, $axios, store }) => {
         })
 
 
-    if ($auth.$state.loggedIn && admin.admin) {
+    if ($auth.$state.loggedIn && admin) {
         return
     } else {
 

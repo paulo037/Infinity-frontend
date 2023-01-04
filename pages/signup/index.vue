@@ -1,62 +1,103 @@
 <template>
     <div align="center">
-        <v-card max-width="500px" class="secondary mb-8 pa-8" elevation="20">
-            <header class="third--text text-h4 mb-8">CADASTRAR</header>
+        <v-card max-width="400px" class="secondary mb-8 pa-8" elevation="5">
+            <div
+                @click="step == 2 ? (step = 1) : $router.go(-1)"
+                style="text-decoration: none;
+                    position: absolute;
+                    left: -20px;
+                    top: 10px;
+                    cursor: pointer;"
+            >
+                <v-icon large class="third--text pl-10"
+                    >mdi-arrow-left-bold</v-icon
+                >
+            </div>
+            <header class="third--text text-h4 mb-8">Cadastrar</header>
             <v-form ref="form" class="text-left">
-                <v-text-field
-                    v-model="user.first_name"
-                    label="Nome"
-                    outlined
-                    :rules="[rules.required]"
-                ></v-text-field>
+                <v-stepper v-model="step" flat>
+                    <v-stepper-items class="secondary pa-0">
+                        <v-stepper-content step="1" class="secondary pa-0">
+                            <v-text-field
+                                v-model="user.first_name"
+                                label="Nome"
+                                outlined
+                                
+                                class="pa-1"
+                                :rules="[rules.required]"
+                            ></v-text-field>
 
-                <v-text-field
-                    v-model="user.last_name"
-                    label="Sobrenome"
-                    :rules="[rules.required]"
-                    outlined
-                ></v-text-field>
+                            <v-text-field
+                                v-model="user.last_name"
+                                label="Sobrenome"
+                                :rules="[rules.required]"
+                                outlined
+                                
+                                class="pa-1"
+                            ></v-text-field>
 
-                <v-text-field
-                    v-model="user.cpf"
-                    label="CPF"
-                    v-mask="'###.###.###-##'"
-                    :rules="[rules.required, rules.cpf]"
-                    outlined
-                ></v-text-field>
+                            <v-text-field
+                                v-model="user.cpf"
+                                label="CPF"
+                                v-mask="'###.###.###-##'"
+                                :rules="[rules.required, rules.cpf]"
+                                outlined
+                                
+                                class="pa-1"
+                            ></v-text-field>
+                            <v-container class="text-center">
+                                <v-btn
+                                    align="center"
+                                    class="primary"
+                                    @click="validateUserStep1"
+                                >
+                                    Continuar
+                                </v-btn>
+                            </v-container>
+                        </v-stepper-content>
+                        <v-stepper-content step="2" class="secondary pa-0">
+                            <v-text-field
+                                v-model="user.email"
+                                label="E-mail"
+                                class="pa-1"
+                                :rules="[rules.required, rules.email]"
+                                outlined
+                            ></v-text-field>
 
-                <v-text-field
-                    v-model="user.email"
-                    label="E-mail"
-                    :rules="[rules.required, rules.email]"
-                    outlined
-                ></v-text-field>
+                            <v-text-field
+                                v-model="user.password"
+                                label="Senha"
+                                class="pa-1"
+                                :rules="[rules.required, rules.counter]"
+                                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="show1 = !show1"
+                                :type="show1 ? 'text' : 'password'"
+                                outlined
+                            ></v-text-field>
 
-                <v-text-field
-                    v-model="user.password"
-                    label="Senha"
-                    :rules="[rules.required, rules.counter]"
-                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="show1 = !show1"
-                    :type="show1 ? 'text' : 'password'"
-                    outlined
-                ></v-text-field>
+                            <v-text-field
+                                v-model="user.confirm_password"
+                                :rules="[rules.required, rules.counter]"
+                                label="Confirmar Senha"
+                                class="pa-1"
+                                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                                @click:append="show2 = !show2"
+                                :type="show2 ? 'text' : 'password'"
+                                outlined
+                            ></v-text-field>
 
-                <v-text-field
-                    v-model="user.confirm_password"
-                    :rules="[rules.required, rules.counter]"
-                    label="Confirmar Senha"
-                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="show2 = !show2"
-                    :type="show2 ? 'text' : 'password'"
-                    outlined
-                ></v-text-field>
-
-                <v-container class="text-center">
-                    <v-btn align="center" class="primary" @click="createUser">
-                        Continuar
-                    </v-btn>
-                </v-container>
+                            <v-container class="text-center">
+                                <v-btn
+                                    align="center"
+                                    class="primary"
+                                    @click="createUser"
+                                >
+                                    Continuar
+                                </v-btn>
+                            </v-container>
+                        </v-stepper-content>
+                    </v-stepper-items>
+                </v-stepper>
             </v-form>
         </v-card>
     </div>
@@ -67,6 +108,7 @@
 import ToastedVue from "~/components/template/Toasted.vue";
 
 export default {
+    layout: "login",
     components: {
         ToastedVue,
     },
@@ -77,6 +119,7 @@ export default {
             color: "",
             show1: false,
             show2: false,
+            step: 1,
             user: {
                 first_name: "",
                 last_name: "",
@@ -108,7 +151,7 @@ export default {
 
     methods: {
         async createUser() {
-            if (!this.validateUser()) return;
+            if (!this.validateUsersStep2())  return;
             this.$store.commit("setLoading", {
                 loading: true,
             });
@@ -132,7 +175,7 @@ export default {
                         .then((response) => {
                             if (this.$store.state.back_url) {
                                 this.$router.push(this.$store.state.back_url);
-                                this.$store.commit("SetBack_url", '/');
+                                this.$store.commit("SetBack_url", "/");
                             }
                         })
                         .catch((e) =>
@@ -144,6 +187,7 @@ export default {
                         );
                 })
                 .catch((e) => {
+                    this.step = 1;
                     this.$toasted({
                         text: e.response.data
                             ? e.response.data
@@ -155,16 +199,20 @@ export default {
             });
         },
 
-        validateUser() {
+        validateUsersStep2() {
             let valido = true;
-            if (!this.validateName()) valido = false;
-            else if (!this.validateCPF()) valido = false;
-            else if (!this.validateEmail()) valido = false;
+            if (!this.validateEmail()) valido = false;
             else if (!this.validatePassword()) valido = false;
 
             return valido;
         },
 
+        validateUserStep1() {
+            let valido = true;
+            if (!this.validateName()) valido = false;
+            else if (!this.validateCPF()) valido = false;
+            if(valido)this.step=2;
+        },
         validateName() {
             if (this.user.first_name == "") {
                 this.$toasted({ text: "Nome inválido!" });

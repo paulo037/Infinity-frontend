@@ -129,7 +129,7 @@
                         <div class="text-center">
                             <v-btn
                                 v-if="item.rating != rating[index]"
-                                class="text-center primary_hover rounded"
+                                class="text-center darken3 white--text rounded"
                                 @click="avaliate(index)"
                                 small
                                 width="60px"
