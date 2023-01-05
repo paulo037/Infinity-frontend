@@ -89,11 +89,38 @@
                     </v-col>
 
                     <v-col class="pl-0" cols="12" md="6">
-                        <v-text-field
-                            outlined
-                            label="Número"
-                            v-model="address.number"
-                        ></v-text-field>
+                        <v-row class="flex-nowrap" style="position: relative;">
+                            <v-text-field
+                                outlined
+                                label="Número"
+                                class="d-inlie-block"
+                                v-model="address.number"
+                                :disabled="checkbox"
+                                maxlength="20"
+                            >
+                            </v-text-field>
+                            <div
+                                class="
+                                    d-flex
+                                    flex-nowrap
+                                    font-weight-light
+                                    align-center
+                                "
+                                style="position: absolute; right: 10px; top: 20px;"
+                            >
+                                <input
+                                    type="checkbox"
+                                   
+                                    style="background-color: #fff;"
+                                    :disabled="false"
+                                    @click="checkbox = !checkbox; address.number = 'SN' "
+                                    v-model="checkbox"
+                                />
+                                <label class="pl-2 text-caption">
+                                    Sem&nbsp;número
+                                </label>
+                            </div>
+                        </v-row>
                     </v-col>
                 </v-row>
 
@@ -130,7 +157,7 @@ export default {
         return {
             mode: this.$route.params ? this.$route.params.mode : null,
             address: this.$store.getters["user/getAddress"],
-
+            checkbox: false,
             rules: {
                 required: (value) =>
                     (!!value && value != "") || "Campo obrigatório.",
@@ -210,6 +237,14 @@ export default {
                 return false;
             }
 
+           if(this.checkbox)this.address.number = null;
+            if (isNaN(this.address.number) && !this.checkbox) {
+                this.$toasted({
+                    text: "O número do endereço tem de ser um valor númerico!",
+                });
+                return false;
+            }
+
             return true;
         },
 
@@ -233,9 +268,16 @@ export default {
                             text: "Endereço criado com sucesso!",
                             color: "success",
                         });
-                        this.$router.go(-1);
-                        return;
-                    });
+
+                        return this.$router.go(-1);
+                    })
+                    .catch((e) =>
+                        this.$toasted({
+                            text: e.response.data
+                                ? e.response.data
+                                : "Ocorreu um erro inesperado!",
+                        })
+                    );
                 this.address.cep = "";
                 return;
             }

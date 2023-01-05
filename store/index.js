@@ -50,7 +50,11 @@ export const mutations = {
     toasted(state, payload) {
         state.text = payload.text;
         state.color = payload.color || null;
-        state.snackbar = !state.snackbar;
+        state.snackbar = true;
+    },
+
+    setSnackBar(state, payload) {
+        state.snackbar = payload;
     },
 
     setProduct(state, payload) {

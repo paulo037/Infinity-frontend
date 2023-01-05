@@ -166,9 +166,11 @@ export default {
                     disabled: colors.orange.lighten2,
                     nav_background: colors.grey.darken4, // black
                     nav_text: colors.amber.darken4, // black
-
+                    green2: colors.lightGreen.accent4,
+                    
                 },
                 light: {
+                    green2: colors.lightGreen.accent4,
                     primary: colors.grey.darken4, // black
                     secondary: colors.grey.lighten4, //branco
                     third: colors.grey.darken4, // black

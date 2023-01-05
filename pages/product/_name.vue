@@ -27,17 +27,15 @@
 
             <v-col cols="12" sm="10" md="5" class="pt-0">
                 <v-card
-                    class="third--text pt-3 pb-12"
+                    class="third--text pt-3 pb-12 pa-5"
                     outlined
                     style="max-width: 800px"
                 >
                     <h1 class="px-12">{{ product.name }}</h1>
-                    <v-row align="center" class="mx-0 justify-center px-12">
-                        <v-col class="d-flex justify-center">
+                    <v-row align="center" class="mx-0 justify-center px-12 ">
+                        <v-col class="d-flex justify-center ">
                             <v-rating
-                                :value="
-                                    product.rating ?   product.rating : 5
-                                "
+                                :value="product.rating ? product.rating : 5"
                                 color="amber"
                                 dense
                                 half-increments
@@ -49,20 +47,16 @@
                             <div class="grey--text ms-4 d-inline-block pt-1">
                                 {{
                                     product.rating
-                                        ? `${(product.rating).toFixed(
-                                              1
-                                          )}(${product.sold})`
+                                        ? `${product.rating.toFixed(1)}(${
+                                              product.sold
+                                          })`
                                         : "(5)"
                                 }}
                             </div>
                         </v-col>
                     </v-row>
 
-                    <Price
-                        :price="product.price"
-                        :size1="'h6'"
-                        :size2="'h4'"
-                    />
+                    <Price :price="product.price" :size1="'h6'" :size2="'h4'" />
 
                     <div v-if="product.colors.length > 0">
                         <ProductQuantity
@@ -110,42 +104,94 @@
                                 {{ size.value }}
                             </v-btn>
                         </v-container>
-
-                        <v-row justify="space-around">
-                            <v-col cols="10" sm="5" md="7" lg="5" class="px-0">
-                                <v-btn
-                                    class="accent white--text pa-5"
-                                    append
-                                    @click="addCart"
+                        <div style="max-width: 400px">
+                            <div
+                                class="
+                                    d-flex
+                                    align-center
+                                    justify-center
+                                    green2--text
+                                    font-weight-bold
+                                "
+                            >
+                                <span v-if="200 - product.price > 0">
+                                    Por mais
+                                    {{
+                                        formatMoney(200 - product.price)
+                                    }}
+                                    o frete é grátis!
+                                </span>
+                                <span v-else>
+                                    Comprando agora o frete é grátis!
+                                </span>
+                                <div
+                                    class="d-flex align-center pl-2"
+                                    style="width: 50px"
                                 >
-                                    <span
-                                        class="font-weight-bold"
-                                        style="text-align: start"
-                                        >Adicionar<br />
-                                        ao carrinho</span
-                                    >
-                                    <v-divider
-                                        vertical
-                                        class="white mx-2"
-                                    ></v-divider>
-                                    <v-icon class="text--end">
-                                        mdi-cart-plus
-                                    </v-icon>
-                                </v-btn>
-                            </v-col>
-                            <v-col cols="10" sm="5" lg="5" md="7" class="px-0">
-                                <v-btn
-                                    class="
-                                        accent
-                                        white--text
-                                        font-weight-bold
-                                        pa-5
-                                    "
-                                    @click="checkout"
-                                    >Comprar Agora
-                                </v-btn>
-                            </v-col>
-                        </v-row>
+                                    <span class="d-flex align-end flex-column">
+                                        <v-divider
+                                            class="green2"
+                                            style="width: 15px"
+                                        ></v-divider>
+                                        <v-divider
+                                            class="green2 mt-1"
+                                            style="width: 10px"
+                                        ></v-divider>
+                                        <v-divider
+                                            class="green2 mt-1"
+                                            style="width: 5px"
+                                        ></v-divider>
+                                    </span>
+                                    <span>
+                                        <v-icon
+                                            class="
+                                                display-inline-block
+                                                green2--text
+                                            "
+                                            >mdi-truck</v-icon
+                                        >
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="max-width: 300px">
+                            <v-btn
+                                block
+                                style=""
+                                class="
+                                    accent
+                                    white--text
+                                    font-weight-bold
+                                    pa-5
+                                    my-1
+                                "
+                                @click="checkout"
+                                >Comprar agora
+                            </v-btn>
+
+                            <v-btn
+                                class="pa-5 my-1 white--text"
+                                color="rgba(239,108,0,0.85)"
+                                append
+                                block
+                                @click="addCart"
+                            >
+                                <span
+                                    class="font-weight-bold"
+                                    style="text-align: start"
+                                    >Adicionar<br />
+                                    ao carrinho</span
+                                >
+                                <v-divider
+                                    vertical
+                                    class="white mx-2"
+                                ></v-divider>
+                                <v-icon class="text--end">
+                                    mdi-cart-plus
+                                </v-icon>
+                            </v-btn>
+                        </div>
                     </div>
 
                     <div class="my-16" v-else>
@@ -157,7 +203,7 @@
             </v-col>
 
             <v-col cols="12" sm="10" v-if="product.description">
-                <v-card outlined class="mt-10" style="max-width: 1600px">
+                <v-card outlined text class="mt-10" style="max-width: 1600px">
                     <v-card-title class="flex justify-center">
                         Descrição do Produto</v-card-title
                     >
@@ -249,6 +295,10 @@ export default {
 
     methods: {
         ...mapMutations(["toasted", "SetBack_url"]),
+
+        formatMoney(value) {
+            return `R$ ${value.toFixed(2).toString().replace(".", ",")}`;
+        },
 
         async checkout() {
             if (!this.$auth.loggedIn) {

@@ -29,7 +29,7 @@
 <script>
 export default {
     middleware: ["admin"],
-    layout:'admin',
+    layout:'clean',
 
     data() {
         return {

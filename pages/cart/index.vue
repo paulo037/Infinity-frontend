@@ -364,8 +364,57 @@
                             border-bottom: thin solid rgba(255, 255, 255, 0.12);
                         "
                     ></v-divider>
-
-                    <v-container class="text-center text-h5 primary--text pa-8">
+                    <div>
+                        <div style="max-width: 400px" class="mt-5">
+                            <div
+                                class="
+                                    d-flex
+                                    align-center
+                                    justify-center
+                                    green2--text
+                                    font-weight-bold
+                                "
+                            >
+                                <span v-if="200 - calculateAmount > 0">
+                                    Por mais
+                                    {{ formatMoney(200 - calculateAmount) }}
+                                    o frete é grátis!
+                                </span>
+                                <span v-else>
+                                    Comprando agora o frete é grátis!
+                                </span>
+                                <div
+                                    class="d-flex align-center pl-2"
+                                    style="width: 50px"
+                                >
+                                    <span class="d-flex align-end flex-column">
+                                        <v-divider
+                                            class="green2"
+                                            style="width: 15px"
+                                        ></v-divider>
+                                        <v-divider
+                                            class="green2 mt-1"
+                                            style="width: 10px"
+                                        ></v-divider>
+                                        <v-divider
+                                            class="green2 mt-1"
+                                            style="width: 5px"
+                                        ></v-divider>
+                                    </span>
+                                    <span>
+                                        <v-icon
+                                            class="
+                                                display-inline-block
+                                                green2--text
+                                            "
+                                            >mdi-truck</v-icon
+                                        >
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <v-container class="text-center text-h5 primary--text">
                         <v-btn class="primary white--text" @click="checkout"
                             >Comprar Agora
                         </v-btn>
@@ -395,18 +444,9 @@ import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
 
 export default {
-    async mounted() {
-        if (!this.$auth.loggedIn) {
-            this.$toasted({
-                text: "Entre ou crie uma conta para ver seu carrinho!",
-            });
-            this.$store.commit(
-                "SetBack_url",
-                this.$router.history.current.path
-            );
-            return this.$router.push("/login");
-        }
+    middleware: ["loggedIn"],
 
+    async fetch() {
         this.products = await this.$axios.$get(`cart`);
         this.page_loading = false;
     },
@@ -422,6 +462,10 @@ export default {
     },
 
     methods: {
+        formatMoney(value) {
+            return `R$ ${value.toFixed(2).toString().replace(".", ",")}`;
+        },
+
         async checkout() {
             if (!this.$auth.loggedIn) {
                 this.$toasted({

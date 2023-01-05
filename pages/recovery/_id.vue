@@ -53,7 +53,7 @@
 
 <script>
 export default {
-    layout: "login",
+    layout: "clean",
     middleware: ["recovery"],
     data() {
         return {

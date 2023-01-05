@@ -1,14 +1,18 @@
 <template>
     <v-snackbar
         v-model="show"
-        
         class="my-16"
         :timeout="timeout"
         :color="color || 'error'"
         top
     >
         <span class="d-flex align-center justify-center">
-            {{ text }}
+            <span>
+                {{ text }}
+            </span>
+        </span>
+        <span style="position: absolute; top: -1px; right: 0px">
+            <v-icon small @click="show=false">mdi-close</v-icon>
         </span>
     </v-snackbar>
 </template>
@@ -17,7 +21,7 @@
 export default {
     data() {
         return {
-            show: false
+            show: false,
         };
     },
 
@@ -27,19 +31,30 @@ export default {
         color: String,
     },
 
-    computed:{
-        timeout(){
-            let time = this.text.split(" ").length * 300
-            time = time < 2000 ? 2000 : time
-            time = time > 10000 ? 10000 : time
-            return time 
-        }
+    fetch() {
+        this.show = this.snackbar;
     },
 
+    computed: {
+        timeout() {
+            let time = this.text.split(" ").length * 250;
+            time = time < 2000 ? 2000 : time;
+            time = time > 10000 ? 10000 : time;
+            return time;
+        },
+    },
 
     watch: {
-        snackbar(){
-            this.show = true
+        snackbar() {
+            if (this.snackbar) {
+                this.show = true;
+            }
+        },
+
+        show() {
+            if (!this.show) {
+                this.$store.commit("setSnackBar", false);
+            }
         },
     },
 };

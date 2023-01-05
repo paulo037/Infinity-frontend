@@ -108,7 +108,7 @@
 import ToastedVue from "~/components/template/Toasted.vue";
 
 export default {
-    layout: "login",
+    layout: "clean",
     components: {
         ToastedVue,
     },
@@ -176,6 +176,8 @@ export default {
                             if (this.$store.state.back_url) {
                                 this.$router.push(this.$store.state.back_url);
                                 this.$store.commit("SetBack_url", "/");
+                            }else{
+                                this.$router.push("/");
                             }
                         })
                         .catch((e) =>

@@ -1,27 +1,32 @@
- <template>
+<template>
     <v-app>
-        <v-container fluid class="d-flex justify-space-between ma-0 pa-0 secondary">
-            <NuxtLink to="/" style="text-decoration: none">
-                <v-icon large class="primary--text pl-10">mdi-arrow-left-bold</v-icon>
-            </NuxtLink>
-            <v-switch
-                v-model="switch1"
-                class="
-                    mt-0
-                    pr-5
-                    primary--text
-                    secondary
-                    text-right
-                    d-inline-block
-                "
-                width="100%"
-                color="primary"
-                input-value="true"
-                hide-details
-                :label="$vuetify.theme.dark ? 'Escuro' : 'Claro'"
-                @click="$vuetify.theme.dark = !$vuetify.theme.dark"
-            ></v-switch>
-        </v-container>
+        <v-app-bar
+            max-height="80px"
+            class="nav_background text--primary and-up"
+            elevation="1"
+            style="z-index: 10"
+        >
+            <v-toolbar-title>
+                <nuxt-link to="/" style="text-decoration: none">
+                    <div class="pl-10" align="center">
+                        <span class="font-weight-light">Infinity</span>
+                        <span> Modas</span>
+                    </div>
+                </nuxt-link>
+            </v-toolbar-title>
+        </v-app-bar>
+
+        <v-switch
+            v-model="switch1"
+            style="position: absolute; right: 0px; top: 65px"
+            class="mt-0 pr-5 primary--text secondary text-right d-inline-block"
+            width="100%"
+            color="primary"
+            input-value="true"
+            hide-details
+            :label="$vuetify.theme.dark ? 'Escuro' : 'Claro'"
+            @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+        ></v-switch>
         <toasted-vue
             :snackbar="$store.state.snackbar"
             :text="$store.state.text"
@@ -41,7 +46,7 @@
             ></v-progress-circular>
         </v-dialog>
 
-        <v-main class="secondary pa-5 d-flex">
+        <v-main class="secondary pa-5 pt-16 d-flex">
             <Nuxt class="pa-0"> </Nuxt>
         </v-main>
 

@@ -80,7 +80,7 @@
 
 <script>
 export default {
-    layout: "login",
+    layout: "clean",
     data() {
         return {
             user: {

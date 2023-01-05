@@ -3,26 +3,18 @@
         <Navbar :hide="false" />
 
         <Sidbar :hide="false" />
-        <v-container fluid class="text-right ma-0 pa-0 secondary">
-            <v-switch
-                v-model="switch1"
-                class="
-                    mt-0
-                    pr-5
-                    primary--text
-                    secondary
-                    text-right
-                    d-inline-block
-                "
-                
-                width="100%"
-                color="primary"
-                input-value="true"
-                hide-details
-                :label="$vuetify.theme.dark ? 'Escuro' : 'Claro'"
-                @click="$vuetify.theme.dark = !$vuetify.theme.dark"
-            ></v-switch>
-        </v-container>
+
+        <v-switch
+            v-model="switch1"
+            style="position: absolute; right: 0px; top: 65px; z-index: 10;"
+            class="mt-0 pr-5 primary--text secondary text-right d-inline-block"
+            width="100%"
+            color="primary"
+            input-value="true"
+            hide-details
+            :label="$vuetify.theme.dark ? 'Escuro' : 'Claro'"
+            @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+        ></v-switch>
         <toasted-vue
             :snackbar="$store.state.snackbar"
             :text="$store.state.text"
