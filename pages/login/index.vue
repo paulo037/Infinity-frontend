@@ -103,7 +103,6 @@ export default {
 
     methods: {
         async passwordRecovery() {
-            // if (this.rules.email(this.user.email))
             if(this.rules.required(this.user.email) !== true){
                 this.$toasted({
                         text: "Preencha o campo de E-mail!",

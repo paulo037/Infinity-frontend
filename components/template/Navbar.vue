@@ -1,13 +1,17 @@
 <template>
-    <v-app-bar max-height="80px" class="nav_background text--accent"   elevation="1">
+    <v-app-bar
+        max-height="80px"
+        class="nav_background text--accent"
+        elevation="1"
+    >
         <v-toolbar-title>
             <nuxt-link to="/" style="text-decoration: none">
-                <v-card class="nav_background px-2" flat align="center">
+                <div class="mx-5 d-flex flex-wrap">
                     <span class="font-weight-light primary--text"
                         >Infinity</span
                     >
                     <span class="primary--text"> Modas</span>
-                </v-card>
+                </div>
             </nuxt-link>
         </v-toolbar-title>
 
@@ -29,7 +33,7 @@
         <v-spacer></v-spacer>
         <client-only>
             <v-toolbar-items v-if="!hide">
-                <NuxtLink class="text-decoration-none" to="/cart" >
+                <NuxtLink class="text-decoration-none" to="/cart">
                     <v-btn
                         text
                         class="primary--text hidden-sm-and-down py-8 min-button"
@@ -45,8 +49,6 @@
                                 mdi-cart
                             </v-icon>
                         </v-hover>
-
-                      
 
                         <span
                             class="blue white--text rounded-circle"
@@ -86,7 +88,10 @@
                     to="/profile"
                     v-if="$auth.loggedIn"
                 >
-                    <v-btn text class="hidden-sm-and-down py-8 min-button primary--text">
+                    <v-btn
+                        text
+                        class="hidden-sm-and-down py-8 min-button primary--text"
+                    >
                         <v-hover v-slot="{ hover }">
                             <v-icon
                                 :class="
@@ -98,7 +103,6 @@
                             >
                                 mdi-account-circle
                             </v-icon>
-                            
                         </v-hover>
                     </v-btn>
                 </NuxtLink>
@@ -115,7 +119,6 @@
                                         ? 'primary_hover--text'
                                         : 'primary--text'
                                 "
-                                
                             >
                                 mdi-account
                             </v-icon>

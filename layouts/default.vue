@@ -6,7 +6,7 @@
 
         <v-switch
             v-model="switch1"
-            style="position: absolute; right: 0px; top: 65px; z-index: 10;"
+            style="position: absolute; right: 0px; top: 65px"
             class="mt-0 pr-5 primary--text secondary text-right d-inline-block"
             width="100%"
             color="primary"
@@ -21,7 +21,11 @@
             :color="$store.state.color"
         ></toasted-vue>
 
-        <v-dialog v-model="$store.state.loading" persistent class="d-flex align-center justify-center">
+        <v-dialog
+            v-model="$store.state.loading"
+            persistent
+            class="d-flex align-center justify-center"
+        >
             <v-progress-circular
                 indeterminate
                 :color="$store.state.loading_color"
@@ -30,7 +34,7 @@
             ></v-progress-circular>
         </v-dialog>
 
-        <v-main class="secondary pa-5 d-flex">
+        <v-main class="secondary pa-5 pt-10 d-flex">
             <Nuxt class="pa-0"> </Nuxt>
         </v-main>
 
@@ -57,7 +61,7 @@ export default {
     data() {
         return {
             switch1: true,
-            preference_loading:true
+            preference_loading: true,
         };
     },
 };

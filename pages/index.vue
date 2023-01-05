@@ -19,7 +19,7 @@ export default {
 
     data() {
         return {
-            launch: "Lançamentos",
+            launch: "Lancamentos",
             bestSeller: "Produtos Mais Vendidos",
         };
     },

@@ -353,7 +353,7 @@ export default {
                 this.preferece_id = null;
                 this.$router.go(-1);
             }
-            this.text = " Concluir Compra";
+            this.text = "Concluir Compra";
         },
 
         async createPreference() {

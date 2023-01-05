@@ -5,7 +5,7 @@
                 <v-card
                     align="center"
                     max-width="500px"
-                    class="secondary mx-8 pa-8 justify-center"
+                    class="secondary mx-8 pa-8 justify-center my-16"
                     elevation="5"
                 >
                     <span class="primary--text text-h6">
