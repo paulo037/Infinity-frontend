@@ -2,7 +2,6 @@
     <div align="center">
         <v-card max-width="400px" class="secondary mb-8 pa-8" elevation="5">
             <div
-                @click="$router.go(-1)"
                 style="
                     text-decoration: none;
                     position: absolute;
@@ -10,6 +9,7 @@
                     top: 10px;
                     cursor: pointer;
                 "
+                @click="$router.go(-1)"
             >
                 <v-icon large class="third--text pl-10"
                     >mdi-arrow-left-bold</v-icon
@@ -26,6 +26,8 @@
                     :rules="[rules.required, rules.email]"
                     required
                     outlined
+                    autofocus
+                    @keydown.enter="$refs.pass.focus()"
                 ></v-text-field>
 
                 <v-text-field
@@ -39,6 +41,8 @@
                     :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="show_password = !show_password"
                     :type="show_password ? 'text' : 'password'"
+                    ref="pass"
+                    @keydown.enter="$refs.login.$el.click()"
                 ></v-text-field>
                 <div
                     class="
@@ -66,6 +70,7 @@
                         class="primary px-10"
                         @click="login"
                         :disabled="$store.state.loading"
+                        ref="login"
                     >
                         Continuar
                     </v-btn>
@@ -103,23 +108,25 @@ export default {
 
     methods: {
         async passwordRecovery() {
-            if(this.rules.required(this.user.email) !== true){
+            if (this.rules.required(this.user.email) !== true) {
                 this.$toasted({
-                        text: "Preencha o campo de E-mail!",
-                    });
+                    text: "Preencha o campo de E-mail!",
+                });
                 return;
             }
 
-            if(this.rules.email(this.user.email) !== true){
+            if (this.rules.email(this.user.email) !== true) {
                 this.$toasted({
-                        text: "E-mail inválido",
-                    });
-                return
+                    text: "E-mail inválido",
+                });
+                return;
             }
 
-            await this.$axios.$post(`password`, {
-                email: this.user.email,
-            }).then((response) => {
+            await this.$axios
+                .$post(`password`, {
+                    email: this.user.email,
+                })
+                .then((response) => {
                     this.$toasted({
                         text: "O link para a redefinição da sua senha foi enviado no seu E-mail!",
                         color: "success",

@@ -26,6 +26,8 @@
                             label="Nome completo"
                             :rules="[rules.required]"
                             v-model="address.user_name"
+                            autofocus
+                            @keydown.enter="$refs.cep.focus()"
                         ></v-text-field>
                     </v-col>
                 </v-row>
@@ -38,6 +40,8 @@
                             v-mask="'#####-###'"
                             maxlength="9"
                             v-model="address.cep"
+                            ref="cep"
+                            @keydown.enter="$refs.district.focus()"
                         ></v-text-field>
                     </v-col>
                 </v-row>
@@ -49,6 +53,8 @@
                             label="Estado"
                             disabled
                             v-model="address.state"
+                            ref="state"
+                            @keydown.enter="$refs.city.focus()"
                         ></v-text-field>
                     </v-col>
 
@@ -57,6 +63,8 @@
                             outlined
                             label="Cidade"
                             disabled
+                            ref="city"
+                            @keydown.enter="$refs.district.focus()"
                             v-model="address.city"
                         ></v-text-field>
                     </v-col>
@@ -68,6 +76,8 @@
                             outlined
                             label="Bairro"
                             v-model="address.district"
+                            ref="district"
+                            @keydown.enter="$refs.complement.focus()"
                         ></v-text-field>
                     </v-col>
 
@@ -76,6 +86,8 @@
                             outlined
                             label="Complemento"
                             v-model="address.complement"
+                            ref="complement"
+                            @keydown.enter="$refs.street.focus()"
                         ></v-text-field>
                     </v-col>
                 </v-row>
@@ -85,11 +97,13 @@
                             outlined
                             label="Rua/Avenida"
                             v-model="address.street"
+                            ref="street"
+                            @keydown.enter="$refs.number.focus()"
                         ></v-text-field>
                     </v-col>
 
                     <v-col class="pl-0" cols="12" md="6">
-                        <v-row class="flex-nowrap" style="position: relative;">
+                        <v-row class="flex-nowrap" style="position: relative">
                             <v-text-field
                                 outlined
                                 label="Número"
@@ -97,6 +111,8 @@
                                 v-model="address.number"
                                 :disabled="checkbox"
                                 maxlength="20"
+                                ref="number"
+                                @keydown.enter="$refs.telephone.focus()"
                             >
                             </v-text-field>
                             <div
@@ -106,14 +122,16 @@
                                     font-weight-light
                                     align-center
                                 "
-                                style="position: absolute; right: 10px; top: 20px;"
+                                style="position: absolute;right: 10px;top: 20px;"
                             >
                                 <input
                                     type="checkbox"
-                                   
-                                    style="background-color: #fff;"
+                                    style="background-color: #fff"
                                     :disabled="false"
-                                    @click="checkbox = !checkbox; address.number = 'SN' "
+                                    @click="
+                                        checkbox = !checkbox;
+                                        address.number = 'SN';
+                                    "
                                     v-model="checkbox"
                                 />
                                 <label class="pl-2 text-caption">
@@ -131,6 +149,8 @@
                             label="Telefone para contato"
                             v-mask="'(##) #########'"
                             v-model="address.telephone"
+                            ref="telephone"
+                            @keydown.enter="$refs.save.$el.click()"
                         ></v-text-field>
                     </v-col>
                 </v-row>
@@ -141,6 +161,7 @@
                             color="primary"
                             class="accent third--text font-weight-bold"
                             @click="save"
+                            ref="save"
                         >
                             Salvar alterações
                         </v-btn>
@@ -237,7 +258,7 @@ export default {
                 return false;
             }
 
-           if(this.checkbox)this.address.number = null;
+            if (this.checkbox) this.address.number = null;
             if (isNaN(this.address.number) && !this.checkbox) {
                 this.$toasted({
                     text: "O número do endereço tem de ser um valor númerico!",

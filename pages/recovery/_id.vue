@@ -11,9 +11,11 @@
                     :rules="[rules.required, rules.counter]"
                     required
                     outlined
+                    autofocus
                     :append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="show_password = !show_password"
                     :type="show_password ? 'text' : 'password'"
+                    @keydown.enter="$refs.confirm_password.$el.click()"
                 ></v-text-field>
 
                 <v-text-field
@@ -31,6 +33,8 @@
                         show_confirm_password = !show_confirm_password
                     "
                     :type="show_confirm_password ? 'text' : 'password'"
+                    ref="confirm_password"
+                    @keydown.enter="$refs.recovery.$el.click()"
                 ></v-text-field>
 
                 <v-container width="100%" class="my-5 text-center">
@@ -39,6 +43,7 @@
                         class="primary px-10"
                         @click="passwordUpdate"
                         :disabled="$store.state.loading"
+                        ref="recovery"
                     >
                         Redefinir
                     </v-btn>
@@ -77,14 +82,14 @@ export default {
 
             await this.$axios
                 .$post(`/password/${id}`, {
-                    user: this.user
+                    user: this.user,
                 })
                 .then((response) => {
                     this.$toasted({
                         text: "Senha alterada com sucesso!",
                         color: "success",
                     });
-                    this.$router.push('/login')
+                    this.$router.push("/login");
                 })
                 .catch((e) => {
                     this.$toasted({

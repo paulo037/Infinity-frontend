@@ -2,12 +2,14 @@
     <div align="center">
         <v-card max-width="400px" class="secondary mb-8 pa-8" elevation="5">
             <div
-                @click="step == 2 ? (step = 1) : $router.go(-1)"
-                style="text-decoration: none;
+                style="
+                    text-decoration: none;
                     position: absolute;
                     left: -20px;
                     top: 10px;
-                    cursor: pointer;"
+                    cursor: pointer;
+                "
+                @click="step == 2 ? (step = 1) : $router.go(-1)"
             >
                 <v-icon large class="third--text pl-10"
                     >mdi-arrow-left-bold</v-icon
@@ -22,9 +24,10 @@
                                 v-model="user.first_name"
                                 label="Nome"
                                 outlined
-                                
                                 class="pa-1"
                                 :rules="[rules.required]"
+                                autofocus
+                                @keydown.enter="$refs.last_name.focus()"
                             ></v-text-field>
 
                             <v-text-field
@@ -32,8 +35,9 @@
                                 label="Sobrenome"
                                 :rules="[rules.required]"
                                 outlined
-                                
                                 class="pa-1"
+                                ref="last_name"
+                                @keydown.enter="$refs.cpf.focus()"
                             ></v-text-field>
 
                             <v-text-field
@@ -42,14 +46,16 @@
                                 v-mask="'###.###.###-##'"
                                 :rules="[rules.required, rules.cpf]"
                                 outlined
-                                
                                 class="pa-1"
+                                ref="cpf"
+                                @keydown.enter="$refs.next.$el.click()"
                             ></v-text-field>
                             <v-container class="text-center">
                                 <v-btn
                                     align="center"
                                     class="primary"
                                     @click="validateUserStep1"
+                                    ref="next"
                                 >
                                     Continuar
                                 </v-btn>
@@ -62,6 +68,8 @@
                                 class="pa-1"
                                 :rules="[rules.required, rules.email]"
                                 outlined
+                                ref="email"
+                                @keydown.enter="$refs.password.focus()"
                             ></v-text-field>
 
                             <v-text-field
@@ -73,6 +81,8 @@
                                 @click:append="show1 = !show1"
                                 :type="show1 ? 'text' : 'password'"
                                 outlined
+                                ref="password"
+                                @keydown.enter="$refs.confirm_password.focus()"
                             ></v-text-field>
 
                             <v-text-field
@@ -84,6 +94,8 @@
                                 @click:append="show2 = !show2"
                                 :type="show2 ? 'text' : 'password'"
                                 outlined
+                                ref="confirm_password"
+                                @keydown.enter="$refs.create.$el.click()"
                             ></v-text-field>
 
                             <v-container class="text-center">
@@ -91,8 +103,9 @@
                                     align="center"
                                     class="primary"
                                     @click="createUser"
+                                    ref="create"
                                 >
-                                    Continuar
+                                    Cadastrar
                                 </v-btn>
                             </v-container>
                         </v-stepper-content>
@@ -151,7 +164,7 @@ export default {
 
     methods: {
         async createUser() {
-            if (!this.validateUsersStep2())  return;
+            if (!this.validateUsersStep2()) return;
             this.$store.commit("setLoading", {
                 loading: true,
             });
@@ -176,7 +189,7 @@ export default {
                             if (this.$store.state.back_url) {
                                 this.$router.push(this.$store.state.back_url);
                                 this.$store.commit("SetBack_url", "/");
-                            }else{
+                            } else {
                                 this.$router.push("/");
                             }
                         })
@@ -213,7 +226,9 @@ export default {
             let valido = true;
             if (!this.validateName()) valido = false;
             else if (!this.validateCPF()) valido = false;
-            if(valido)this.step=2;
+            if (valido) {
+                this.step = 2;
+            }
         },
         validateName() {
             if (this.user.first_name == "") {

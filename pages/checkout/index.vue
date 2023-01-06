@@ -122,10 +122,7 @@
 
                                             <td>
                                                 <span
-                                                    style="
-                                                        cursor: pointer;
-                                                        height: 50px;
-                                                    "
+                                                    style="cursor: pointer;height: 50px; "
                                                     class="primary--text"
                                                     @click="
                                                         choseAddressModel = true
@@ -213,6 +210,7 @@
                                     class="accent white--text font-weight-bold"
                                     @click="buy"
                                     :disabled="$store.state.loading"
+                                    v-if="isMPLoaded"
                                 >
                                     {{ text }}
                                 </v-btn>
@@ -248,7 +246,7 @@ export default {
     data() {
         return {
             preferece_id: null,
-
+            isMPLoaded: false,
             choseAddressModel: null,
 
             addresses: [],
@@ -261,6 +259,21 @@ export default {
         };
     },
 
+    head() {
+        return {
+            title: "Mercado Pago",
+            script: [
+                {
+                    hid: "mercado livre",
+                    src: "https://sdk.mercadopago.com/js/v2/",
+                    defer: true,
+                    callback: () => {
+                        this.isMPLoaded = true;
+                    },
+                },
+            ],
+        };
+    },
     async fetch() {
         await this.$axios
             .get("/addresses")
