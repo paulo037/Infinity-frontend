@@ -36,13 +36,14 @@
             <div align="center" v-else-if="!page_loading">
                 <v-card
                     max-width="900px"
-                    class="secondary mx-8 mb-16"
-                    elevation="12"
+                    class="secondary mx-8 mb-16 pa-2"
+                    elevation="5"
+                    outlined
                 >
-                    <v-card class="primary--text secondary py-2">
-                        <span class="text-h5"> CARRINHO | </span>
-                        <v-icon class="primary--text pb-3">mdi-cart</v-icon>
-                    </v-card>
+                    <div class="primary--text secondary py-2">
+                        <span class="text-h5"> Carrinho | </span>
+                        <v-icon class="primary--text pb-2">mdi-cart</v-icon>
+                    </div>
                     <v-divider
                         class=""
                         style="
@@ -415,7 +416,7 @@
                         </div>
                     </div>
                     <v-container class="text-center text-h5 primary--text">
-                        <v-btn class="primary white--text" @click="checkout"
+                        <v-btn class="accent white--text" @click="checkout"
                             >Comprar Agora
                         </v-btn>
                     </v-container>

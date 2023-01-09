@@ -5,15 +5,14 @@
         <Sidbar :hide="false" />
 
         <v-switch
-            v-model="switch1"
+            v-model="$vuetify.theme.dark"
             style="position: absolute; right: 0px; top: 65px"
             class="mt-0 pr-5 primary--text secondary text-right d-inline-block"
             width="100%"
             color="primary"
-            input-value="true"
             hide-details
+            @click="toggleDarkMode"
             :label="$vuetify.theme.dark ? 'Escuro' : 'Claro'"
-            @click="$vuetify.theme.dark = !$vuetify.theme.dark"
         ></v-switch>
         <toasted-vue
             :snackbar="$store.state.snackbar"
@@ -37,14 +36,15 @@
         <v-main class="secondary pa-5 pt-10 d-flex">
             <Nuxt class="pa-0"> </Nuxt>
         </v-main>
-
         <Footer />
     </v-app>
 </template>
 
 
 
- <script>
+
+
+<script>
 import ToastedVue from "~/components/template/Toasted.vue";
 import Navbar from "@/components/template/Navbar.vue";
 import Sidbar from "@/components/template/Sidebar.vue";
@@ -58,11 +58,26 @@ export default {
         Footer,
         ToastedVue,
     },
+
     data() {
         return {
             switch1: true,
             preference_loading: true,
         };
+    },
+
+    methods: {
+        async toggleDarkMode() {
+            this.$cookies.set("darkTheme", this.$vuetify.theme.dark, {
+                path: "/",
+                maxAge: 60 * 60 * 24 * 7,
+            });
+        },
+    },
+
+    async beforeCreate() {
+        const isDark = await this.$cookies.get("darkTheme");
+        this.$vuetify.theme.dark = (await isDark) === undefined ? true : isDark;
     },
 };
 </script>

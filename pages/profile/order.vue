@@ -10,11 +10,20 @@
                 Pedidos
             </h1>
 
-            <div align="center" v-if="$fetchState.pending">
-                <v-skeleton-loader
-                    class="mx-auto"
-                    type="image"
-                ></v-skeleton-loader>
+            <div align="center" v-if="$fetchState.pending || loading">
+                <v-card
+                    class="pa-5 mb-10"
+                    outlined
+                    style="position: relative ;"
+                >
+                    <v-skeleton-loader class="mx-auto" type="image">
+                    </v-skeleton-loader>
+                    <v-progress-circular
+                        indeterminate
+                        color="primary"
+                        style="position: absolute; top: 40%; left: 45%;"
+                    ></v-progress-circular>
+                </v-card>
             </div>
 
             <v-card
@@ -74,6 +83,18 @@
                     </div>
                 </div>
             </v-card>
+
+            <v-divider class="mb-10"></v-divider>
+
+            <div style="max-width: 400px">
+                <v-pagination
+                    dense
+                    v-model="page"
+                    :length="Math.ceil(count / limit)"
+                    class="mb-5"
+                ></v-pagination>
+            </div>
+            <v-divider></v-divider>
         </div>
     </div>
 </template>
@@ -82,9 +103,11 @@
 import ShowProductListVue from "~/components/product/ShowProductList.vue";
 import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
+import Pagination from "~/components/Pagination.vue";
 
 export default {
     components: {
+        Pagination,
         ShowProductListVue,
     },
     data() {
@@ -112,20 +135,48 @@ export default {
                 { text: "Pedido enviado", color: "success" },
                 { text: "Entregue", color: "success" },
             ],
+            loading: false,
+            page: 1,
+            count: 0,
+            limit: 5,
         };
     },
 
     async fetch() {
-        this.orders = await this.$axios.$get("order");
+        await this.getOrders();
+    },
 
-        this.orders = this.orders.sort(
-            (a, b) =>
-                new Date(b.created_at).getTime() -
-                new Date(a.created_at).getTime()
-        );
+    watch: {
+        async page() {
+            window.scrollTo(0, 0);
+            await this.getOrders();
+        },
     },
 
     methods: {
+        async getOrders() {
+            this.loading = true;
+            const params = new URLSearchParams();
+            params.append("limit", this.limit);
+            params.append("page", this.page);
+
+            let { orders, count } = await this.$axios.$get(`order`, {
+                params,
+            });
+            this.orders = await orders;
+            this.count = count;
+            this.loading = false;
+        },
+        async limitChange(limit) {
+            this.limit = limit;
+            this.page = 1;
+            await this.getOrders();
+        },
+
+        async pageChange(page) {
+            this.page = page;
+        },
+
         getBrazilianDate(str_date) {
             const date = new Date(str_date);
             return `${

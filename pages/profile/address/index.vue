@@ -1,7 +1,9 @@
 <template>
     <div align="center">
-        <div align="left"  style="max-width: 1000px">
-            <v-icon @click="$router.push('/profile')" x-large>mdi-arrow-left-bold</v-icon>
+        <div align="left" style="max-width: 1000px">
+            <v-icon @click="$router.push('/profile')" x-large
+                >mdi-arrow-left-bold</v-icon
+            >
         </div>
         <v-col cols="12" sm="8" class="pa-0" style="max-width: 800px">
             <h1 class="text-left pb-5">Endereços</h1>
@@ -16,19 +18,37 @@
                             <td class="py-5">
                                 <span class="text-h6"
                                     >{{ address.street }} -
-                                    {{ address.number ? address.number : "SN" }} {{ address.complement  ? '- ' + address.complement : "" }}
+                                    {{
+                                        address.number ? address.number : "SN"
+                                    }}
+                                    {{
+                                        address.complement
+                                            ? "- " + address.complement
+                                            : ""
+                                    }}
                                 </span>
                                 <br />
                                 <span class="py-5 text-body-2"
-                                    >CEP {{ address.cep }} -
-                                    {{ address.state }} -
+                                    >CEP
+                                    {{
+                                        address.cep.replace(
+                                            /(\d{5})(\d{3})/,
+                                            "$1-$2"
+                                        )
+                                    }}
+                                    - {{ address.state }} -
                                     {{ address.city }}
                                 </span>
 
                                 <br />
                                 <span class="py-5 text-body-2"
                                     >{{ address.user_name }} -
-                                    {{ address.telephone }}
+                                    {{
+                                        address.telephone.replace(
+                                            /(\d{2})(\d{9})/,
+                                            "($1) $2"
+                                        )
+                                    }}
                                 </span>
                             </td>
 
@@ -75,9 +95,7 @@
 </template>
 
 <script>
-
 export default {
-
     middleware: "address",
     data() {
         return {

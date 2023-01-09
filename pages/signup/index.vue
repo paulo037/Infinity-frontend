@@ -53,7 +53,7 @@
                             <v-container class="text-center">
                                 <v-btn
                                     align="center"
-                                    class="primary"
+                                    class="accent"
                                     @click="validateUserStep1"
                                     ref="next"
                                 >
@@ -101,7 +101,7 @@
                             <v-container class="text-center">
                                 <v-btn
                                     align="center"
-                                    class="primary"
+                                    class="accent"
                                     @click="createUser"
                                     ref="create"
                                 >

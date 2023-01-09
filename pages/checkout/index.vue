@@ -122,7 +122,10 @@
 
                                             <td>
                                                 <span
-                                                    style="cursor: pointer;height: 50px; "
+                                                    style="
+                                                        cursor: pointer;
+                                                        height: 50px;
+                                                    "
                                                     class="primary--text"
                                                     @click="
                                                         choseAddressModel = true
@@ -155,7 +158,7 @@
                     <v-stepper-content step="2">
                         <div align="center">
                             <div class="text-h5 pb-5" v-if="address">
-                                Confira cada item do seu pedido
+                                Confira os itens do seu pedido
                             </div>
                             <ShowProductListVue
                                 :products="products"
@@ -178,39 +181,53 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
+                        <div class="text-h5 pb-5" v-if="address">
+                            Detalhes da sua compra
+                        </div>
+
                         <div align="center">
-                            <div class="text-h5 pb-5" v-if="address">
-                                Finalizar pedido
-                            </div>
                             <v-card
                                 max-width="400px"
-                                class="mb-10 third--text"
+                                class="mb-10 third--text pa-2"
                                 outlined
                             >
-                                <div
-                                    class="secondary third--text text-body-1"
-                                    outlined
-                                >
-                                    <p class="pa-5 ma-0">
-                                        O valor total do seu pedido foi de
-                                        {{ getPrice(amout) }}. Assim que for
-                                        confirmado o pagamento realizaremos o
-                                        envio.
-                                    </p>
+                                <v-row>
+                                    <v-col>
+                                        <v-row> Produtos </v-row>
+                                        <v-row>Frete</v-row>
+                                    </v-col>
+                                    <v-col>
+                                        <v-row class="justify-end">
+                                            {{ getPrice(amount) }}
+                                        </v-row>
 
-                                    <p class="pa-5 ma-0 text-body-2">
-                                        Você pode ver os seus pedidos na aba
-                                        "Pedidos" no seu perfil.
-                                    </p>
-                                </div>
+                                        <v-row class="justify-end">{{
+                                            getPrice(shipments)
+                                        }}</v-row>
+                                    </v-col>
+                                </v-row>
+                                <v-divider></v-divider>
+
+                                <v-row>
+                                    <v-col>
+                                        <v-row> Total</v-row>
+                                    </v-col>
+                                    <v-col>
+                                        <v-row class="justify-end">
+                                            {{ getPrice(shipments + amount) }}
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
                             </v-card>
-
+                            <p class="pa-5 ma-0 text-body-2">
+                                Você pode ver os seus pedidos na aba "Pedidos"
+                                no seu perfil.
+                            </p>
                             <div class="d-flex justify-center">
                                 <v-btn
                                     class="accent white--text font-weight-bold"
                                     @click="buy"
                                     :disabled="$store.state.loading"
-                                    v-if="isMPLoaded"
                                 >
                                     {{ text }}
                                 </v-btn>
@@ -314,19 +331,23 @@ export default {
             return this.addresses[this.selected[0]];
         },
 
-        amout() {
-            let amout = 0;
+        amount() {
+            let amount = 0;
             this.products.forEach((element) => {
-                amout += element.price * element.quantity;
+                amount += element.price * element.quantity;
             });
 
-            return amout;
+            return amount;
+        },
+
+        shipments() {
+            return this.amount >= 200 ? 0 : 25;
         },
     },
 
     methods: {
-        getPrice(amout) {
-            return ` R$ ${amout.toFixed(2).replace(".", ",")}`;
+        getPrice(amount) {
+            return ` R$ ${amount.toFixed(2).replace(".", ",")}`;
         },
 
         name_formated(name) {

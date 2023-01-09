@@ -14,7 +14,6 @@
                     Nenhum resultado para a categoria "{{ category }}"
                 </span>
 
-
                 <span class="primary--text text-h6" v-else>
                     Nenhum resultado para "{{ term }}"
                 </span>
@@ -39,12 +38,18 @@
                 <v-simple-table>
                     <template v-slot:default>
                         <thead>
-                            <tr  >
-                                <th class="text-left px-10 primary--text text-h6">
+                            <tr>
+                                <th
+                                    class="
+                                        text-left
+                                        px-10
+                                        primary--text
+                                        text-h6
+                                    "
+                                >
                                     Categorias
                                 </th>
                                 <th class="text-left"></th>
-                
                             </tr>
                         </thead>
                         <tbody>
@@ -63,19 +68,6 @@
                         </tbody>
                     </template>
                 </v-simple-table>
-                <!-- <div class="align-self-center">
-                    <v-select
-                        :items="categories"
-                        item-text="category"
-                        item-value="id"
-                        placeholder="Categoria"
-                        dense
-                        outlined
-                        v-model="select"
-                        style="width: 250px"
-                    >
-                    </v-select>
-                </div> -->
             </v-col>
             <v-col cols="10" md="9" class="">
                 <list-product-no-slide
@@ -83,6 +75,7 @@
                     :category="parseInt(category)"
                     :products="productsWithFilter"
                     :loading="$fetchState.pending || loading"
+                    page=""
                 />
             </v-col>
         </v-row>
@@ -150,9 +143,19 @@ export default {
             this.products = [];
             if (this.term) {
                 this.loading = true;
-                this.products = await this.$axios.$get(
-                    `product/search/${this.term}`
-                );
+                const params = new URLSearchParams();
+                params.append("limit", this.limit);
+                params.append("page", this.page);
+
+                this.products = await this.$axios
+                    .$get(`product/search/${this.term}`)
+                    .catch((e) =>
+                        this.$toasted({
+                            text: e.response.data
+                                ? e.response.data
+                                : "Ocorreu um erro inesperado!",
+                        })
+                    );
 
                 let categories = [];
 
@@ -177,9 +180,15 @@ export default {
             if (this.category) {
                 this.loading = true;
 
-                this.products = await this.$axios.$get(
-                    `product/category/${this.category}`
-                );
+                this.products = await this.$axios
+                    .$get(`product/category/${this.category}`)
+                    .catch((e) =>
+                        this.$toasted({
+                            text: e.response.data
+                                ? e.response.data
+                                : "Ocorreu um erro inesperado!",
+                        })
+                    );
                 this.loading = false;
             }
         },

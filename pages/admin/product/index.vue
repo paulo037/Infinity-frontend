@@ -6,6 +6,8 @@
             :search="search"
             :items-per-page="limit"
             hide-default-footer
+            :loading="loading"
+            loading-text="Carregando..."
         >
             <template v-slot:top>
                 <v-row justify="space-around">
@@ -20,10 +22,7 @@
                     </v-col>
 
                     <v-col cols="10" sm="6" md="3" class="pb-10">
-                        <v-btn
-                            color="accent"
-                            to="/admin/product/new-product"
-                        >
+                        <v-btn color="accent" to="/admin/product/new-product">
                             Criar novo produto
                         </v-btn>
                     </v-col>
@@ -58,42 +57,27 @@
             </template>
         </v-data-table>
         <v-divider class="mb-10"></v-divider>
-        <v-row align="center" justify="center" class="px-5">
-            <v-col class="d-flex align-center" cols="12" sm="6" md="5  ">
-                <v-pagination
-                    v-model="page"
-                    :length="Math.ceil(count / limit)"
-                    class="mb-5"
-                ></v-pagination>
-            </v-col>
 
-            <v-col class="d-flex align-right" cols="12" sm="6" md="5">
-                <span class="mt-2 pr-2 d-inline-block"
-                    >Produtos por página:
-                </span>
-                <span style="width: 110px" class="d-inline-block">
-                    <v-autocomplete
-                        solo
-                        dense
-                        v-model="limit"
-                        label="Limite"
-                        :items="limits"
-                    ></v-autocomplete>
-                </span>
-            </v-col>
-        </v-row>
-
+        <Pagination
+            :count="count"
+            :limit="limit"
+            :limits="limits"
+            :page="page"
+            :text="'Produtos por página:'"
+            v-on:pageChange="pageChange"
+            v-on:limitChange="limitChange"
+        />
         <v-divider></v-divider>
 
         <v-dialog v-model="dialog" max-width="300px">
             <v-card class="pa-2">
                 <v-card-title
-                    class="text-center"
-                    v-html="text"
+                    class="text-center d-block"
                     style="white-space: nowrap"
                 >
+                    {{ text }}
                 </v-card-title>
-
+                <v-divider></v-divider>
                 <v-card-actions class="flex justify-space-between">
                     <v-btn class="red white--text" @click="dialog = false">
                         Cancelar
@@ -109,7 +93,11 @@
 
 
  <script>
+import Pagination from "~/components/Pagination.vue";
 export default {
+    components: {
+        Pagination,
+    },
     data() {
         return {
             timeout: 3000,
@@ -121,7 +109,7 @@ export default {
             count: 0,
             limit: 20,
             limits: [5, 10, 20, 50, 100],
-
+            loading: false,
             headers: [
                 { text: "Imagem", value: "image", sortable: false },
                 {
@@ -136,6 +124,7 @@ export default {
                     sortable: false,
                     align: "right",
                 },
+                20,
             ],
 
             products: [],
@@ -148,6 +137,7 @@ export default {
 
     methods: {
         async getProducts() {
+            this.loading = true;
             const params = new URLSearchParams();
             params.append("limit", this.limit);
             params.append("page", this.page);
@@ -155,7 +145,8 @@ export default {
                 params,
             });
             this.products = products;
-            this.count = parseInt(count.count);
+            this.count = count;
+            this.loading = false;
         },
         formatMoney(value) {
             return `R$ ${parseFloat(value).toFixed(2).replace(".", ",")}`;
@@ -184,17 +175,20 @@ export default {
         },
         dialogFunction(id) {
             this.id = id;
-            this.text = `Confirma<wbr> que<wbr> quer<wbr> deletar<wbr> o<wbr> produto ?`;
+            this.text = `Deletar produto`;
             this.dialog = true;
         },
-    },
-    watch: {
-        async page() {
+
+        async limitChange(limit) {
+            this.limit = limit;
+            this.page = 1;
+            if (this.limit <= this.products.length) return;
             await this.getProducts();
         },
-        async limit() {
+
+        async pageChange(page) {
+            this.page = page;
             await this.getProducts();
-            this.page = 1;
         },
     },
 };

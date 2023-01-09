@@ -7,6 +7,9 @@
             hide-default-footer
             class="mt-5"
             :search="search"
+            :loading="loading"
+            loading-text="Carregando..."
+            dense
         >
             <template v-slot:top>
                 <v-row justify="space-around">
@@ -56,61 +59,28 @@
             </template>
         </v-data-table>
 
-        
         <v-divider class="mb-10"></v-divider>
-        <v-row align="center" justify="center" class="px-5">
-            <v-col class="d-flex align-center" cols="12" sm="6" md="5  ">
-                <v-pagination
-                    v-model="page"
-                    :length="Math.ceil(count / limit)"
-                    class="mb-5"
-                ></v-pagination>
-            </v-col>
 
-            <v-col class="d-flex align-right" cols="12" sm="6" md="5">
-                <span class="mt-2 pr-2 d-inline-block"
-                    >Produtos por página:
-                </span>
-                <span style="width: 110px" class="d-inline-block">
-                    <v-autocomplete
-                        solo
-                        dense
-                        v-model="limit"
-                        label="Limite"
-                        :items="limits"
-                    ></v-autocomplete>
-                </span>
-            </v-col>
-        </v-row>
-
+        <Pagination
+            :count="count"
+            :limit="limit"
+            :limits="limits"
+            :page="page"
+            :text="'Pedidos por página:'"
+            v-on:pageChange="pageChange"
+            v-on:limitChange="limitChange"
+        />
         <v-divider></v-divider>
-
-        <v-dialog v-model="dialog" max-width="300px">
-            <v-card class="pa-2">
-                <v-card-title
-                    class="text-center"
-                    v-html="text"
-                    style="white-space: nowrap"
-                >
-                </v-card-title>
-
-                <v-card-actions class="flex justify-space-between">
-                    <v-btn class="red white--text" @click="dialog = false">
-                        Cancelar
-                    </v-btn>
-                    <v-btn class="green white--text" @click="deleteProduct()">
-                        Confirmar
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
     </div>
 </template>
 
 
  <script>
-import { stringify } from 'uuid';
+import Pagination from "~/components/Pagination.vue";
 export default {
+    components: {
+        Pagination,
+    },
     data() {
         return {
             timeout: 3000,
@@ -120,18 +90,14 @@ export default {
             id: null,
             page: 1,
             count: 0,
-            limit: 20,
+            limit: 10,
             limits: [5, 10, 20, 50, 100],
-
+            loading: false,
             headers: [
-                {
-                    text: " Id Usuario",
-                    align: "start",
-                    value: "user_id",
-                },
-                { text: "Preço", value: "price" },
                 { text: "Data", value: "created_at" },
+                { text: "Estado", value: "state" },
                 { text: "Cidade", value: "city" },
+                { text: "Preço", value: "price" },
                 { text: "Status", value: "status" },
                 {
                     text: "Ações",
@@ -166,24 +132,39 @@ export default {
             orders: [],
 
             search: "",
-            orders_with_filter : [],
+            orders_with_filter: [],
 
-            status_filter: null,
+            status_filter: "Pagamento Aprovado",
         };
     },
     async fetch() {
-        this.orders = await this.$axios.$get("orders");
-        this.orders = this.orders.sort(
-            (a, b) =>
-                new Date(b.created_at).getTime() -
-                new Date(a.created_at).getTime()
-        );
-        this.orders_with_filter = this.orders;
+        await this.getOrders();
     },
 
     methods: {
+        async getOrders() {
+            this.loading = true;
+            const status =
+                this.status.indexOf(
+                    this.status.find((s) => s.text == this.status_filter)
+                ) - 1;
+            const params = new URLSearchParams();
+            params.append("limit", this.limit);
+            params.append("page", this.page);
+            params.append("status", status);
+
+            let { orders, count } = await this.$axios.$get(`orders`, {
+                params,
+            });
+
+            this.orders = orders;
+            this.count = count;
+            this.orders_with_filter = this.orders;
+            this.loading = false;
+        },
+
         formatMoney(value) {
-            return `R$ ${(value.toFixed(2).toString()).replace(".", ",")}`;
+            return `R$ ${value.toFixed(2).toString().replace(".", ",")}`;
         },
 
         getBrazilianDate(date_miliseconds) {
@@ -192,20 +173,23 @@ export default {
                 date.getDate() <= 9 ? `0${date.getDate()}` : `${date.getDate()}`
             } de ${this.meses[date.getMonth()]} de ${date.getFullYear()}`;
         },
+
+        async limitChange(limit){
+            this.limit = limit;
+            this.page = 1;
+            await this.getOrders();
+        },
+
+        async pageChange(page){
+            this.page = page;
+            await this.getOrders();
+        }
     },
 
     watch: {
-        status_filter() {
-            this.orders_with_filter = [];
-            if (this.status_filter == null || this.status_filter == "" || this.status_filter == 'Todos') {
-                this.orders_with_filter = this.orders;
-                return;
-            }
-            this.orders.forEach((element) => {
-                if (this.status[element.status + 1].text == this.status_filter) {
-                    this.orders_with_filter.push(element);
-                }
-            });
+        async status_filter() {
+            this.page = 1;
+            await this.getOrders();
         },
     },
 };

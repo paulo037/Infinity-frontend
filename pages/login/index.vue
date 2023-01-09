@@ -67,7 +67,7 @@
                 <v-container width="100%" class="my-5 text-center">
                     <v-btn
                         align="center"
-                        class="primary px-10"
+                        class="accent px-10"
                         @click="login"
                         :disabled="$store.state.loading"
                         ref="login"

@@ -52,7 +52,6 @@
             :items="colors"
             :headers="headers"
             :hide-default-header="true"
-            hide-default-footer
         >
             <template #[`item.value`]="{ item }">
                 <span>{{ item.value }}</span>

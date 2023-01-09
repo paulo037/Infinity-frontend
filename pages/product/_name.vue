@@ -16,9 +16,22 @@
                             >
                                 <v-img
                                     max-height
-                                    style="max-width: 800px; max-height: 500px"
+                                    style="max-width: 800px; max-height: 500px; min-height:500px"
                                     :src="item.url"
-                                ></v-img>
+                                >
+                                    <template v-slot:placeholder>
+                                        <v-row
+                                            class="fill-height ma-0"
+                                            align="center"
+                                            justify="center"
+                                        >
+                                            <v-progress-circular
+                                                indeterminate
+                                                color="primary"
+                                            ></v-progress-circular>
+                                        </v-row>
+                                    </template>
+                                </v-img>
                             </v-carousel-item>
                         </v-carousel>
                     </div>
@@ -32,8 +45,8 @@
                     style="max-width: 800px"
                 >
                     <h1 class="px-12">{{ product.name }}</h1>
-                    <v-row align="center" class="mx-0 justify-center px-12 ">
-                        <v-col class="d-flex justify-center ">
+                    <v-row align="center" class="mx-0 justify-center px-12">
+                        <v-col class="d-flex justify-center">
                             <v-rating
                                 :value="product.rating ? product.rating : 5"
                                 color="amber"
@@ -116,9 +129,7 @@
                             >
                                 <span v-if="200 - product.price > 0">
                                     Por mais
-                                    {{
-                                        formatMoney(200 - product.price)
-                                    }}
+                                    {{ formatMoney(200 - product.price) }}
                                     o frete é grátis!
                                 </span>
                                 <span v-else>

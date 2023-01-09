@@ -14,7 +14,7 @@
                 ></v-text-field>
                 <div class="d-flex mt-5 justify-center align-center">
                     <v-btn
-                        color="primary"
+                        color="accent"
                         :loading="isSelecting"
                         outlined
                         @click="handleFileImport"
@@ -74,7 +74,7 @@
 
                 <div class="d-flex mt-5 justify-center align-center">
                     <v-btn
-                        color="primary"
+                        color="accent"
                         :loading="isSelecting"
                         outlined
                         @click="handleFileImport"
@@ -127,7 +127,7 @@
             :items="categories"
             :headers="headers"
             :hide-default-header="true"
-            hide-default-footer
+         
         >
             <template #[`item.image`]="{ item }">
                 <v-img

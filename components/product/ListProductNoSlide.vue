@@ -95,6 +95,13 @@ export default {
             return this.products.slice(start, start + this.productPerPage);
         },
     },
+
+
+    watch:{
+        products(){
+            this.page = 1
+        }
+    }
 };
 </script>
 

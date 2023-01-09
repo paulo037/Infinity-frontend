@@ -8,14 +8,20 @@
 
         <h1 class="text-left pb-5 ma-0" style="max-width: 800px">Dados</h1>
         <v-card style="max-width: 800px" outlined class="pa-5 px-10">
-            <div align="center" v-if="$fetchState.pending">
+            <div align="center" v-if="$fetchState.pending" style="position: relative;">
                 <v-skeleton-loader
                     class="mx-auto"
                     type="image"
                 ></v-skeleton-loader>
+                <v-progress-circular
+                    indeterminate
+                    color="primary"
+                    style="position: absolute; top: 40%; left: 45%"
+                ></v-progress-circular>
             </div>
 
             <div v-else class="text-left">
+                
                 <div>
                     <v-icon
                         v-if="!edit"
@@ -36,8 +42,7 @@
                 <div class="text-h5 mb-2">
                     <span class="font-weight-bold">Nome: </span>
                     <v-text-field
-                        class="d-inline-block pa-0 ma-0 text-h5 mb-2"
-                        style="max-width: 210px"
+                        class="d-inline-block pa-0 ma-0 text-h5 mb-2 no-details"
                         dense
                         v-model="user.first_name"
                         v-if="edit"
@@ -50,8 +55,7 @@
                 <div class="text-h5 mb-2">
                     <span class="font-weight-bold"> Sobrenome: </span>
                     <v-text-field
-                        class="d-inline-block pa-0 ma-0 text-h5 mb-2"
-                        style="max-width: 210px"
+                        class="d-inline-block pa-0 ma-0 text-h5 mb-2 no-details"
                         dense
                         v-model="user.last_name"
                         v-if="edit"
@@ -63,8 +67,7 @@
                 <div class="text-h5 mb-2">
                     <span class="font-weight-bold"> CPF: </span>
                     <v-text-field
-                        class="d-inline-block pa-0 ma-0 text-h5 mb-2"
-                        style="max-width: 210px"
+                        class="d-inline-block pa-0 ma-0 text-h5 mb-2 no-details"
                         dense
                         v-mask="'###.###.###-##'"
                         :rules="[rules.required, rules.cpf]"
@@ -72,15 +75,19 @@
                         v-if="edit"
                     ></v-text-field>
                     <span v-else>
-                        {{ user.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}}
+                        {{
+                            user.cpf.replace(
+                                /(\d{3})(\d{3})(\d{3})(\d{2})/,
+                                "$1.$2.$3-$4"
+                            )
+                        }}
                     </span>
                 </div>
 
                 <div class="text-h5 mb-2">
                     <span class="font-weight-bold"> E-mail: </span>
                     <v-text-field
-                        class="d-inline-block pa-0 ma-0 text-h5 mb-2"
-                        style="max-width: 210px"
+                        class="d-inline-block pa-0 ma-0 text-h5 mb-2 no-details"
                         dense
                         v-model="user.email"
                         v-if="edit"
@@ -144,15 +151,15 @@ export default {
             save_disabled: true,
             edit: false,
             rules: {
-                required: value => !!value || "Campo obrigatório.",
-                counter: value=>
+                required: (value) => !!value || "Campo obrigatório.",
+                counter: (value) =>
                     value.length >= 8 || "mínimo 8 caracteres  ",
-                email: value => {
+                email: (value) => {
                     const pattern =
                         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                     return pattern.test(value) || "E-mail inválido";
                 },
-                cpf: value => {
+                cpf: (value) => {
                     const pattern =
                         /^((\d{3}\d{3}?\d{3}?\d{2})|(\d{3}\.\d{3}\.\d{3}\-\d{2}))$/;
 
@@ -195,8 +202,6 @@ export default {
         },
     },
 
-    
-
     methods: {
         async updateUser() {
             if (!this.validateUser()) return;
@@ -225,7 +230,6 @@ export default {
                 });
         },
 
-       
         validateUser() {
             let valido = true;
             if (!this.validateName()) valido = false;

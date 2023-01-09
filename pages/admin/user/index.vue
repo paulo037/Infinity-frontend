@@ -1,6 +1,17 @@
 <template>
     <div>
-        <v-data-table :items="users" :headers="headers" :search="search">
+        <div class="pb-0 text-right font-weight-bold">
+           Total de usuários: {{ count }}
+        </div>
+        <v-data-table
+            :items="users"
+            :headers="headers"
+            :search="search"
+            hide-default-footer
+            :loading="loading"
+            loading-text="Carregando..."
+            dense
+        >
             <template v-slot:top>
                 <v-row justify="space-around">
                     <v-col cols="9" sm="5" class="pb-0">
@@ -26,6 +37,19 @@
                 {{ item.admin ? "sim" : "não" }}
             </template>
         </v-data-table>
+
+        <v-divider class="mb-10"></v-divider>
+
+        <Pagination
+            :count="count"
+            :limit="limit"
+            :limits="limits"
+            :page="page"
+            :text="'Pedidos por página:'"
+            v-on:pageChange="pageChange"
+            v-on:limitChange="limitChange"
+        />
+        <v-divider></v-divider>
 
         <v-dialog v-model="dialog" max-width="300px">
             <v-card class="pa-2">
@@ -53,7 +77,11 @@
 </template>
 
 <script>
+import Pagination from "~/components/Pagination.vue";
 export default {
+    components: {
+        Pagination,
+    },
     data: () => ({
         users: [],
         admin: false,
@@ -80,11 +108,30 @@ export default {
                 align: "right",
             },
         ],
+        loading :false,
+        page: 1,
+        count: 0,
+        limit: 10,
+        limits: [5, 10, 20, 50, 100],
     }),
     async fetch() {
-        this.users = await this.$axios.$get(`users`);
+        await this.getUsers();
     },
     methods: {
+        async getUsers() {
+            this.loading = true;
+            const params = new URLSearchParams();
+            params.append("limit", this.limit);
+            params.append("page", this.page);
+
+            let { users, count } = await this.$axios.$get(`users`, {
+                params,
+            });
+
+            this.users = users;
+            this.count = count;
+            this.loading = false;
+        },
         onDialog(user, index) {
             this.user = this.users[index];
             this.text = user.admin
@@ -110,6 +157,17 @@ export default {
                         this.user.admin
                     );
                 });
+        },
+
+        async limitChange(limit) {
+            this.limit = limit;
+            this.page = 1;
+            await this.getUsers();
+        },
+
+        async pageChange(page) {
+            this.page = page;
+            await this.getUsers();
         },
     },
 };

@@ -158,7 +158,7 @@
                 <v-row class="d-flex justify-center">
                     <v-col class="justify-space-between pl-0" cols="12" md="6">
                         <v-btn
-                            color="primary"
+                            color="accent"
                             class="accent third--text font-weight-bold"
                             @click="save"
                             ref="save"

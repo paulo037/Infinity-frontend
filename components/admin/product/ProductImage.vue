@@ -8,7 +8,7 @@
                 <v-row justify="center">
                     <v-col cols="12" sm="10" xl="6" class="pa-1 text-center">
                         <v-btn
-                            color="primary"
+                            color="accent"
                             :loading="isSelecting"
                             outlined
                             @click="handleFileImport"

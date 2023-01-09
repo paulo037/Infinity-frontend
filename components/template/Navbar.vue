@@ -1,6 +1,6 @@
 <template>
     <v-app-bar
-        max-height="80px"
+        max-height="60px"
         class="nav_background text--accent"
         elevation="1"
     >
@@ -16,7 +16,7 @@
         </v-toolbar-title>
 
         <v-spacer></v-spacer>
-
+        
         <v-text-field
             v-model="term"
             placeholder="Buscar Produtos"
