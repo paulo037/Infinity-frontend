@@ -155,27 +155,23 @@ export default {
 
     methods: {
         async getOrders() {
-            this.loading = true;
-            const params = new URLSearchParams();
-            params.append("limit", this.limit);
-            params.append("page", this.page);
-
-            let { orders, count } = await this.$axios.$get(`order`, {
-                params,
-            });
-            this.orders = await orders;
-            this.count = count;
+            try {
+                this.loading = true;
+                const params = new URLSearchParams();
+                params.append("limit", this.limit);
+                params.append("page", this.page);
+    
+                let { orders, count } = await this.$axios.$get(`order`, {
+                    params,
+                });
+                this.orders = await orders;
+                this.count = count;
+            } catch (error) {
+                this.loading = false;
+            }
             this.loading = false;
         },
-        async limitChange(limit) {
-            this.limit = limit;
-            this.page = 1;
-            await this.getOrders();
-        },
 
-        async pageChange(page) {
-            this.page = page;
-        },
 
         getBrazilianDate(str_date) {
             const date = new Date(str_date);
