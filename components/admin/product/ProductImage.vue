@@ -35,10 +35,20 @@
             <tbody>
                 <tr v-for="(item, index) in items" :key="index">
                     <td>
+                        <nuxt-img
+                            :src="item.url"
+                            width="36px"
+                            height="36px"
+                            format="webp"
+                            provider="cloudinary"
+                            v-if="item.url "
+                        />
+
                         <v-img
-                            :src="item.url ? item.url : createURL(item.file)"
-                            max-width="36px"
-                            max-height="36px"
+                            :src="createURL(item.file)"
+                            width="36px"
+                            height="36px"
+                            v-else
                         />
                     </td>
 
@@ -50,10 +60,10 @@
                     <td>
                         <v-icon
                             small
-                            class="rounded-0 ma-0 mr-15 d-block accent--text"
+                            class="rounded-0 ma-0 mr-15 d-block"
                             @click="makePrimary(index)"
                             :class="
-                                item.primary ? 'accent--text' : 'white--text'
+                                item.primary ? 'accent--text' : ''
                             "
                         >
                             mdi-star

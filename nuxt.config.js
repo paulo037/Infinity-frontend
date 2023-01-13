@@ -62,8 +62,32 @@ export default {
         'cookie-universal-nuxt',
         'universal-cookie',
         ['cookie-universal-nuxt', { alias: 'cookiz' }],
+        '@nuxt/image',
 
     ],
+
+    image: {
+
+        screens: {
+            xs: 600,
+            sm: 959,
+            md: 1264,
+            lg: 1500,
+            xl: 1600,
+
+        },
+
+        cloudinary: {
+            baseURL: "https://res.cloudinary.com/dhtgipp7l/image/upload/v1673533404/",
+            modifiers: {
+                format: 'webp',
+                quality: 'auto:best',
+            }
+        },
+
+
+        
+    },
 
     auth: {
 
@@ -160,7 +184,7 @@ export default {
                     nav_background: colors.grey.darken4, // black
                     nav_text: colors.amber.darken4, // black
                     green2: colors.lightGreen.accent4,
-                    
+
                 },
                 light: {
                     green2: colors.lightGreen.accent4,

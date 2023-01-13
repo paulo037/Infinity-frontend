@@ -35,15 +35,16 @@
                         @change="onFileChanged"
                     />
 
-                    <v-img
+                    <nuxt-img
                         class="ml-8"
                         :src="
                             newCategory.image.file == null
                                 ? newCategory.image.url
                                 : createURL(newCategory.image.file)
                         "
-                        max-width="36px"
-                        max-height="36px"
+                        width="36px"
+                        height="36px"
+                        format="webp"
                         style="display: inline-block"
                     />
                 </div>
@@ -91,16 +92,20 @@
                         @change="onFileChanged"
                     />
 
+                    <nuxt-img
+                        :src="updateCategory.image"
+                        width="36px"
+                        height="36px"
+                        format="webp"
+                        provider="cloudinary"
+                        v-if="updateCategory.image.file == null"
+                    />
+
                     <v-img
-                        class="ml-8"
-                        :src="
-                            updateCategory.image.file == null
-                                ? updateCategory.image
-                                : createURL(updateCategory.image.file)
-                        "
-                        max-width="36px"
-                        max-height="36px"
-                        style="display: inline-block"
+                        :src="createURL(updateCategory.image.file)"
+                        width="36px"
+                        height="36px"
+                        v-else
                     />
                 </div>
             </v-col>
@@ -127,13 +132,13 @@
             :items="categories"
             :headers="headers"
             :hide-default-header="true"
-         
         >
             <template #[`item.image`]="{ item }">
-                <v-img
+                <nuxt-img
                     :src="item.image ? item.image : createURL(item.file)"
-                    max-width="36px"
-                    max-height="36px"
+                    width="36px"
+                    height="36px"
+                    format="webp"
                 />
             </template>
             <template #[`item.name`]="{ item }">
@@ -164,15 +169,15 @@ export default {
             categories: [],
             emptyCategory: {
                 name: "",
-                image: { file: null, url: "/noImage.png" },
+                image: { file: null, url: "/infinity/noImage.png" },
             },
             newCategory: {
                 name: "",
-                image: { file: null, url: "/noImage.png" },
+                image: { file: null, url: "/infinity/noImage.png" },
             },
             updateCategory: {
                 name: "",
-                image: { file: null, url: "/noImage.png" },
+                image: { file: null, url: "/infinity/noImage.png" },
             },
             headers: [
                 { value: "image", sortable: false },
@@ -255,7 +260,7 @@ export default {
         newEmptyCategory() {
             return {
                 name: "",
-                image: { file: null, url: "/noImage.png" },
+                image: { file: null, url: "/infinity/noImage.png" },
             };
         },
 

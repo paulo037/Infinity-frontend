@@ -48,12 +48,14 @@
             </template>
 
             <template #[`item.image`]="{ item }">
-                <v-img
-                    :src="item.image ? item.image : '/noImage.png'"
-                    max-width="36px"
-                    max-height="36px"
+                <nuxt-img
+                    :src="item.image ? item.image : '/infinity/noImage.png'"
+                    width="36px"
+                    height="36px"
+                    format="webp"
+                    provider="cloudinary"
                 >
-                </v-img>
+                </nuxt-img>
             </template>
         </v-data-table>
         <v-divider class="mb-10"></v-divider>

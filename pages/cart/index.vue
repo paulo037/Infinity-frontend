@@ -105,12 +105,13 @@
                                                 <router-link
                                                     :to="`/product/${item.name}`"
                                                 >
-                                                    <v-img
+                                                    <nuxt-img
                                                         class="d-inline-block"
                                                         :src="item.image"
                                                         max-width="80px"
                                                         height="80px"
-                                                    ></v-img>
+                                                        format="webp"
+                                                    ></nuxt-img>
                                                 </router-link>
                                                 <div class="text ml-5">
                                                     <span
@@ -224,7 +225,7 @@
                                             flat
                                             :to="`/product/${item.name}`"
                                         >
-                                            <v-img
+                                            <nuxt-img
                                                 class="
                                                     d-inline-block
                                                     mx-5
@@ -233,7 +234,8 @@
                                                 :src="item.image"
                                                 max-width="80px"
                                                 height="80px"
-                                            ></v-img>
+                                                format="webp"
+                                            ></nuxt-img>
                                             <div>
                                                 <span
                                                     class="

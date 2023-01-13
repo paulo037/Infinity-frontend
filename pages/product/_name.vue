@@ -1,239 +1,429 @@
 <template>
-    <div align="center">
-        <SkeletonProductBuy v-if="$fetchState.pending || page_loading" />
-
-        <v-row justify="center" v-else style="max-width: 1600px">
-            <v-col cols="12" sm="10" md="5" class="pt-0">
-                <v-card outlined class="pa-1" style="max-width: 800px">
-                    <div>
-                        <v-carousel
-                            hide-delimiters
-                            style="max-width: 800px; height: auto"
+    <v-row class="justify-center align-center">
+        <v-col cols="12" md="11" align="center">
+            <SkeletonProductBuy v-if="$fetchState.pending || page_loading" />
+            <v-card v-else style="max-width: 1600px; height: auto" class="pa-1">
+                <v-row justify="center">
+                    <v-col
+                        cols="12"
+                        sm="10"
+                        md="7"
+                        class="d-flex justify-center"
+                    >
+                        <v-item-group
+                            v-model="selected"
+                            class="mr-5 hidden-sm-and-down"
                         >
-                            <v-carousel-item
+                            <v-item v-if="view > 0">
+                                <v-icon large @click="view -= 5"
+                                    >mdi-arrow-up-drop-circle-outline</v-icon
+                                >
+                            </v-item>
+                            <v-item
                                 v-for="(item, i) in product.images"
                                 :key="i"
                             >
-                                <v-img
-                                    max-height
-                                    style="max-width: 800px; max-height: 500px; min-height:500px"
-                                    :src="item.url"
+                                <v-card
+                                    v-if="i >= view && i <= view + 4"
+                                    outlined
+                                    class="pa-0-8 d-flex justify-center my-2"
+                                    rounded="md"
+                                    style="
+                                        height: 6vw;
+                                        width: 6vw;
+                                        max-width: 60px;
+                                        max-height: 60px;
+                                    "
+                                    @click="selected = i"
+                                    :style="
+                                        selected == i
+                                            ? 'border: 2px solid rgba(239,108,0,0.85)'
+                                            : ''
+                                    "
                                 >
-                                    <template v-slot:placeholder>
-                                        <v-row
-                                            class="fill-height ma-0"
-                                            align="center"
-                                            justify="center"
-                                        >
-                                            <v-progress-circular
-                                                indeterminate
-                                                color="primary"
-                                            ></v-progress-circular>
-                                        </v-row>
-                                    </template>
-                                </v-img>
-                            </v-carousel-item>
-                        </v-carousel>
-                    </div>
-                </v-card>
-            </v-col>
-
-            <v-col cols="12" sm="10" md="5" class="pt-0">
-                <v-card
-                    class="third--text pt-3 pb-12 pa-5"
-                    outlined
-                    style="max-width: 800px"
-                >
-                    <h1 class="px-12">{{ product.name }}</h1>
-                    <v-row align="center" class="mx-0 justify-center px-12">
-                        <v-col class="d-flex justify-center">
-                            <v-rating
-                                :value="product.rating ? product.rating : 5"
-                                color="amber"
-                                dense
-                                half-increments
-                                readonly
-                                size="20"
-                                class="d-inline-block"
-                            ></v-rating>
-
-                            <div class="grey--text ms-4 d-inline-block pt-1">
-                                {{
-                                    product.rating
-                                        ? `${product.rating.toFixed(1)}(${
-                                              product.sold
-                                          })`
-                                        : "(5)"
-                                }}
-                            </div>
-                        </v-col>
-                    </v-row>
-
-                    <Price :price="product.price" :size1="'h6'" :size2="'h4'" />
-
-                    <div v-if="product.colors.length > 0">
-                        <ProductQuantity
-                            :max="max"
-                            :quantity="quantity"
-                            v-on:increment="increment"
-                            v-on:decrement="decrement"
-                            class="pb-0"
-                        />
-
-                        <v-container class="px-12 py-1">
-                            <div class="py-2 px-1 d-inline">Cor:</div>
-                            <v-select
-                                :items="colors"
-                                :disabled="colors.length == 1"
-                                item-text="value"
-                                class="d-inline-block no-details pt-1"
-                                dense
-                                outlined
-                                v-model="color"
-                            ></v-select>
-                        </v-container>
-
-                        <v-container class="px-0 py-1">
-                            <div>Tamanho:</div>
-                            <v-btn
-                                light
-                                rounded
-                                color="sencondary"
-                                class="rounded-circle ma-2"
-                                min-width="26px"
-                                min-height="26px"
-                                height="26px"
-                                width="26px"
-                                style="padding: 16px !important"
-                                v-for="size in sizes"
-                                :key="size.value"
-                                v-bind:class="{
-                                    'accent secondary--text':
-                                        size_selected == indexOfSize(size),
-                                    white: size_selected != indexOfSize(size),
-                                }"
-                                @click="size_selected = indexOfSize(size)"
-                            >
-                                {{ size.value }}
-                            </v-btn>
-                        </v-container>
-                        <div style="max-width: 400px">
-                            <div
-                                class="
-                                    d-flex
-                                    align-center
-                                    justify-center
-                                    green2--text
-                                    font-weight-bold
-                                "
-                            >
-                                <span v-if="200 - product.price > 0">
-                                    Por mais
-                                    {{ formatMoney(200 - product.price) }}
-                                    o frete é grátis!
-                                </span>
-                                <span v-else>
-                                    Comprando agora o frete é grátis!
-                                </span>
-                                <div
-                                    class="d-flex align-center pl-2"
-                                    style="width: 50px"
+                                    <nuxt-img
+                                        sizes="xs:5vw sm:5vw md:5vw lg:5vw xl:80px"
+                                        :src="item.url"
+                                        provider="cloudinary"
+                                        class="rounded-md"
+                                        format="png"
+                                    >
+                                    </nuxt-img>
+                                </v-card>
+                            </v-item>
+                            <v-item>
+                                <v-card
+                                    outlined
+                                    class="
+                                        pa-0-8
+                                        d-flex
+                                        justify-center
+                                        my-2
+                                        align-center
+                                    "
+                                    rounded="md"
+                                    style="
+                                        height: 6vw;
+                                        width: 6vw;
+                                        max-width: 60px;
+                                        max-height: 60px;
+                                    "
+                                    @click="view += 5"
+                                    v-if="
+                                        product.images.length - (view + 4) > 0
+                                    "
                                 >
-                                    <span class="d-flex align-end flex-column">
-                                        <v-divider
-                                            class="green2"
-                                            style="width: 15px"
-                                        ></v-divider>
-                                        <v-divider
-                                            class="green2 mt-1"
-                                            style="width: 10px"
-                                        ></v-divider>
-                                        <v-divider
-                                            class="green2 mt-1"
-                                            style="width: 5px"
-                                        ></v-divider>
-                                    </span>
-                                    <span>
-                                        <v-icon
-                                            class="
-                                                display-inline-block
-                                                green2--text
-                                            "
-                                            >mdi-truck</v-icon
+                                    <v-card-title class="pa-0 grey--text">
+                                        +
+                                        {{ product.images.length - (view + 4) }}
+                                    </v-card-title>
+                                </v-card>
+                            </v-item>
+                            <v-item
+                                v-if="product.images.length - (view + 4) > 0"
+                            >
+                                <v-icon large @click="view += 5"
+                                    >mdi-arrow-down-drop-circle-outline</v-icon
+                                >
+                            </v-item>
+                        </v-item-group>
+
+                        <div class="flex-grow-1">
+                            <v-carousel
+                                hide-delimiters
+                                style="height: auto !important"
+                                v-model="selected"
+                            >
+                                <v-carousel-item
+                                    v-for="(item, i) in product.images"
+                                    :key="i"
+                                    class="text--center"
+                                    eager
+                                >
+                                    <nuxt-img
+                                        sizes="xs:80vw sm:60vw md:35vw lg:35vw xl:500px"
+                                        :src="item.url"
+                                        provider="cloudinary"
+                                        ref="images"
+                                        class="d"
+                                    >
+                                    </nuxt-img>
+                                </v-carousel-item>
+                            </v-carousel>
+                        </div>
+                    </v-col>
+                    <v-col cols="12" sm="10" class="hidden-md-and-up">
+                        <v-item-group
+                            v-model="selected"
+                            class="d-flex justify-center"
+                        >
+                            <v-item v-if="view > 0">
+                                <v-icon  @click="view -= 5"
+                                    >mdi-arrow-left-drop-circle-outline</v-icon
+                                >
+                            </v-item>
+                            <v-item
+                                v-for="(item, i) in product.images"
+                                :key="i"
+                            >
+                                <v-card
+                                    v-if="i >= view && i <= view + 4"
+                                    outlined
+                                    class="pa-0-8 d-flex justify-center mx-1"
+                                    rounded="md"
+                                    style="
+                                        height: 10vw;
+                                        width: 10vw;
+                                        max-width: 60px;
+                                        max-height: 60px;
+                                    "
+                                    @click="selected = i"
+                                    :style="
+                                        selected == i
+                                            ? 'border: 2px solid rgba(239,108,0,0.85)'
+                                            : ''
+                                    "
+                                >
+                                    <nuxt-img
+                                        sizes="xs:5vw sm:5vw md:5vw lg:5vw xl:80px"
+                                        :src="item.url"
+                                        provider="cloudinary"
+                                        class="rounded-md"
+                                        format="png"
+                                    >
+                                    </nuxt-img>
+                                </v-card>
+                            </v-item>
+                            <v-item>
+                                <v-card
+                                    outlined
+                                    class="
+                                        pa-0-8
+                                        d-flex
+                                        justify-center
+                                        mx-1
+                                        align-center
+                                    "
+                                    rounded="md"
+                                    style="
+                                        height: 10vw;
+                                        width: 10vw;
+                                        max-width: 60px;
+                                        max-height: 60px;
+                                    "
+                                    @click="view += 5"
+                                    v-if="
+                                        product.images.length - (view + 4) > 0
+                                    "
+                                >
+                                    <v-card-title class="pa-0 grey--text">
+                                        +
+                                        {{ product.images.length - (view + 4) }}
+                                    </v-card-title>
+                                </v-card>
+                            </v-item>
+                            <v-item
+                                v-if="product.images.length - (view + 4) > 0"
+                            >
+                                <v-icon  @click="view += 5"
+                                    >mdi-arrow-right-drop-circle-outline</v-icon
+                                >
+                            </v-item>
+                        </v-item-group></v-col
+                    >
+                    <v-col cols="12" sm="10" md="5">
+                        <v-card
+                            class="third--text pt-3 pb-12 pa-5"
+                            outlined
+                            style="max-width: 500px"
+                        >
+                            <h1 class="">{{ product.name }}</h1>
+                            <v-row
+                                align="center"
+                                class="mx-0 justify-center px-12"
+                            >
+                                <v-col class="d-flex justify-center">
+                                    <v-rating
+                                        :value="
+                                            product.rating ? product.rating : 5
+                                        "
+                                        color="amber"
+                                        dense
+                                        half-increments
+                                        readonly
+                                        size="20"
+                                        class="d-inline-block"
+                                    ></v-rating>
+
+                                    <div
+                                        class="
+                                            grey--text
+                                            ms-4
+                                            d-inline-block
+                                            pt-1
+                                        "
+                                    >
+                                        {{
+                                            product.rating
+                                                ? `${product.rating.toFixed(
+                                                      1
+                                                  )}(${product.sold})`
+                                                : "(5)"
+                                        }}
+                                    </div>
+                                </v-col>
+                            </v-row>
+
+                            <Price
+                                :price="product.price"
+                                :size1="'h6'"
+                                :size2="'h4'"
+                            />
+
+                            <div v-if="product.colors.length > 0">
+                                <ProductQuantity
+                                    :max="max"
+                                    :quantity="quantity"
+                                    v-on:increment="increment"
+                                    v-on:decrement="decrement"
+                                    class="pb-0"
+                                />
+
+                                <v-container class="px-12 py-1">
+                                    <div class="py-2 px-1 d-inline">Cor:</div>
+                                    <v-select
+                                        :items="colors"
+                                        :disabled="colors.length == 1"
+                                        item-text="value"
+                                        class="d-inline-block no-details pt-1"
+                                        dense
+                                        outlined
+                                        v-model="color"
+                                    ></v-select>
+                                </v-container>
+
+                                <v-container class="px-0 py-1">
+                                    <div>Tamanho:</div>
+                                    <v-btn
+                                        light
+                                        rounded
+                                        color="sencondary"
+                                        class="rounded-circle ma-2"
+                                        min-width="26px"
+                                        min-height="26px"
+                                        height="26px"
+                                        width="26px"
+                                        style="padding: 16px !important"
+                                        v-for="size in sizes"
+                                        :key="size.value"
+                                        v-bind:class="{
+                                            'accent secondary--text':
+                                                size_selected ==
+                                                indexOfSize(size),
+                                            white:
+                                                size_selected !=
+                                                indexOfSize(size),
+                                        }"
+                                        @click="
+                                            size_selected = indexOfSize(size)
+                                        "
+                                    >
+                                        {{ size.value }}
+                                    </v-btn>
+                                </v-container>
+                                <div style="max-width: 400px">
+                                    <div
+                                        class="
+                                            d-flex
+                                            align-center
+                                            justify-center
+                                            green2--text
+                                            font-weight-bold
+                                        "
+                                    >
+                                        <span v-if="200 - product.price > 0">
+                                            Por mais
+                                            {{
+                                                formatMoney(200 - product.price)
+                                            }}
+                                            o frete é grátis!
+                                        </span>
+                                        <span v-else>
+                                            Comprando agora o frete é grátis!
+                                        </span>
+                                        <div
+                                            class="d-flex align-center pl-2"
+                                            style="width: 50px"
                                         >
-                                    </span>
+                                            <span
+                                                class="
+                                                    d-flex
+                                                    align-end
+                                                    flex-column
+                                                "
+                                            >
+                                                <v-divider
+                                                    class="green2"
+                                                    style="width: 15px"
+                                                ></v-divider>
+                                                <v-divider
+                                                    class="green2 mt-1"
+                                                    style="width: 10px"
+                                                ></v-divider>
+                                                <v-divider
+                                                    class="green2 mt-1"
+                                                    style="width: 5px"
+                                                ></v-divider>
+                                            </span>
+                                            <span>
+                                                <v-icon
+                                                    class="
+                                                        display-inline-block
+                                                        green2--text
+                                                    "
+                                                    >mdi-truck</v-icon
+                                                >
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="max-width: 300px">
+                                    <v-btn
+                                        block
+                                        style=""
+                                        class="
+                                            accent
+                                            white--text
+                                            font-weight-bold
+                                            pa-5
+                                            my-1
+                                        "
+                                        @click="checkout"
+                                        >Comprar agora
+                                    </v-btn>
+
+                                    <v-btn
+                                        class="pa-5 my-1 white--text"
+                                        color="rgba(239,108,0,0.85)"
+                                        append
+                                        block
+                                        @click="addCart"
+                                    >
+                                        <span
+                                            class="font-weight-bold"
+                                            style="text-align: start"
+                                            >Adicionar<br />
+                                            ao carrinho</span
+                                        >
+                                        <v-divider
+                                            vertical
+                                            class="white mx-2"
+                                        ></v-divider>
+                                        <v-icon class="text--end">
+                                            mdi-cart-plus
+                                        </v-icon>
+                                    </v-btn>
                                 </div>
                             </div>
-                        </div>
 
-                        <div style="max-width: 300px">
-                            <v-btn
-                                block
-                                style=""
-                                class="
-                                    accent
-                                    white--text
-                                    font-weight-bold
-                                    pa-5
-                                    my-1
-                                "
-                                @click="checkout"
-                                >Comprar agora
-                            </v-btn>
-
-                            <v-btn
-                                class="pa-5 my-1 white--text"
-                                color="rgba(239,108,0,0.85)"
-                                append
-                                block
-                                @click="addCart"
-                            >
+                            <div class="my-16" v-else>
                                 <span
-                                    class="font-weight-bold"
-                                    style="text-align: start"
-                                    >Adicionar<br />
-                                    ao carrinho</span
+                                    class="text-h6 red--text font-weight-bold"
                                 >
-                                <v-divider
-                                    vertical
-                                    class="white mx-2"
-                                ></v-divider>
-                                <v-icon class="text--end">
-                                    mdi-cart-plus
-                                </v-icon>
-                            </v-btn>
-                        </div>
-                    </div>
+                                    Produto Esgotado!
+                                </span>
+                            </div>
+                        </v-card>
+                    </v-col>
 
-                    <div class="my-16" v-else>
-                        <span class="text-h6 red--text font-weight-bold">
-                            Produto Esgotado!
-                        </span>
-                    </div>
-                </v-card>
-            </v-col>
-
-            <v-col cols="12" sm="10" v-if="product.description">
-                <v-card outlined text class="mt-10" style="max-width: 1600px">
-                    <v-card-title class="flex justify-center">
-                        Descrição do Produto</v-card-title
-                    >
-                    <v-card-text
-                        style="text-align: initial"
-                        v-html="product.description"
-                    >
-                    </v-card-text>
-                </v-card>
-            </v-col>
-        </v-row>
-
-        <ListProduct
-            class="pt-16"
-            v-if="category != null"
-            label="Produtos semelhantes"
-            :name="category"
-        />
-    </div>
+                    <v-col cols="12" sm="10" v-if="product.description">
+                        <v-card
+                            outlined
+                            text
+                            class="mt-10"
+                            style="max-width: 1600px"
+                        >
+                            <v-card-title class="flex justify-center">
+                                Descrição do Produto</v-card-title
+                            >
+                            <v-card-text
+                                style="text-align: initial"
+                                v-html="product.description"
+                            >
+                            </v-card-text>
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </v-card>
+            <ListProduct
+                class="pt-16"
+                v-if="category != null"
+                label="Produtos semelhantes"
+                :name="category"
+            />
+        </v-col>
+    </v-row>
 </template>
 
 
@@ -267,15 +457,18 @@ export default {
             quantity: 1,
             max: null,
             color: null,
+            view: 0,
 
             preferece_id: null,
 
             choseAddressModel: null,
 
-            addresses: [],
-            selected: [0], //address selected
+            selected: 0, //address selected
 
             page_loading: true,
+            imageLoad: [],
+
+            model: null,
         };
     },
 
@@ -300,11 +493,18 @@ export default {
                 this.category = this.product.categories[0].name;
             }
             if (this.product.images.length === 0)
-                this.product.images.push({ url: "/noImage.png" });
+                this.product.images.push({ url: "/infinity/noImage.png" });
         }
+
+        this.imageLoad = this.product.images.map(() => false);
     },
 
     methods: {
+        loaded(i) {
+            this.$refs.loading[i].$el.style = "display: none !important";
+            // this.$refs.images[i].$el.style = "display: block !important";
+        },
+
         ...mapMutations(["toasted", "SetBack_url"]),
 
         formatMoney(value) {
@@ -441,6 +641,16 @@ export default {
             this.max = this.choice.quantity;
             this.quantity = 1;
         },
+
+        view() {
+            this.selected = this.view;
+        },
+
+        selected() {
+            this.view =
+                this.selected > this.view + 4 ? this.view + 5 : this.view;
+            this.view = this.selected < this.view ? this.view - 5 : this.view;
+        },
     },
 
     computed: {
@@ -490,6 +700,15 @@ export default {
 
             return choice;
         },
+
+        images() {
+            const product = this.product;
+            const view = this.view;
+            return this.product.images.filter(function (x) {
+                const index = product.images.indexOf(x);
+                return index >= view && index <= view + 4;
+            });
+        },
     },
 };
 </script>
@@ -500,8 +719,7 @@ export default {
     color: #000;
 }
 
-.v-carousel__item {
+.v-image {
     height: auto !important;
-    max-width: 800px !important;
 }
 </style>

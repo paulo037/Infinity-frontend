@@ -27,12 +27,13 @@
                         >
                             <v-container class="d-flex align-start">
                                 <router-link :to="`/product/${item.name}`">
-                                    <v-img
+                                    <nuxt-img
                                         class="d-inline-block"
                                         :src="item.image"
                                         max-width="80px"
                                         height="80px"
-                                    ></v-img>
+                                        format="webp"
+                                    ></nuxt-img>
                                 </router-link>
                                 <div class="text ml-5">
                                     <span
@@ -81,12 +82,13 @@
                             max-width=""
                             :to="`/product/${item.name}`"
                         >
-                            <v-img
+                            <nuxt-img
                                 class="d-inline-block mx-5 rounded-sm"
                                 :src="item.image"
                                 max-width="80px"
                                 height="80px"
-                            ></v-img>
+                                format="webp"
+                            ></nuxt-img>
 
                             <div>
                                 <span

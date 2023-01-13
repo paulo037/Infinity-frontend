@@ -9,11 +9,24 @@
                 :elevation="hover ? 2 : 0"
                 @click="goToProduct"
             >
-                <v-img
+                <nuxt-img
                     height="260"
                     width="260"
-                    :src="image ? image : '/noImage.png'"
-                ></v-img>
+                    format="webp"
+                    present="product"
+                    provider="cloudinary"
+                    v-if="image"
+                    :src="image"
+                ></nuxt-img>
+
+                <nuxt-img
+                    height="260"
+                    width="260"
+                    format="webp"
+                    v-else
+                    :src="'/infinity/noImage.png'"
+                ></nuxt-img>
+
 
                 <v-card-title
                     style="width: 250px; heigth: 20px"
@@ -26,7 +39,7 @@
                 <v-card-text style="text-align: start">
                     <v-row class="mx-0">
                         <v-rating
-                            :value=" rating ? rating : 5"
+                            :value="rating ? rating : 5"
                             color="amber"
                             dense
                             half-increments
@@ -43,11 +56,7 @@
                         </div>
                     </v-row>
 
-                    <Price
-                        :price="price"
-                        :size1="'subtitle-1'"
-                        :size2="'h6'"
-                    />
+                    <Price :price="price" :size1="'subtitle-1'" :size2="'h6'" />
                 </v-card-text>
             </v-card>
         </template>
