@@ -118,13 +118,10 @@
 
 
 <script>
-import ToastedVue from "~/components/template/Toasted.vue";
 
 export default {
     layout: "clean",
-    components: {
-        ToastedVue,
-    },
+
     data() {
         return {
             snackbar: false,

@@ -84,7 +84,7 @@
                             path: 'address/new-address',
                         })
                     "
-                    class="accent third--text font-weight-bold mt-10"
+                    class="accent font-weight-bold mt-10"
                     height="50px"
                     block
                     >Adicionar novo endereço</v-btn

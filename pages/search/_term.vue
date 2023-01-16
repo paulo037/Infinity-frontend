@@ -70,7 +70,7 @@
                 </v-simple-table>
             </v-col>
             <v-col cols="10" md="9" class="">
-                <list-product-no-slide
+                <ListProductNoSlide
                     :term="term"
                     :category="parseInt(category)"
                     :products="productsWithFilter"
@@ -83,12 +83,10 @@
 </template>
 
 <script>
-import ListProductNoSlide from "@/components/product/ListProductNoSlide.vue";
+
 
 export default {
-    components: {
-        ListProductNoSlide,
-    },
+
     data() {
         return {
             categories: [],

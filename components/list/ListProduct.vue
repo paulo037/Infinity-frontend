@@ -8,12 +8,15 @@
                 <v-slide-group
                     show-arrows="desktop"
                     v-if="!$fetchState.pending"
+                    
                 >
                     <v-slide-item
                         v-for="(product, index) in products"
                         :key="index"
+                        :slot-scope="index"
                     >
-                        <Product
+                    
+                        <CardProduct
                             :name="product.name"
                             :rating="product.rating"
                             :price="product.price"
@@ -49,11 +52,9 @@
 </template>
 
 <script>
-import Product from "./Product.vue";
+
 export default {
-    components: {
-        Product,
-    },
+
     data() {
         return {
             products: [],

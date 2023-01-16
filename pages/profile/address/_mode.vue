@@ -159,7 +159,7 @@
                     <v-col class="justify-space-between pl-0" cols="12" md="6">
                         <v-btn
                             color="accent"
-                            class="accent third--text font-weight-bold"
+                            class="accent font-weight-bold"
                             @click="save"
                             ref="save"
                         >

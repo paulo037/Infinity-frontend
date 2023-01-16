@@ -4,7 +4,7 @@
             Categorias
         </div>
         <v-row justify="center" class="mb-5 pt-5" v-if="!edit">
-            <v-col cols="9" sm="6" class="pb-0 mb-0">
+            <v-col cols="12" sm="6" class="pb-0 mb-0">
                 <v-text-field
                     v-model="newCategory.name"
                     label="Nome"
@@ -21,7 +21,7 @@
                     >
                         {{
                             newCategory.image.file == null
-                                ? "Adicionar Imagem"
+                                ? "Nova Imagem"
                                 : "Mudar Imagem"
                         }}
                     </v-btn>
@@ -37,26 +37,32 @@
 
                     <nuxt-img
                         class="ml-8"
-                        :src="
-                            newCategory.image.file == null
-                                ? newCategory.image.url
-                                : createURL(newCategory.image.file)
-                        "
+                        :src="newCategory.image.url"
                         width="36px"
                         height="36px"
                         format="webp"
+                        provider="cloudinary"
                         style="display: inline-block"
+                        v-if="newCategory.image.file == null"
+                    />
+
+                    <v-img
+                        :src="createURL(newCategory.image.file)"
+                        width="36px"
+                        height="36px"
+                        v-else
                     />
                 </div>
             </v-col>
 
-            <v-col cols="4" sm="3" class="text-center">
+            <v-col cols="12" sm="3" class="text-center">
                 <v-btn
                     class="accent"
                     @click="create()"
                     :disabled="
                         newCategory.name == '' || newCategory.image.file == null
                     "
+                     style="min-width:170px"
                 >
                     Adicionar
                 </v-btn>
@@ -64,10 +70,10 @@
         </v-row>
 
         <v-row justify="center" class="mb-5 pt-5" v-else>
-            <v-col cols="9" sm="6" class="pb-0 mb-0">
+            <v-col cols="9" sm="8" md="6" class="pb-0 mb-0">
                 <v-text-field
                     v-model="updateCategory.name"
-                    label="Valor"
+                    label="Nome"
                     outlined
                     dense
                     class="no-details"
@@ -91,37 +97,38 @@
                         name="uploadImages"
                         @change="onFileChanged"
                     />
+                    <span class="ml-8" style="max-width:36px; max-height: 36px;">
+                        <nuxt-img
+                            :src="updateCategory.image"
+                            width="36"
+                            height="36"
+                            provider="cloudinary"
+                            v-if="updateCategory.image.file == null"
+                        />
 
-                    <nuxt-img
-                        :src="updateCategory.image"
-                        width="36px"
-                        height="36px"
-                        format="webp"
-                        provider="cloudinary"
-                        v-if="updateCategory.image.file == null"
-                    />
-
-                    <v-img
-                        :src="createURL(updateCategory.image.file)"
-                        width="36px"
-                        height="36px"
-                        v-else
-                    />
+                        <v-img
+                            :src="createURL(updateCategory.image.file)"
+                            width="36px"
+                            height="36px"
+                            v-else
+                        />
+                    </span>
                 </div>
             </v-col>
 
-            <v-col cols="10" sm="2" class="text-center">
+            <v-col cols="10" sm="6" md="2" class="text-center">
                 <v-btn
                     class="red"
                     @click="
                         edit = false;
                         updateCategory = { ...newEmptyCategory() };
                     "
+                    style="min-width:170px"
                 >
                     Cancelar
                 </v-btn>
             </v-col>
-            <v-col cols="10" sm="2" class="text-center">
+            <v-col cols="10" sm="6" md="2" class="text-center">
                 <v-btn class="accent" @click="update">
                     Salvar alterações
                 </v-btn>
@@ -135,10 +142,19 @@
         >
             <template #[`item.image`]="{ item }">
                 <nuxt-img
-                    :src="item.image ? item.image : createURL(item.file)"
+                    :src="item.image"
                     width="36px"
                     height="36px"
                     format="webp"
+                    provider="cloudinary"
+                    v-if="item.image"
+                />
+
+                <v-img
+                    :src="createURL(item.file)"
+                    width="36px"
+                    height="36px"
+                    v-else
                 />
             </template>
             <template #[`item.name`]="{ item }">
@@ -158,26 +174,23 @@
 </template>
 
 <script>
-import ProductImage from "@/components/admin/product/ProductImage.vue";
 export default {
-    components: {
-        ProductImage,
-    },
+
     data() {
         return {
             isSelecting: false,
             categories: [],
             emptyCategory: {
                 name: "",
-                image: { file: null, url: "/infinity/noImage.png" },
+                image: { file: null, url: "/infinity/noImage" },
             },
             newCategory: {
                 name: "",
-                image: { file: null, url: "/infinity/noImage.png" },
+                image: { file: null, url: "/infinity/noImage" },
             },
             updateCategory: {
                 name: "",
-                image: { file: null, url: "/infinity/noImage.png" },
+                image: { file: null, url: "/infinity/noImage" },
             },
             headers: [
                 { value: "image", sortable: false },
@@ -260,7 +273,7 @@ export default {
         newEmptyCategory() {
             return {
                 name: "",
-                image: { file: null, url: "/infinity/noImage.png" },
+                image: { file: null, url: "/infinity/noImage" },
             };
         },
 

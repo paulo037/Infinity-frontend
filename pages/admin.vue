@@ -1,7 +1,21 @@
 <template >
     <div align="center">
-       
-        <v-card class="ma-0 mt-0 pt-0"  style="max-width: 1200px">
+
+        <v-dialog
+            v-model="$store.state.loading"
+            persistent
+            class="d-flex align-center justify-center"
+        >
+            <v-progress-circular
+                indeterminate
+                :color="$store.state.loading_color"
+                :size="60"
+                style="position: fixed; top: 98px; z-index: 50"
+            ></v-progress-circular>
+        </v-dialog>
+
+        
+        <v-card class="ma-0 mt-0 pt-0" style="max-width: 1200px">
             <v-tabs v-model="tab" class="pa-5 pb-0">
                 <v-tab
                     v-for="(item, index) in tabs"
@@ -29,7 +43,7 @@
 <script>
 export default {
     middleware: ["admin"],
-    layout:'clean',
+    layout: "clean",
 
     data() {
         return {

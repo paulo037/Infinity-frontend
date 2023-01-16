@@ -37,7 +37,7 @@ export default {
 
     computed: {
         timeout() {
-            let time = this.text.split(" ").length * 250;
+            let time = typeof this.text == 'string'? this.text.split(" ").length * 250 : 2000;
             time = time < 2000 ? 2000 : time;
             time = time > 10000 ? 10000 : time;
             return time;

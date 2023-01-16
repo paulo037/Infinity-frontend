@@ -30,20 +30,24 @@
                     v-model="descriptionText"
                 ></v-textarea>
 
-                <ProductImage :items="product.images" />
+                <AdminProductImage
+                    :items="product.images"
+                    :create_items="createImages"
+                    :delete_items="deleteImages"
+                />
             </v-col>
 
             <v-col md="6" sm="10">
-                <ProductColor />
-                <ProductSize />
-                <ProductCategory :items="product.categories" />
+                <AdminProductColor />
+                <AdminProductSize />
+                <AdminProductCategory :items="product.categories" />
             </v-col>
         </v-row>
 
         <v-row justify="center">
             <v-col cols="8" sm="4" md="3" v-if="creating">
-                <v-btn  
-                   min-width="150px"
+                <v-btn
+                    min-width="150px"
                     color="green"
                     @click="create()"
                     class="white--text"
@@ -52,7 +56,6 @@
                 </v-btn>
             </v-col>
 
-            
             <v-col cols="6" sm="6" md="3" v-if="!creating">
                 <v-btn block color="red" @click="deleteProduct()">
                     Excluir
@@ -60,7 +63,9 @@
             </v-col>
 
             <v-col cols="6" sm="6" md="3" v-if="!creating">
-                <v-btn block color="green" @click="save()"> Salvar alterações </v-btn>
+                <v-btn block color="green" @click="save()">
+                    Salvar alterações
+                </v-btn>
             </v-col>
         </v-row>
     </v-form>
@@ -68,24 +73,17 @@
 
 <script>
 import { mapMutations } from "vuex";
-import ProductImage from "../../../components/admin/product/ProductImage.vue";
-import ProductSize from "../../../components/admin/product/ProductSize.vue";
-import ProductColor from "../../../components/admin/product/ProductColor.vue";
-import ProductCategory from "../../../components/admin/product/ProductCategory.vue";
 
 export default {
-    components: {
-        ProductImage,
-        ProductColor,
-        ProductSize,
-        ProductCategory,
-    },
+
     data: () => ({
         rate: 0,
         errors: {},
         timeout: 3000,
         creating: false,
         descriptionText: "",
+        deleteImages: [],
+        createImages: [],
         product: {
             name: null,
             price: null,
@@ -98,7 +96,6 @@ export default {
     }),
 
     computed: {
-      
         sizes() {
             return this.$store.state.admin.product.sizes;
         },
@@ -148,17 +145,62 @@ export default {
             initialColor: "admin/product/initialColor",
             initialSizes: "admin/product/initialSizes",
         }),
+
+        createProductEntity(payload) {
+            return JSON.parse(
+                JSON.stringify({
+                    name: payload.name,
+                    id: payload.id,
+                    price: payload.price,
+                    description: payload.description,
+                    height: payload.height,
+                    width: payload.width,
+                    length: payload.length,
+                    weight: payload.weight,
+                })
+            );
+        },
         async save() {
+            this.$store.commit("setLoading", { loading: true });
             this.product.colors = this.$store.state.admin.product.sizes;
             this.product.description = await this.descriptionText
                 .replace(/\n/g, "<br>")
                 .replace(/ /g, "<wbr/>&nbsp;<wbr/>");
 
             if (!this.validation()) return;
-            await this.uploadImages();
+
+            let formData = new FormData();
+
+            const product = this.createProductEntity(this.product);
+
+            formData.append("product", JSON.stringify(product));
+
+            this.createImages.forEach((image, index) => {
+                formData.append("uploadImages", image.file);
+            });
+
+            formData.append("deleteImages", JSON.stringify(this.deleteImages));
+
+            const updateImages = this.product.images.filter((i) => this.deleteImages.indexOf(i) == -1 && !i.file)
+            formData.append("updateImages", JSON.stringify(updateImages));
+
+            formData.append("colors", JSON.stringify(this.product.colors));
+
+            formData.append(
+                "categories",
+                JSON.stringify(this.product.categories)
+            );
+
+            formData.append(
+                "primary",
+                JSON.stringify(this.createImages.map((i) => i.primary))
+            );
+
             await this.$axios
-                .$put(`product/${this.$route.params.id}`, {
-                    product: this.product,
+                .$put(`product/${this.product.id}`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
                 })
                 .then((e) => {
                     this.$toasted({
@@ -174,30 +216,53 @@ export default {
                             : "Ocorreu um erro inesperado!",
                     })
                 );
+            this.$store.commit("setLoading", { loading: false });
         },
+
+
         async create() {
+            this.$store.commit("setLoading", { loading: true });
             this.product.colors = this.$store.state.admin.product.sizes;
+            this.product.description = await this.descriptionText
+                .replace(/\n/g, "<br>")
+                .replace(/ /g, "<wbr/>&nbsp;<wbr/>");
+
             if (!this.validation()) return;
-            await this.uploadImages();
+
+            let formData = new FormData();
+
+            const product = this.createProductEntity(this.product);
+
+            formData.append("product", JSON.stringify(product));
+
+            this.createImages.forEach((image, index) => {
+                formData.append("uploadImages", image.file);
+            });
+
+
+            formData.append("colors", JSON.stringify(this.product.colors));
+
+            formData.append(
+                "categories",
+                JSON.stringify(this.product.categories)
+            );
+
+            formData.append(
+                "primary",
+                JSON.stringify(this.createImages.map((i) => i.primary))
+            );
+
             await this.$axios
-                .$post(`product/`, {
-                    product: this.product,
+                .$post(`product`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
                 })
-                .then((p) => {
+                .then((e) => {
                     this.$toasted({
                         text: "Produto criado com sucesso!",
                         color: "success",
                     });
-                    this.product = {
-                        name: null,
-                        price: null,
-                        description: null,
-                        id: null,
-                        images: [],
-                        colors: [],
-                        categories: [],
-                    };
-                    this.initialColor([]);
                     this.$router.push("/admin/product");
                 })
                 .catch((e) =>
@@ -207,37 +272,40 @@ export default {
                             : "Ocorreu um erro inesperado!",
                     })
                 );
+            this.$store.commit("setLoading", { loading: false });
         },
         async uploadImages() {
             let formData = new FormData();
-            let append = false;
-            this.product.images.forEach((image, index) => {
-                if (image.file) {
-                    image.file.primary = image.primary;
-                    formData.append("uploadImages", image.file);
-                    append = true;
-                }
-            });
 
-            if (append) {
-                await this.$axios
-                    .$post(`product/image`, formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            this.createImages.forEach((image, index) => {
+                formData.append("uploadImages", image.file);
+            });
+            this.product.images = this.product.images.filter((i) => !i.file);
+            formData.append("product", JSON.stringify(this.product));
+            formData.append(
+                "primary",
+                JSON.stringify(this.createImages.map((i) => i.primary))
+            );
+
+            await this.$axios
+                .$put(`product/${this.product.id}`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .catch((e) =>
+                    this.$toasted({
+                        text: e.response.data
+                            ? e.response.data
+                            : "Ocorreu um erro inesperado!",
                     })
-                    .catch((e) =>
-                        this.$toasted({
-                            text: e.response.data
-                                ? e.response.data
-                                : "Ocorreu um erro inesperado!",
-                        })
-                    )
-                    .then((images) => {
-                        this.parseImages(images);
-                    });
-            }
+                )
+                .then((images) => {
+                    // this.parseImages(images);
+                });
+            this.$store.commit("setLoading", { loading: false });
         },
+
         async deleteProduct() {
             await this.$axios
                 .$delete(`product/${this.$route.params.id}`)

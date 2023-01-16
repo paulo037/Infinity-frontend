@@ -29,12 +29,15 @@
             hide-default-footer
         >
             <template #[`item.image`]="{ item }">
+                <div>
+
+                </div>
                 <nuxt-img
                     format="webp"
-                    :src="item.image ? item.image : 'infinity/noImage.png'"
+                    :src="item.image ? item.image : '/noImage.png'"
                     width="36px"
                     height="36px"
-                    preload
+                    :provider="item.provider || 'cloudinary'"
                 >
                 </nuxt-img>
             </template>
@@ -58,6 +61,7 @@ export default {
             categories: [],
             newCategory: null,
             headers: [
+                { value: "image", sortable: false, align: "center" },
                 { value: "name", sortable: false },
                 { value: "actions", sortable: false, align: "center" },
             ],

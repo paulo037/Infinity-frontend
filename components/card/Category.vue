@@ -21,7 +21,9 @@
                         width="180"
                         :src="img"
                         format="webp"
+                        provider="cloudinary"
                         fit="fill"
+                        class="rounded-circle "
                     ></nuxt-img>
                 </v-card>
             </template>

@@ -110,7 +110,7 @@
                                                         :src="item.image"
                                                         max-width="80px"
                                                         height="80px"
-                                                        format="webp"
+                                                        :provider="item.provider || 'static'"
                                                     ></nuxt-img>
                                                 </router-link>
                                                 <div class="text ml-5">
@@ -234,7 +234,7 @@
                                                 :src="item.image"
                                                 max-width="80px"
                                                 height="80px"
-                                                format="webp"
+                                                :provider="item.provider || 'cloudinary'"
                                             ></nuxt-img>
                                             <div>
                                                 <span

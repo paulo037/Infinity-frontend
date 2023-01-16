@@ -44,13 +44,14 @@
                                     <nuxt-img
                                         sizes="xs:5vw sm:5vw md:5vw lg:5vw xl:80px"
                                         :src="item.url"
-                                        provider="cloudinary"
+                                        :provider="item.provider || 'static'"
                                         class="rounded-md"
-                                        format="png"
+                                        format="webp"
                                     >
                                     </nuxt-img>
                                 </v-card>
                             </v-item>
+
                             <v-item>
                                 <v-card
                                     outlined
@@ -70,17 +71,17 @@
                                     "
                                     @click="view += 5"
                                     v-if="
-                                        product.images.length - (view + 4) > 0
+                                        product.images.length - (view + 5) > 0
                                     "
                                 >
                                     <v-card-title class="pa-0 grey--text">
                                         +
-                                        {{ product.images.length - (view + 4) }}
+                                        {{ product.images.length - (view + 5) }}
                                     </v-card-title>
                                 </v-card>
                             </v-item>
                             <v-item
-                                v-if="product.images.length - (view + 4) > 0"
+                                v-if="product.images.length - (view + 5) > 0"
                             >
                                 <v-icon large @click="view += 5"
                                     >mdi-arrow-down-drop-circle-outline</v-icon
@@ -97,15 +98,20 @@
                                 <v-carousel-item
                                     v-for="(item, i) in product.images"
                                     :key="i"
-                                    class="text--center"
+                                    class=""
                                     eager
                                 >
                                     <nuxt-img
                                         sizes="xs:80vw sm:60vw md:35vw lg:35vw xl:500px"
                                         :src="item.url"
-                                        provider="cloudinary"
+                                        :provider="item.provider"
                                         ref="images"
-                                        class="d"
+                                        fit="fill"
+                                        :style="
+                                            item.provider == 'static'
+                                                ? 'width:80%'
+                                                : ''
+                                        "
                                     >
                                     </nuxt-img>
                                 </v-carousel-item>
@@ -118,7 +124,7 @@
                             class="d-flex justify-center"
                         >
                             <v-item v-if="view > 0">
-                                <v-icon  @click="view -= 5"
+                                <v-icon @click="view -= 5"
                                     >mdi-arrow-left-drop-circle-outline</v-icon
                                 >
                             </v-item>
@@ -147,13 +153,14 @@
                                     <nuxt-img
                                         sizes="xs:5vw sm:5vw md:5vw lg:5vw xl:80px"
                                         :src="item.url"
-                                        provider="cloudinary"
+                                        :provider="item.provider"
                                         class="rounded-md"
-                                        format="png"
+                                        format="webp"
                                     >
                                     </nuxt-img>
                                 </v-card>
                             </v-item>
+
                             <v-item>
                                 <v-card
                                     outlined
@@ -178,14 +185,14 @@
                                 >
                                     <v-card-title class="pa-0 grey--text">
                                         +
-                                        {{ product.images.length - (view + 4) }}
+                                        {{ product.images.length - (view + 5) }}
                                     </v-card-title>
                                 </v-card>
                             </v-item>
                             <v-item
                                 v-if="product.images.length - (view + 4) > 0"
                             >
-                                <v-icon  @click="view += 5"
+                                <v-icon @click="view += 5"
                                     >mdi-arrow-right-drop-circle-outline</v-icon
                                 >
                             </v-item>
@@ -234,7 +241,7 @@
                                 </v-col>
                             </v-row>
 
-                            <Price
+                            <ProductPrice
                                 :price="product.price"
                                 :size1="'h6'"
                                 :size2="'h4'"
@@ -416,6 +423,7 @@
                     </v-col>
                 </v-row>
             </v-card>
+
             <ListProduct
                 class="pt-16"
                 v-if="category != null"
@@ -429,22 +437,12 @@
 
 <script>
 import { mapMutations } from "vuex";
-import ListProduct from "@/components/product/ListProduct.vue";
-import SkeletonProductBuy from "~/components/product/SkeletonProductBuy.vue";
-import Price from "@/components/product/Price.vue";
-import ProductQuantity from "@/components/product/ProductQuantity.vue";
 import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
 
 export default {
     middleware: ["product-view"],
 
-    components: {
-        SkeletonProductBuy,
-        ListProduct,
-        ProductQuantity,
-        Price,
-    },
 
     data() {
         return {
@@ -493,7 +491,10 @@ export default {
                 this.category = this.product.categories[0].name;
             }
             if (this.product.images.length === 0)
-                this.product.images.push({ url: "/infinity/noImage.png" });
+                this.product.images.push({
+                    url: "/noImage.png",
+                    provider: "static",
+                });
         }
 
         this.imageLoad = this.product.images.map(() => false);

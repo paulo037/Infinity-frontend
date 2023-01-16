@@ -40,8 +40,8 @@
                             width="36px"
                             height="36px"
                             format="webp"
-                            provider="cloudinary"
-                            v-if="item.url "
+                            :provider="item.provider"
+                            v-if="item.url"
                         />
 
                         <v-img
@@ -62,9 +62,7 @@
                             small
                             class="rounded-0 ma-0 mr-15 d-block"
                             @click="makePrimary(index)"
-                            :class="
-                                item.primary ? 'accent--text' : ''
-                            "
+                            :class="item.primary ? 'accent--text' : ''"
                         >
                             mdi-star
                         </v-icon>
@@ -98,7 +96,9 @@ export default {
         };
     },
     props: {
-        items: [],
+        items: Array,
+        delete_items: Array,
+        create_items: Array,
     },
     methods: {
         handleFileImport() {
@@ -126,6 +126,7 @@ export default {
                 }
                 item.name = file.name;
                 item.file = file;
+                this.create_items.push(item);
                 this.items.push(item);
             }
         },
@@ -134,9 +135,21 @@ export default {
         },
 
         removeImage(index) {
-            let image = this.items.splice(index, 1);
-            if (image[0].primary && this.items.length >= 1) {
+            let image = this.items.splice(index, 1)[0];
+
+            if (image.primary && this.items.length >= 1) {
                 this.items[0].primary = true;
+            }
+
+            if (!image.file) {
+                this.delete_items.push(image);
+                return;
+            }
+
+            const i = this.create_items.indexOf(image);
+            console.log(i, this.create_items, image);
+            if (i != -1) {
+                this.create_items.splice(i, 1);
             }
         },
 

@@ -49,11 +49,11 @@
 
             <template #[`item.image`]="{ item }">
                 <nuxt-img
-                    :src="item.image ? item.image : '/infinity/noImage.png'"
+                    :src="item.image ? item.image : '/noImage.png'"
                     width="36px"
                     height="36px"
                     format="webp"
-                    provider="cloudinary"
+                    :provider="item.provider || 'static'"
                 >
                 </nuxt-img>
             </template>
@@ -95,11 +95,7 @@
 
 
  <script>
-import Pagination from "~/components/Pagination.vue";
 export default {
-    components: {
-        Pagination,
-    },
     data() {
         return {
             timeout: 3000,

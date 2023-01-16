@@ -19,14 +19,12 @@
                     :src="image"
                 ></nuxt-img>
 
-                <nuxt-img
+                <v-img
                     height="260"
                     width="260"
-                    format="webp"
                     v-else
-                    :src="'/infinity/noImage.png'"
-                ></nuxt-img>
-
+                    :src="'/noImage.png'"
+                ></v-img>
 
                 <v-card-title
                     style="width: 250px; heigth: 20px"
@@ -56,7 +54,7 @@
                         </div>
                     </v-row>
 
-                    <Price :price="price" :size1="'subtitle-1'" :size2="'h6'" />
+                    <ProductPrice :price="price" :size1="'subtitle-1'" :size2="'h6'" />
                 </v-card-text>
             </v-card>
         </template>
@@ -64,12 +62,9 @@
 </template>
 
 <script>
-import Price from "./Price.vue";
 import { mapMutations } from "vuex";
 export default {
-    components: {
-        Price,
-    },
+
     props: {
         price: Number,
         name: String,

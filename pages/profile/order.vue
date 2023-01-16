@@ -65,7 +65,7 @@
                     </span>
                 </div>
                 <div>
-                    <ShowProductListVue
+                    <ProductTable
                         :products="order.products"
                         :head="false"
                         :show_rating="order.status == 3"
@@ -100,16 +100,11 @@
 </template>
 
 <script>
-import ShowProductListVue from "~/components/product/ShowProductList.vue";
 import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
-import Pagination from "~/components/Pagination.vue";
 
 export default {
-    components: {
-        Pagination,
-        ShowProductListVue,
-    },
+
     data() {
         return {
             orders: [],

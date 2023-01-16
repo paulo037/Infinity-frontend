@@ -1,8 +1,8 @@
  <template>
     <v-app>
-        <Navbar :hide="false" />
+        <TemplateNavbar :hide="false" />
 
-        <Sidbar :hide="false" />
+        <TemplateSidbar :hide="false" />
 
         <v-switch
             v-model="$vuetify.theme.dark"
@@ -36,7 +36,7 @@
         <v-main class="secondary pa-5 pt-10 d-flex">
             <Nuxt class="pa-0"> </Nuxt>
         </v-main>
-        <Footer />
+        <TemplateFooter />
     </v-app>
 </template>
 
@@ -45,19 +45,10 @@
 
 
 <script>
-import ToastedVue from "~/components/template/Toasted.vue";
-import Navbar from "@/components/template/Navbar.vue";
-import Sidbar from "@/components/template/Sidebar.vue";
-import Footer from "@/components/template/Footer.vue";
 
 export default {
     name: "App",
-    components: {
-        Navbar,
-        Sidbar,
-        Footer,
-        ToastedVue,
-    },
+
 
     data() {
         return {

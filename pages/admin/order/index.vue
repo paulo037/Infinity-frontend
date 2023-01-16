@@ -76,11 +76,8 @@
 
 
  <script>
-import Pagination from "~/components/Pagination.vue";
 export default {
-    components: {
-        Pagination,
-    },
+
     data() {
         return {
             timeout: 3000,
@@ -143,6 +140,7 @@ export default {
 
     methods: {
         async getOrders() {
+            console.log('start')
             this.loading = true;
             const status =
                 this.status.indexOf(
@@ -161,6 +159,7 @@ export default {
             this.count = count;
             this.orders_with_filter = this.orders;
             this.loading = false;
+            console.log(orders, count)
         },
 
         formatMoney(value) {

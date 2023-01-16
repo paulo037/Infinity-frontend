@@ -77,11 +77,7 @@
 </template>
 
 <script>
-import Pagination from "~/components/Pagination.vue";
 export default {
-    components: {
-        Pagination,
-    },
     data: () => ({
         users: [],
         admin: false,

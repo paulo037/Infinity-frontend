@@ -30,9 +30,9 @@
                                     <nuxt-img
                                         class="d-inline-block"
                                         :src="item.image"
-                                        max-width="80px"
+                                        width="80px"
                                         height="80px"
-                                        format="webp"
+                                        :provider="item.provider || 'cloudinary'"
                                     ></nuxt-img>
                                 </router-link>
                                 <div class="text ml-5">
@@ -85,9 +85,9 @@
                             <nuxt-img
                                 class="d-inline-block mx-5 rounded-sm"
                                 :src="item.image"
-                                max-width="80px"
+                                width="80px"
                                 height="80px"
-                                format="webp"
+                                :provider="item.provider || 'cloudinary'"
                             ></nuxt-img>
 
                             <div>
@@ -137,8 +137,7 @@
                                 width="60px"
                                 style="
                                     height: 30px !important;
-                                    padding: 0px !important;
-                                "
+                                    padding: 0px !important;"
                             >
                                 Avaliar
                             </v-btn>

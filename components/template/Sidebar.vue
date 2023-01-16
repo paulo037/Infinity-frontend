@@ -44,7 +44,7 @@
 
             <v-list-item class="pa-0">
                 <v-list-item-content class="pa-0">
-                    <MdiLinkVue
+                    <TemplateMdiLinkVue
                         :icon="'mdi-cart'"
                         :link="'/cart'"
                         :text="'CARRINHO'"
@@ -89,7 +89,7 @@
                                 >
                             </div>
                         </template>
-                    </MdiLinkVue>
+                    </TemplateMdiLinkVue>
                 </v-list-item-content>
             </v-list-item>
 
@@ -132,12 +132,8 @@
 
 <script>
 import { mapState } from "vuex";
-import MdiLinkVue from "./MdiLink.vue";
-
 export default {
-    components: {
-        MdiLinkVue,
-    },
+
     props: {
         hide: Boolean,
     },

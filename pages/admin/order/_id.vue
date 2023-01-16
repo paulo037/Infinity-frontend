@@ -170,7 +170,7 @@
                         Produtos
                     </div>
                     <v-divider class="pb-5"></v-divider>
-                    <ShowProductListVue
+                    <ProductTable
                         :products="order.products"
                         :head="true"
                     />
@@ -210,12 +210,9 @@
 </template>
 
 <script>
-import ShowProductListVue from "~/components/product/ShowProductList.vue";
 
 export default {
-    components: {
-        ShowProductListVue,
-    },
+
     data() {
         return {
             order: {

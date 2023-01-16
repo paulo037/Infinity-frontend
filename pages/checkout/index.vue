@@ -160,7 +160,7 @@
                             <div class="text-h5 pb-5" v-if="address">
                                 Confira os itens do seu pedido
                             </div>
-                            <ShowProductListVue
+                            <ProductTable
                                 :products="products"
                                 :head="true"
                             />
@@ -238,7 +238,7 @@
             </v-stepper>
         </v-card>
 
-        <ChoseAddress
+        <ModalChoseAddress
             :addresses="addresses"
             :model="choseAddressModel"
             :selected="selected"
@@ -250,15 +250,9 @@
 </template>
 
 <script>
-import ChoseAddress from "@/components/product/ChoseAddress.vue";
-import ShowProductListVue from "~/components/product/ShowProductList.vue";
 import verify from "jsonwebtoken/verify";
 
 export default {
-    components: {
-        ChoseAddress,
-        ShowProductListVue,
-    },
 
     data() {
         return {

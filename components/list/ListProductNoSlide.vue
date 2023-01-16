@@ -62,14 +62,10 @@
 </template>
 
 <script>
-import Product from "./Product.vue";
-import SkeletonProduct from "~/components/product/SkeletonProduct.vue";
+
 
 export default {
-    components: {
-        Product,
-        SkeletonProduct,
-    },
+
     data() {
         return {
             page: 1,

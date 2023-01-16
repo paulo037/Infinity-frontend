@@ -65,7 +65,7 @@
                 <div class="text-right px-5">
                     <router-link
                         class="
-                            primary--text
+                            
                             text-end text-decoration-none
                             third--text
                         "
@@ -84,7 +84,7 @@
                 <div class="text-center">
                     <v-btn
                         @click="$emit('buy')"
-                        class="accent third--text font-weight-bold my-5"
+                        class="accent font-weight-bold my-5"
                         >Salvar alterações</v-btn
                     >
                 </div>
