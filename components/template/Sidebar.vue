@@ -33,18 +33,18 @@
 
             <v-list-item v-else class="pa-0">
                 <v-list-item-content>
-                    <MdiLinkVue
+                    <TemplateMdiLink
                         :icon="'mdi-account'"
                         :link="'/login'"
                         :text="'LOGIN | CADASTRO'"
-                    ></MdiLinkVue>
+                    ></TemplateMdiLink>
                 </v-list-item-content>
             </v-list-item>
 
 
             <v-list-item class="pa-0">
                 <v-list-item-content class="pa-0">
-                    <TemplateMdiLinkVue
+                    <TemplateMdiLink
                         :icon="'mdi-cart'"
                         :link="'/cart'"
                         :text="'CARRINHO'"
@@ -89,7 +89,7 @@
                                 >
                             </div>
                         </template>
-                    </TemplateMdiLinkVue>
+                    </TemplateMdiLink>
                 </v-list-item-content>
             </v-list-item>
 

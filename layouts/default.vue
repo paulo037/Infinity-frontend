@@ -2,7 +2,7 @@
     <v-app>
         <TemplateNavbar :hide="false" />
 
-        <TemplateSidbar :hide="false" />
+        <TemplateSidebar :hide="false" />
 
         <v-switch
             v-model="$vuetify.theme.dark"
@@ -14,11 +14,11 @@
             @click="toggleDarkMode"
             :label="$vuetify.theme.dark ? 'Escuro' : 'Claro'"
         ></v-switch>
-        <toasted-vue
+        <Toasted
             :snackbar="$store.state.snackbar"
             :text="$store.state.text"
             :color="$store.state.color"
-        ></toasted-vue>
+        ></Toasted>
 
         <v-dialog
             v-model="$store.state.loading"
@@ -39,9 +39,6 @@
         <TemplateFooter />
     </v-app>
 </template>
-
-
-
 
 
 <script>

@@ -44,7 +44,6 @@ export default {
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: [
         '~/components',
-        { path: '~/components/product', extensions: ['vue'] }
     ],
 
     // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -80,17 +79,21 @@ export default {
 
         },
 
+
+
         cloudinary: {
+            name: 'cloudinary',
             baseURL: "https://res.cloudinary.com/dhtgipp7l/image/upload/v1673533404/",
             modifiers: {
                 format: 'webp',
                 quality: 'auto:best',
+
             }
         },
 
-        static: {
-            baseURL: "",
-        },
+
+
+
 
 
 

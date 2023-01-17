@@ -328,8 +328,7 @@
                     <v-divider
                         class=""
                         style="
-                            border-bottom: thin solid rgba(255, 255, 255, 0.12);
-                        "
+                            border-bottom: thin solid rgba(255, 255, 255, 0.12); "
                     ></v-divider>
 
                     <v-container class="py-5">

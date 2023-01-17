@@ -16,6 +16,7 @@
 
 <script>
 export default {
+    name:'ProductPrice',
     props: {
         price: Number,
         size1: String,

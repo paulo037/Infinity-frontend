@@ -3,7 +3,7 @@
         <v-col cols="12" md="11" align="center">
             <SkeletonProductBuy v-if="$fetchState.pending || page_loading" />
             <v-card v-else style="max-width: 1600px; height: auto" class="pa-1">
-                <v-row justify="center">
+                <v-row justify="center" eager>
                     <v-col
                         cols="12"
                         sm="10"
@@ -13,18 +13,16 @@
                         <v-item-group
                             v-model="selected"
                             class="mr-5 hidden-sm-and-down"
+                            center-active
                         >
                             <v-item v-if="view > 0">
                                 <v-icon large @click="view -= 5"
                                     >mdi-arrow-up-drop-circle-outline</v-icon
                                 >
                             </v-item>
-                            <v-item
-                                v-for="(item, i) in product.images"
-                                :key="i"
-                            >
+
+                            <v-item v-for="(item, i) in images" :key="i">
                                 <v-card
-                                    v-if="i >= view && i <= view + 4"
                                     outlined
                                     class="pa-0-8 d-flex justify-center my-2"
                                     rounded="md"
@@ -34,9 +32,11 @@
                                         max-width: 60px;
                                         max-height: 60px;
                                     "
-                                    @click="selected = i"
+                                    @click="
+                                        selected = product.images.indexOf(item)
+                                    "
                                     :style="
-                                        selected == i
+                                        selected == product.images.indexOf(item)
                                             ? 'border: 2px solid rgba(239,108,0,0.85)'
                                             : ''
                                     "
@@ -52,7 +52,9 @@
                                 </v-card>
                             </v-item>
 
-                            <v-item>
+                            <v-item
+                                v-if="product.images.length - (view + 5) > 0"
+                            >
                                 <v-card
                                     outlined
                                     class="
@@ -70,9 +72,6 @@
                                         max-height: 60px;
                                     "
                                     @click="view += 5"
-                                    v-if="
-                                        product.images.length - (view + 5) > 0
-                                    "
                                 >
                                     <v-card-title class="pa-0 grey--text">
                                         +
@@ -80,6 +79,7 @@
                                     </v-card-title>
                                 </v-card>
                             </v-item>
+
                             <v-item
                                 v-if="product.images.length - (view + 5) > 0"
                             >
@@ -102,11 +102,10 @@
                                     eager
                                 >
                                     <nuxt-img
-                                        sizes="xs:80vw sm:60vw md:35vw lg:35vw xl:500px"
                                         :src="item.url"
                                         :provider="item.provider"
+                                        sizes="xs:80vw sm:60vw md:35vw lg:35vw xl:500px"
                                         ref="images"
-                                        fit="fill"
                                         :style="
                                             item.provider == 'static'
                                                 ? 'width:80%'
@@ -128,12 +127,9 @@
                                     >mdi-arrow-left-drop-circle-outline</v-icon
                                 >
                             </v-item>
-                            <v-item
-                                v-for="(item, i) in product.images"
-                                :key="i"
-                            >
+
+                            <v-item v-for="(item, i) in images" :key="i">
                                 <v-card
-                                    v-if="i >= view && i <= view + 4"
                                     outlined
                                     class="pa-0-8 d-flex justify-center mx-1"
                                     rounded="md"
@@ -143,9 +139,11 @@
                                         max-width: 60px;
                                         max-height: 60px;
                                     "
-                                    @click="selected = i"
+                                    @click="
+                                        selected = product.images.indexOf(item)
+                                    "
                                     :style="
-                                        selected == i
+                                        selected == product.images.indexOf(item)
                                             ? 'border: 2px solid rgba(239,108,0,0.85)'
                                             : ''
                                     "
@@ -161,7 +159,9 @@
                                 </v-card>
                             </v-item>
 
-                            <v-item>
+                            <v-item
+                                v-if="product.images.length - (view + 4) > 0"
+                            >
                                 <v-card
                                     outlined
                                     class="
@@ -179,9 +179,6 @@
                                         max-height: 60px;
                                     "
                                     @click="view += 5"
-                                    v-if="
-                                        product.images.length - (view + 4) > 0
-                                    "
                                 >
                                     <v-card-title class="pa-0 grey--text">
                                         +
@@ -442,7 +439,6 @@ import { sign } from "jsonwebtoken";
 
 export default {
     middleware: ["product-view"],
-
 
     data() {
         return {

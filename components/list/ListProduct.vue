@@ -8,22 +8,23 @@
                 <v-slide-group
                     show-arrows="desktop"
                     v-if="!$fetchState.pending"
-                    
+                    center-active
                 >
                     <v-slide-item
                         v-for="(product, index) in products"
                         :key="index"
                         :slot-scope="index"
                     >
-                    
-                        <CardProduct
-                            :name="product.name"
-                            :rating="product.rating"
-                            :price="product.price"
-                            :sold="product.sold"
-                            :image="product.image"
-                            :id="product.id"
-                        />
+                        <div>
+                            <CardProduct
+                                :name="product.name"
+                                :rating="product.rating"
+                                :price="product.price"
+                                :sold="product.sold"
+                                :image="product.image"
+                                :id="product.id"
+                            />
+                        </div>
                     </v-slide-item>
                 </v-slide-group>
                 <v-slide-group show-arrows="desktop" v-if="$fetchState.pending">
@@ -52,9 +53,7 @@
 </template>
 
 <script>
-
 export default {
-
     data() {
         return {
             products: [],
@@ -70,7 +69,13 @@ export default {
     async fetch() {
         this.products = await this.$axios
             .$get(`product/category/${this.name}`)
-           .catch((e) => this.$toasted({ text: e.response.data ?  e.response.data : "Ocorreu um erro inesperado!"}));
+            .catch((e) =>
+                this.$toasted({
+                    text: e.response.data
+                        ? e.response.data
+                        : "Ocorreu um erro inesperado!",
+                })
+            );
 
         this.loading = false;
     },

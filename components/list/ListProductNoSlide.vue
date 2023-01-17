@@ -34,7 +34,7 @@
                 v-for="(product, index) in productsWithPagination"
                 :key="`${index}-${product.name}`"
             >
-                <Product
+                <CardProduct
                     :name="product.name"
                     :rating="product.rating"
                     :price="product.price"
