@@ -33,7 +33,7 @@
             ></v-progress-circular>
         </v-dialog>
 
-        <v-main class="secondary pa-5 pt-10 d-flex">
+        <v-main class="secondary pt-10 d-flex">
             <Nuxt class="pa-0"> </Nuxt>
         </v-main>
         <TemplateFooter />

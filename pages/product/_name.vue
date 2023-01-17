@@ -1,8 +1,8 @@
 <template>
     <v-row class="justify-center align-center">
-        <v-col cols="12" md="11" align="center">
+        <v-col cols="12" md="11" align="center" class="pa-2">
             <SkeletonProductBuy v-if="$fetchState.pending || page_loading" />
-            <v-card v-else style="max-width: 1600px; height: auto" class="pa-1">
+            <v-card v-else style="max-width: 1600px; height: auto" class="pa-1" >
                 <v-row justify="center" eager>
                     <v-col
                         cols="12"
