@@ -182,15 +182,15 @@ export default {
             categories: [],
             emptyCategory: {
                 name: "",
-                image: { file: null, url: "/infinity/noImage" },
+                image: { file: null, url: "noImage" },
             },
             newCategory: {
                 name: "",
-                image: { file: null, url: "/infinity/noImage" },
+                image: { file: null, url: "noImage" },
             },
             updateCategory: {
                 name: "",
-                image: { file: null, url: "/infinity/noImage" },
+                image: { file: null, url: "noImage" },
             },
             headers: [
                 { value: "image", sortable: false },
@@ -273,7 +273,7 @@ export default {
         newEmptyCategory() {
             return {
                 name: "",
-                image: { file: null, url: "/infinity/noImage" },
+                image: { file: null, url: "noImage" },
             };
         },
 

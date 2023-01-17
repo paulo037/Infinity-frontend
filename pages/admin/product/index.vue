@@ -49,11 +49,11 @@
 
             <template #[`item.image`]="{ item }">
                 <nuxt-img
-                    :src="item.image ? item.image : '/noImage.png'"
+                    :src="item.image ? item.image : '/noImage'"
                     width="36px"
                     height="36px"
                     format="webp"
-                    :provider="item.provider || 'static'"
+                    :provider="item.provider || 'clo'"
                 >
                 </nuxt-img>
             </template>

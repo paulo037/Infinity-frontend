@@ -23,7 +23,7 @@
                     height="250"
                     width="250"
                     v-else
-                    :src="'/noImage.png'"
+                    :src="'noImage'"
                 ></v-img>
                 <v-divider></v-divider>
                 <v-card-title

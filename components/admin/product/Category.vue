@@ -34,7 +34,7 @@
                 </div>
                 <nuxt-img
                     format="webp"
-                    :src="item.image ? item.image : '/noImage.png'"
+                    :src="item.image ? item.image : '/noImage'"
                     width="36px"
                     height="36px"
                     :provider="item.provider || 'cloudinary'"

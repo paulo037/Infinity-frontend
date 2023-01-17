@@ -2,7 +2,7 @@
     <v-row class="justify-center align-center">
         <v-col cols="12" md="11" align="center" class="pa-2">
             <SkeletonProductBuy v-if="$fetchState.pending || page_loading" />
-            <v-card v-else style="max-width: 1600px; height: auto" class="pa-1" >
+            <v-card v-else style="max-width: 1600px; height: auto" class="pa-1">
                 <v-row justify="center" eager>
                     <v-col
                         cols="12"
@@ -44,7 +44,9 @@
                                     <nuxt-img
                                         sizes="xs:5vw sm:5vw md:5vw lg:5vw xl:80px"
                                         :src="item.url"
-                                        :provider="item.provider || 'static'"
+                                        :provider="
+                                            item.provider || 'cloudinary'
+                                        "
                                         class="rounded-md"
                                         format="webp"
                                     >
@@ -107,7 +109,7 @@
                                         sizes="xs:80vw sm:60vw md:35vw lg:35vw xl:500px"
                                         ref="images"
                                         :style="
-                                            item.provider == 'static'
+                                            item.provider == 'cloudinary'
                                                 ? 'width:80%'
                                                 : ''
                                         "
@@ -319,35 +321,54 @@
                                             class="d-flex align-center pl-2"
                                             style="width: 50px"
                                         >
-                                            <span
-                                                class="
-                                                    d-flex
-                                                    align-end
-                                                    flex-column
-                                                "
+                                            <svg
+                                                width="50"
+                                                height="28"
+                                                viewBox="0 0 50 22"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
                                             >
-                                                <v-divider
-                                                    class="green2"
-                                                    style="width: 15px"
-                                                ></v-divider>
-                                                <v-divider
-                                                    class="green2 mt-1"
-                                                    style="width: 10px"
-                                                ></v-divider>
-                                                <v-divider
-                                                    class="green2 mt-1"
-                                                    style="width: 5px"
-                                                ></v-divider>
-                                            </span>
-                                            <span>
-                                                <v-icon
-                                                    class="
-                                                        display-inline-block
-                                                        green2--text
-                                                    "
-                                                    >mdi-truck</v-icon
-                                                >
-                                            </span>
+                                                <path
+                                                    d="M18 3.78947C18 2.80117 18.6805 2 19.52 2H35.48C36.3195 2 37 2.80117 37 3.78947V19H26.2175L24.46 17.2105L23.32 17.6579L21.8 19H18V3.78947Z"
+                                                    fill="#64DD17"
+                                                />
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    d="M42.0106 7.03226H37.9V11.1613H40.6L40.15 16.8387L39.25 18.3871L39.7 20.4516L42.2496 21.6216L43.75 18.3871V18.3871L40.15 16.8387L40.6 11.1613H44.2L42.0106 7.03226ZM42.4783 6H37V19.4194H38.8L39.25 20.9677L40.6 22L42.85 21.4839L44.2 19.4194H46V11.7512L42.4783 6Z"
+                                                    fill="#64DD17"
+                                                />
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    d="M24 20.5C24.8284 20.5 25.5 19.8284 25.5 19C25.5 18.1716 24.8284 17.5 24 17.5C23.1716 17.5 22.5 18.1716 22.5 19C22.5 19.8284 23.1716 20.5 24 20.5ZM24 22C25.6569 22 27 20.6569 27 19C27 17.3431 25.6569 16 24 16C22.3431 16 21 17.3431 21 19C21 20.6569 22.3431 22 24 22Z"
+                                                    fill="#64DD17"
+                                                />
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    d="M41 20.5C41.8284 20.5 42.5 19.8284 42.5 19C42.5 18.1716 41.8284 17.5 41 17.5C40.1716 17.5 39.5 18.1716 39.5 19C39.5 19.8284 40.1716 20.5 41 20.5ZM41 22C42.6569 22 44 20.6569 44 19C44 17.3431 42.6569 16 41 16C39.3431 16 38 17.3431 38 19C38 20.6569 39.3431 22 41 22Z"
+                                                    fill="#64DD17"
+                                                />
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    d="M18 4L5 4V3L18 3V4Z"
+                                                    fill="#64DD17"
+                                                />
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    d="M18 9L9 9V8L18 8V9Z"
+                                                    fill="#64DD17"
+                                                />
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    d="M18 14L13 14V13L18 13V14Z"
+                                                    fill="#64DD17"
+                                                />
+                                            </svg>
                                         </div>
                                     </div>
                                 </div>
@@ -488,8 +509,8 @@ export default {
             }
             if (this.product.images.length === 0)
                 this.product.images.push({
-                    url: "/noImage.png",
-                    provider: "static",
+                    url: "noImage",
+                    provider: "cloudinary",
                 });
         }
 
