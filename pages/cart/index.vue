@@ -499,7 +499,7 @@ export default {
                     text: "Entre ou crie uma conta para comprar produtos!",
                 });
                 this.$store.commit(
-                    "SetBack_url",
+                    "setBack_url",
                     this.$router.history.current.path
                 );
                 return this.$router.push("/login");
@@ -521,15 +521,14 @@ export default {
                 });
             });
 
-            localStorage.setItem(
-                "reference",
-                sign(reference, process.env.JWT_SECRET)
-            );
 
-            localStorage.setItem(
-                "checkout",
-                sign(JSON.stringify(items), process.env.JWT_SECRET)
-            );
+            this.$cookies.set("reference", reference, {
+                path: "/",
+                maxAge: 60 * 60 * 3,
+            });
+
+            this.$store.commit('setItems', items)
+
 
             await this.$router.push({
                 path: "/checkout",

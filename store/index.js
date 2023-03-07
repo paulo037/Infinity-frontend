@@ -12,7 +12,8 @@ export const state = () => ({
     access_token: null,
     refresh_token: null,
     loading: false,
-    loading_color: "primary"
+    loading_color: "primary",
+    items: [],
 })
 export const mutations = {
 
@@ -73,8 +74,12 @@ export const mutations = {
         state.numberOfProductsInCart -= 1
     },
 
-    SetBack_url(state, payload) {
+    setBack_url(state, payload) {
         state.back_url = payload
+    },
+
+    setItems(state, payload) {
+        state.items = payload
     }
 
 }

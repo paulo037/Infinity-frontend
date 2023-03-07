@@ -523,7 +523,7 @@ export default {
             // this.$refs.images[i].$el.style = "display: block !important";
         },
 
-        ...mapMutations(["toasted", "SetBack_url"]),
+        ...mapMutations(["toasted", "setBack_url"]),
 
         formatMoney(value) {
             return `R$ ${value.toFixed(2).toString().replace(".", ",")}`;
@@ -534,7 +534,7 @@ export default {
                 this.$toasted({
                     text: "Entre ou crie uma conta para comprar produtos!",
                 });
-                this.SetBack_url(this.$router.history.current.path);
+                this.setBack_url(this.$router.history.current.path);
                 return this.$router.push("/login");
             }
 
@@ -552,15 +552,12 @@ export default {
                 },
             ];
 
-            localStorage.setItem(
-                "reference",
-                sign(reference, process.env.JWT_SECRET)
-            );
+            this.$cookies.set("reference", reference, {
+                path: "/",
+                maxAge: 60 * 60 * 3,
+            });
 
-            localStorage.setItem(
-                "checkout",
-                sign(JSON.stringify(items), process.env.JWT_SECRET)
-            );
+            this.$store.commit('setItems', items)
 
             await this.$router.push({
                 path: "/checkout",
@@ -574,7 +571,7 @@ export default {
                     text: "Entre ou crie uma conta para adicionar produtos ao carrinho!",
                 });
 
-                this.SetBack_url(this.$router.history.current.path);
+                this.setBack_url(this.$router.history.current.path);
 
                 return this.$router.push("/login");
             }

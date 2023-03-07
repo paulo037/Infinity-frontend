@@ -159,7 +159,7 @@ export default {
 
                     if (this.$store.state.back_url) {
                         const back = this.$store.state.back_url;
-                        this.$store.commit("SetBack_url", "/");
+                        this.$store.commit("setBack_url", "/");
                         return window.open(
                             `${process.env.BASE_FRONT}${back}`,
                             "_self"

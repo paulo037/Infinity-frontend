@@ -59,7 +59,7 @@
                                     class="my-10"
                                     @click="
                                         $store.commit(
-                                            'SetBack_url',
+                                            'setBack_url',
                                             $router.history.current.path
                                         )
                                     "
@@ -250,7 +250,8 @@
 </template>
 
 <script>
-import verify from "jsonwebtoken/verify";
+
+import { verify } from "jsonwebtoken";
 
 export default {
 
@@ -300,17 +301,11 @@ export default {
             );
     },
 
-    mounted() {
-        const reference = verify(
-            localStorage.getItem("reference"),
-            process.env.JWT_SECRET
-        );
+    async mounted() {
+        const reference = await this.$cookies.get("reference");
 
         if (this.$route.query.reference == reference) {
-            this.products = verify(
-                localStorage.getItem("checkout"),
-                process.env.JWT_SECRET
-            );
+            this.products = JSON.parse(JSON.stringify(this.$store.state.items))
         } else {
             this.$toasted({
                 text: "Checkout não encontrado!",

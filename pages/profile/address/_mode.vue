@@ -311,7 +311,7 @@ export default {
                         color: "success",
                     });
                     if (this.$store.state.back_ur == "/checkout") {
-                        this.$store.commit("SetBack_url", "");
+                        this.$store.commit("setBack_url", "");
                         return this.$router.go(-1);
                     }
                     this.$router.push(

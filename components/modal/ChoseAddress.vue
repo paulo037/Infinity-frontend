@@ -72,7 +72,7 @@
                         to="/profile/address"
                         @click="
                             $store.commit(
-                                'SetBack_url',
+                                'setBack_url',
                                 $router.history.current.path
                             )
                         "

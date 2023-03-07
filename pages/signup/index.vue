@@ -185,7 +185,7 @@ export default {
                         .then((response) => {
                             if (this.$store.state.back_url) {
                                 this.$router.push(this.$store.state.back_url);
-                                this.$store.commit("SetBack_url", "/");
+                                this.$store.commit("setBack_url", "/");
                             } else {
                                 this.$router.push("/");
                             }

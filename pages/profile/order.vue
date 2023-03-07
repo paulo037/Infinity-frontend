@@ -200,7 +200,7 @@ export default {
                     text: "Entre ou crie uma conta para comprar produtos!",
                 });
                 this.$store.commit(
-                    "SetBack_url",
+                    "setBack_url",
                     this.$router.history.current.path
                 );
                 return this.$router.push("/login");
