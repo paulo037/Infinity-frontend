@@ -36,7 +36,7 @@
         <v-main class="secondary pt-10 d-flex">
             <Nuxt class="pa-0"> </Nuxt>
         </v-main>
-        <TemplateFooter />
+        <TemplateFooter style="width: 100%;"/>
     </v-app>
 </template>
 

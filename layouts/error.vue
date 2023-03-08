@@ -16,6 +16,7 @@
             <br />
             <nuxt-link to="/">Ir à página pricipal.</nuxt-link>
         </v-card>
+        <TemplateFooter style="width: 100%;"/>
     </div>
 </template>
   
