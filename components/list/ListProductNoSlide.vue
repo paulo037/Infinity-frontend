@@ -17,66 +17,6 @@
                 />
             </v-col>
 
-            <v-col
-                class="ma-0 pa-0 d-flex flex-grow-0"
-                v-for="(product, index) in productsWithPagination"
-                :key="`${index}-${product.name}`"
-            >
-                <CardProduct
-                    :name="product.name"
-                    :rating="product.rating"
-                    :price="product.price"
-                    :sold="parseInt(product.sold)"
-                    :image="product.image"
-                    :id="product.id"
-                />
-            </v-col>
-
-            <v-col
-                class="ma-0 pa-0 d-flex flex-grow-0"
-                v-for="(product, index) in productsWithPagination"
-                :key="`${index}-${product.name}`"
-            >
-                <CardProduct
-                    :name="product.name"
-                    :rating="product.rating"
-                    :price="product.price"
-                    :sold="parseInt(product.sold)"
-                    :image="product.image"
-                    :id="product.id"
-                />
-            </v-col>
-
-            <v-col
-                class="ma-0 pa-0 d-flex flex-grow-0"
-                v-for="(product, index) in productsWithPagination"
-                :key="`${index}-${product.name}`"
-            >
-                <CardProduct
-                    :name="product.name"
-                    :rating="product.rating"
-                    :price="product.price"
-                    :sold="parseInt(product.sold)"
-                    :image="product.image"
-                    :id="product.id"
-                />
-            </v-col>
-
-            <v-col
-                class="ma-0 pa-0 d-flex flex-grow-0"
-                v-for="(product, index) in productsWithPagination"
-                :key="`${index}-${product.name}`"
-            >
-                <CardProduct
-                    :name="product.name"
-                    :rating="product.rating"
-                    :price="product.price"
-                    :sold="parseInt(product.sold)"
-                    :image="product.image"
-                    :id="product.id"
-                />
-            </v-col>
-
             <v-col class="ma-0 pa-0 d-flex flex-grow-0" v-for="n in 3" :key="n">
                 <SkeletonProduct v-if="loading" />
             </v-col>
