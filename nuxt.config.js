@@ -154,7 +154,7 @@ export default {
         middleware: ['token']
     },
 
-    serverMiddleware: process.env.NODE_ENV !== 'production' ? [{ path: '/server', handler: '~/server-middleware/index.js' }] : [{ path: '/server', handler: '~/server-middleware/index.js' }, "redirect-ssl"],
+    serverMiddleware: process.env.NODE_ENV !== 'production' ? [{ path: '/server', handler: '~/server-middleware/index.js' }] : [{ path: '/server', handler: '~/server-middleware/index.js' }],
 
     env: {
         MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY,
