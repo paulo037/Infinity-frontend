@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            :class="`mt-4 text-${size1} text-decoration-line-through pr-14`"
+            :class="`mt-2 text-${size1} text-decoration-line-through pr-14`"
             style="color: #bdbdbd"
         >
             R$ {{ (this.price * 1.33).toFixed(2).replace(".", ",") }}
