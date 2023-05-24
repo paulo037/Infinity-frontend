@@ -5,21 +5,22 @@
                 <template v-slot:default="{ hover }">
                     <v-card
                         tag="span"
-                        class="d-inline-block my-5 mx-2 pa-2"
+                        class="d-inline-block my-5 mx-1 pa-1"
                         height="300"
                         outlined
                         :elevation="hover ? 2 : 0"
                         @click="goToProduct"
                     >
                         <nuxt-img
-                            height="150"
-                            width="150"
+                            height="160"
+                            width="160"
                             format="webp"
                             present="product"
                             provider="cloudinary"
                             v-if="image"
                             :src="image"
-                        ></nuxt-img>
+                        >
+                        </nuxt-img>
 
                         <v-img
                             height="150"
@@ -27,7 +28,8 @@
                             v-else
                             :src="'noImage'"
                         ></v-img>
-                        <v-divider></v-divider>
+
+                       
                         <v-card-title
                             style="width: 150px; heigth: 20px"
                             class="text-body-2 py-2"
@@ -36,7 +38,10 @@
                             {{ name.length > 16 ? "..." : "" }}
                         </v-card-title>
 
-                        <v-card-text style="text-align: start" class="pa-0 pl-2">
+                        <v-card-text
+                            style="text-align: start"
+                            class="pa-0 pl-2"
+                        >
                             <v-row class="mx-0">
                                 <v-rating
                                     :value="rating ? rating : 5"

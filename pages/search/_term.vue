@@ -30,29 +30,80 @@
 
         <v-row class="d-flex justify-center" v-else>
             <v-col
-                cols="10"
-                md="3"
-                class="d-flex align-center pt-16 px-0 flex-column"
-                v-if="!this.$route.query.category"
+                cols="12"
+                :md="this.$route.query.category ? '12' : '4'"
+                class="d-flex pt-8 px-0 flex-column"
+                :class="
+                    this.$route.query.category
+                        ? 'align-left px-10'
+                        : 'align-center'
+                "
             >
-                <v-simple-table>
+                <div class="pb-10">
+                    <h2
+                        class="primary--text ml-2 d-inline-block"
+                        align="start"
+                        v-if="!loading"
+                    >
+                        {{ productsWithFilter.length }}
+                        <span v-if="term">
+                            Resultado(s) para : "{{
+                                term.length > 20
+                                    ? term.substring(0, 20) + "..."
+                                    : term
+                            }}"
+                        </span>
+
+                        <span v-else>
+                            Resultado(s) para categoria: "{{
+                                productsWithFilter.length > 0
+                                    ? productsWithFilter[0].category
+                                    : ""
+                            }}"
+                        </span>
+                    </h2>
+
+                    <h2
+                        class="primary--text ml-2 d-inline-block"
+                        align="start"
+                        v-else
+                    >
+                        <span class="pr-5"> Buscando </span>
+                        <v-progress-circular
+                            indeterminate
+                            color="primary"
+                        ></v-progress-circular>
+                    </h2>
+                </div>
+                <v-simple-table v-if="!this.$route.query.category">
                     <template v-slot:default>
                         <thead>
                             <tr>
                                 <th
-                                    class="
-                                        text-left
-                                        px-10
-                                        primary--text
-                                        text-h6
-                                    "
+                                    class="text-left px-10 primary--text text-h6"
                                 >
-                                    Categorias
+                                    Filtrar
                                 </th>
-                                <th class="text-left"></th>
+                                <th class="text-left">
+                                    <v-icon
+                                        class="accent--text"
+                                        v-show="!filter"
+                                        @click="filter = true"
+                                        >mdi-arrow-up-drop-circle</v-icon
+                                    >
+                                    <v-icon
+                                        class="accent--text"
+                                        v-show="filter"
+                                        @click="
+                                            filter = false;
+                                            selected = [];
+                                        "
+                                        >mdi-arrow-down-drop-circle</v-icon
+                                    >
+                                </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody v-if="filter">
                             <tr
                                 v-for="(item, index) in categories"
                                 :key="index"
@@ -69,13 +120,10 @@
                     </template>
                 </v-simple-table>
             </v-col>
-            <v-col cols="10" md="9" class="">
+            <v-col cols="12" md="8" class="">
                 <ListProductNoSlide
-                    :term="term"
-                    :category="parseInt(category)"
                     :products="productsWithFilter"
                     :loading="$fetchState.pending || loading"
-                    page=""
                 />
             </v-col>
         </v-row>
@@ -83,16 +131,14 @@
 </template>
 
 <script>
-
-
 export default {
-
     data() {
         return {
             categories: [],
             selected: [],
             products: [],
             loading: false,
+            filter: true,
         };
     },
 

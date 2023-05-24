@@ -5,8 +5,8 @@
                 <v-card
                     tag="div"
                     class="ma-5 rounded-circle d-flex justify-center align-center"
-                    height="190"
-                    width="190"
+                    height="160"
+                    width="160"
                     color="secondary"
                     :elevation="hover ? 16 : 0"
                     @click="
@@ -17,8 +17,8 @@
                     "
                 >
                     <nuxt-img
-                        height="180"
-                        width="180"
+                        height="150"
+                        width="150"
                         :src="img"
                         format="webp"
                         provider="cloudinary"
