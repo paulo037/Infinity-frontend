@@ -54,7 +54,7 @@
 
             <template #[`item.created_at`]="{ item }">
                 <div style="max-width: 800px" align="left">
-                    {{ getBrazilianDate(item.created_at) }}
+                    {{ $brazilianDate(item.created_at) }}
                 </div>
             </template>
         </v-data-table>
@@ -76,8 +76,9 @@
 
 
  <script>
-export default {
 
+import moment from "moment-timezone";
+export default {
     data() {
         return {
             timeout: 3000,
@@ -140,7 +141,7 @@ export default {
 
     methods: {
         async getOrders() {
-            console.log('start')
+            console.log("start");
             this.loading = true;
             const status =
                 this.status.indexOf(
@@ -159,30 +160,23 @@ export default {
             this.count = count;
             this.orders_with_filter = this.orders;
             this.loading = false;
-            console.log(orders, count)
+            console.log(orders, count);
         },
 
         formatMoney(value) {
             return `R$ ${value.toFixed(2).toString().replace(".", ",")}`;
         },
 
-        getBrazilianDate(date_miliseconds) {
-            const date = new Date(date_miliseconds);
-            return `${
-                date.getDate() <= 9 ? `0${date.getDate()}` : `${date.getDate()}`
-            } de ${this.meses[date.getMonth()]} de ${date.getFullYear()}`;
-        },
-
-        async limitChange(limit){
+        async limitChange(limit) {
             this.limit = limit;
             this.page = 1;
             await this.getOrders();
         },
 
-        async pageChange(page){
+        async pageChange(page) {
             this.page = page;
             await this.getOrders();
-        }
+        },
     },
 
     watch: {

@@ -60,22 +60,12 @@
                                     </th>
 
                                     <th
-                                        class="
-                                            text-left
-                                            third--text
-                                            hidden-xs-only
-                                            pa-0
-                                        "
+                                        class="text-left third--text hidden-xs-only pa-0"
                                     >
                                         QUANTIDADE
                                     </th>
                                     <th
-                                        class="
-                                            text-left
-                                            third--text
-                                            text-center
-                                            hidden-xs-only
-                                        "
+                                        class="text-left third--text text-center hidden-xs-only"
                                     >
                                         PREÇO
                                     </th>
@@ -90,13 +80,7 @@
                                     <!-- Para Celular -->
                                     <td class="hidden-sm-and-up pa-0">
                                         <v-card
-                                            class="
-                                                d-flex
-                                                align-start
-                                                pa-0
-                                                ma-2
-                                                secondary
-                                            "
+                                            class="d-flex align-start pa-0 ma-2 secondary"
                                             flat
                                         >
                                             <v-container
@@ -110,16 +94,15 @@
                                                         :src="item.image"
                                                         max-width="80px"
                                                         height="80px"
-                                                        :provider="item.provider || 'cloudinary'"
+                                                        :provider="
+                                                            item.provider ||
+                                                            'cloudinary'
+                                                        "
                                                     ></nuxt-img>
                                                 </router-link>
                                                 <div class="text ml-5">
                                                     <span
-                                                        class="
-                                                            primary--text
-                                                            font-weight-bold
-                                                            text-body-1
-                                                        "
+                                                        class="primary--text font-weight-bold text-body-1"
                                                     >
                                                         {{
                                                             item.name.length >
@@ -134,7 +117,7 @@
 
                                                     <span>
                                                         <br />
-                                                        R$:
+                                                        R$
                                                         {{
                                                             (item.price * 1)
                                                                 .toFixed(2)
@@ -148,10 +131,7 @@
                                                     <div>
                                                         <v-icon
                                                             color="sencondary"
-                                                            class="
-                                                                accent
-                                                                rounded-circle
-                                                            "
+                                                            class="accent rounded-circle"
                                                             :disabled="
                                                                 item.quantity <=
                                                                 1
@@ -167,20 +147,14 @@
                                                         </v-icon>
 
                                                         <span
-                                                            class="
-                                                                font-weight-light
-                                                                pa-2
-                                                            "
+                                                            class="font-weight-light pa-2"
                                                             v-text="
                                                                 item.quantity
                                                             "
                                                         ></span>
                                                         <v-icon
                                                             color="sencondary"
-                                                            class="
-                                                                accent
-                                                                rounded-circle
-                                                            "
+                                                            class="accent rounded-circle"
                                                             small
                                                             @click="
                                                                 increment(index)
@@ -214,35 +188,24 @@
                                     <!-- Para Computadores -->
                                     <td class="hidden-xs-only">
                                         <v-card
-                                            class="
-                                                d-flex
-                                                align-top
-                                                py-5
-                                                ma-2
-                                                secondary
-                                            "
+                                            class="d-flex align-top py-5 ma-2 secondary"
                                             width="260px"
                                             flat
                                             :to="`/product/${item.name}`"
                                         >
                                             <nuxt-img
-                                                class="
-                                                    d-inline-block
-                                                    mx-5
-                                                    rounded-sm
-                                                "
+                                                class="d-inline-block mx-5 rounded-sm"
                                                 :src="item.image"
                                                 max-width="80px"
                                                 height="80px"
-                                                :provider="item.provider || 'cloudinary'"
+                                                :provider="
+                                                    item.provider ||
+                                                    'cloudinary'
+                                                "
                                             ></nuxt-img>
                                             <div>
                                                 <span
-                                                    class="
-                                                        primary--text
-                                                        font-weight-bold
-                                                        text-body-1
-                                                    "
+                                                    class="primary--text font-weight-bold text-body-1"
                                                 >
                                                     {{
                                                         item.name.length > 25
@@ -293,13 +256,9 @@
                                         </v-icon>
                                     </td>
                                     <td
-                                        class="
-                                            hidden-xs-only
-                                            primary--text
-                                            text-subtitle-1 text-center
-                                        "
+                                        class="hidden-xs-only primary--text text-subtitle-1 text-center"
                                     >
-                                        R$:
+                                        R$
                                         {{
                                             (item.price * 1)
                                                 .toFixed(2)
@@ -328,37 +287,144 @@
                     <v-divider
                         class=""
                         style="
-                            border-bottom: thin solid rgba(255, 255, 255, 0.12); "
+                            border-bottom: thin solid rgba(255, 255, 255, 0.12);
+                        "
                     ></v-divider>
 
-                    <v-container class="py-5">
-                        <v-layout row wrap align-top justify-center>
-                            <v-flex md8>
-                                <span
-                                    class="
-                                        third--text
-                                        text-h5
-                                        mb-8
-                                        ml-5
-                                        text-center
-                                    "
-                                    >TOTAL</span
+                    <v-row class="py-5">
+                        <v-col
+                            cols="12"
+                            sm="4"
+                            class="d-flex justify-center align-center"
+                        >
+                            <span
+                                class="third--text text-h5 mb-8 ml-5 text-center"
+                                >TOTAL</span
+                            >
+                        </v-col>
+                        <v-col cols="12" sm="8" class="d-flex justify-center">
+                            <v-row class="disccount">
+                                <v-col cols="12" class="">
+                                    <v-row class="" justify="center">
+                                        <div
+                                            class="text-right"
+                                            style="width: 100px"
+                                        >
+                                            Sub-Total
+                                        </div>
+                                        <div
+                                            class="text-right"
+                                            style="width: 150px"
+                                        >
+                                            R$
+
+                                            {{
+                                                calculateAmount
+                                                    .toFixed(2)
+                                                    .replace(".", ",")
+                                            }}
+                                        </div>
+                                    </v-row>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-row class="" justify="center">
+                                        <div
+                                            class="text-right"
+                                            style="width: 100px"
+                                        >
+                                            Frete
+                                        </div>
+
+                                        <div
+                                            class="text-right"
+                                            style="width: 150px"
+                                        >
+                                            + R$
+                                            {{
+                                                (calculateAmount >= 200 ? 0 : 25)
+                                                    .toFixed(2)
+                                                    .replace(".", ",")
+                                            }}
+                                        </div>
+                                    </v-row>
+                                </v-col>
+
+                                <v-col
+                                    v-for="item in calcDiscount"
+                                    :key="item"
+                                    cols="12"
                                 >
-                            </v-flex>
+                                    <v-row class="" justify="center">
+                                        <div
+                                            class="text-right"
+                                            style="width: 100px"
+                                        >
+                                            Desconto
+                                        </div>
 
-                            <v-flex md4>
-                                <span class="primary--text text-h5 text-right">
-                                    R$:
+                                        <div
+                                            class="text-right"
+                                            style="width: 150px"
+                                        >
+                                            - R$
+                                            {{
+                                                item
+                                                    .toFixed(2)
+                                                    .replace(".", ",")
+                                            }}
+                                        </div>
+                                    </v-row>
+                                </v-col>
 
-                                    {{
-                                        calculateAmount
-                                            .toFixed(2)
-                                            .replace(".", ",")
-                                    }}
-                                </span>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
+                                <v-col cols="12">
+                                    <v-row justify="center">
+                                        <div
+                                            class="text-right ml-8"
+                                            style="width: 100px"
+                                        >
+                                            
+                                        </div>
+
+                                     
+                                        <v-divider
+                                            class="mb-1 text-right"
+                                            style="
+                                                border-bottom: thin solid
+                                                    rgba(255, 255, 255, 0.12);
+                                                max-width: 150px;
+                                            "
+                                        ></v-divider>
+                                    </v-row>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-row justify="center">
+                                        <div
+                                            class="text-right"
+                                            style="width: 100px"
+                                        >
+                                            Total
+                                        </div>
+
+                                        <div
+                                            class="text-right"
+                                            style="width: 150px"
+                                        >
+                                            R$
+
+                                            {{
+                                                (
+                                                    calculateAmount -
+                                                    disccountAmount +  (calculateAmount >= 200 ? 0 : 25)
+                                                )
+                                                    .toFixed(2)
+                                                    .replace(".", ",")
+                                            }}
+                                        </div>
+                                    </v-row>
+                                </v-col>
+                            </v-row>
+                        </v-col>
+                    </v-row>
 
                     <v-divider
                         class=""
@@ -369,13 +435,7 @@
                     <div>
                         <div style="max-width: 400px" class="mt-5">
                             <div
-                                class="
-                                    d-flex
-                                    align-center
-                                    justify-center
-                                    green2--text
-                                    font-weight-bold
-                                "
+                                class="d-flex align-center justify-center green2--text font-weight-bold"
                             >
                                 <span v-if="200 - calculateAmount > 0">
                                     Por mais
@@ -389,54 +449,54 @@
                                     class="d-flex align-center pl-2"
                                     style="width: 50px"
                                 >
-                                <svg
-                                                width="50"
-                                                height="28"
-                                                viewBox="0 0 50 22"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M18 3.78947C18 2.80117 18.6805 2 19.52 2H35.48C36.3195 2 37 2.80117 37 3.78947V19H26.2175L24.46 17.2105L23.32 17.6579L21.8 19H18V3.78947Z"
-                                                    fill="#64DD17"
-                                                />
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    clip-rule="evenodd"
-                                                    d="M42.0106 7.03226H37.9V11.1613H40.6L40.15 16.8387L39.25 18.3871L39.7 20.4516L42.2496 21.6216L43.75 18.3871V18.3871L40.15 16.8387L40.6 11.1613H44.2L42.0106 7.03226ZM42.4783 6H37V19.4194H38.8L39.25 20.9677L40.6 22L42.85 21.4839L44.2 19.4194H46V11.7512L42.4783 6Z"
-                                                    fill="#64DD17"
-                                                />
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    clip-rule="evenodd"
-                                                    d="M24 20.5C24.8284 20.5 25.5 19.8284 25.5 19C25.5 18.1716 24.8284 17.5 24 17.5C23.1716 17.5 22.5 18.1716 22.5 19C22.5 19.8284 23.1716 20.5 24 20.5ZM24 22C25.6569 22 27 20.6569 27 19C27 17.3431 25.6569 16 24 16C22.3431 16 21 17.3431 21 19C21 20.6569 22.3431 22 24 22Z"
-                                                    fill="#64DD17"
-                                                />
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    clip-rule="evenodd"
-                                                    d="M41 20.5C41.8284 20.5 42.5 19.8284 42.5 19C42.5 18.1716 41.8284 17.5 41 17.5C40.1716 17.5 39.5 18.1716 39.5 19C39.5 19.8284 40.1716 20.5 41 20.5ZM41 22C42.6569 22 44 20.6569 44 19C44 17.3431 42.6569 16 41 16C39.3431 16 38 17.3431 38 19C38 20.6569 39.3431 22 41 22Z"
-                                                    fill="#64DD17"
-                                                />
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    clip-rule="evenodd"
-                                                    d="M18 4L5 4V3L18 3V4Z"
-                                                    fill="#64DD17"
-                                                />
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    clip-rule="evenodd"
-                                                    d="M18 9L9 9V8L18 8V9Z"
-                                                    fill="#64DD17"
-                                                />
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    clip-rule="evenodd"
-                                                    d="M18 14L13 14V13L18 13V14Z"
-                                                    fill="#64DD17"
-                                                />
-                                            </svg>
+                                    <svg
+                                        width="50"
+                                        height="28"
+                                        viewBox="0 0 50 22"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M18 3.78947C18 2.80117 18.6805 2 19.52 2H35.48C36.3195 2 37 2.80117 37 3.78947V19H26.2175L24.46 17.2105L23.32 17.6579L21.8 19H18V3.78947Z"
+                                            fill="#64DD17"
+                                        />
+                                        <path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M42.0106 7.03226H37.9V11.1613H40.6L40.15 16.8387L39.25 18.3871L39.7 20.4516L42.2496 21.6216L43.75 18.3871V18.3871L40.15 16.8387L40.6 11.1613H44.2L42.0106 7.03226ZM42.4783 6H37V19.4194H38.8L39.25 20.9677L40.6 22L42.85 21.4839L44.2 19.4194H46V11.7512L42.4783 6Z"
+                                            fill="#64DD17"
+                                        />
+                                        <path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M24 20.5C24.8284 20.5 25.5 19.8284 25.5 19C25.5 18.1716 24.8284 17.5 24 17.5C23.1716 17.5 22.5 18.1716 22.5 19C22.5 19.8284 23.1716 20.5 24 20.5ZM24 22C25.6569 22 27 20.6569 27 19C27 17.3431 25.6569 16 24 16C22.3431 16 21 17.3431 21 19C21 20.6569 22.3431 22 24 22Z"
+                                            fill="#64DD17"
+                                        />
+                                        <path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M41 20.5C41.8284 20.5 42.5 19.8284 42.5 19C42.5 18.1716 41.8284 17.5 41 17.5C40.1716 17.5 39.5 18.1716 39.5 19C39.5 19.8284 40.1716 20.5 41 20.5ZM41 22C42.6569 22 44 20.6569 44 19C44 17.3431 42.6569 16 41 16C39.3431 16 38 17.3431 38 19C38 20.6569 39.3431 22 41 22Z"
+                                            fill="#64DD17"
+                                        />
+                                        <path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M18 4L5 4V3L18 3V4Z"
+                                            fill="#64DD17"
+                                        />
+                                        <path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M18 9L9 9V8L18 8V9Z"
+                                            fill="#64DD17"
+                                        />
+                                        <path
+                                            fill-rule="evenodd"
+                                            clip-rule="evenodd"
+                                            d="M18 14L13 14V13L18 13V14Z"
+                                            fill="#64DD17"
+                                        />
+                                    </svg>
                                 </div>
                             </div>
                         </div>
@@ -466,17 +526,13 @@
     </div>
 </template>
 
+
 <script>
 import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
 
 export default {
     middleware: ["loggedIn"],
-
-    async fetch() {
-        this.products = await this.$axios.$get(`cart`);
-        this.page_loading = false;
-    },
 
     data() {
         return {
@@ -485,7 +541,15 @@ export default {
             addresses: [],
             selected: [0],
             page_loading: true,
+            promotions: [],
         };
+    },
+
+    async fetch() {
+        this.products = await this.$axios.$get(`cart`);
+        this.promotions = await this.$axios.$get(`promotions`);
+        console.log(this.promotions);
+        this.page_loading = false;
     },
 
     methods: {
@@ -521,14 +585,12 @@ export default {
                 });
             });
 
-
             this.$cookies.set("reference", reference, {
                 path: "/",
                 maxAge: 60 * 60 * 3,
             });
 
-            this.$store.commit('setItems', items)
-
+            this.$store.commit("setItems", items);
 
             await this.$router.push({
                 path: "/checkout",
@@ -572,8 +634,9 @@ export default {
             await this.$axios
                 .put("/cart", { cart: cart })
                 .then(() => {
-                    if (this.products[index].quantity == quantity)
+                    if (this.products[index].quantity == quantity) {
                         this.products[index].quantity++;
+                    }
                 })
                 .catch((e) =>
                     this.$toasted({
@@ -625,6 +688,66 @@ export default {
             );
             return amout;
         },
+
+        disccountAmount() {
+            let amount = 0;
+            const keysArray = Object.keys(this.calcDiscount);
+            for (const key of keysArray) {
+                amount += this.calcDiscount[key];
+            }
+            return amount;
+        },
+
+        category_frequence() {
+            const categoryIds = {};
+
+            for (const product of this.products) {
+                const { categories } = product;
+                for (const categoryId of categories) {
+                    if (categoryIds[categoryId]) {
+                        categoryIds[categoryId].quantity += product.quantity;
+                    } else {
+                        categoryIds[categoryId] = {
+                            quantity: product.quantity,
+                            price: product.price,
+                        };
+                    }
+                }
+            }
+
+            return categoryIds;
+        },
+
+        calcDiscount() {
+            console.log(this.category_frequence);
+            let have = JSON.parse(JSON.stringify(this.category_frequence));
+            let disccount = {};
+
+            for (const promotion of this.promotions) {
+                if (!!have[promotion.buying_category_id] && have[promotion.buying_category_id].quantity) {
+                    let buying_id = promotion.buying_category_id;
+                    let buying_quantity = promotion.buying_quantity;
+                    let win_id = promotion.win_category_id;
+                    let win_quantity = promotion.win_quantity;
+
+                    while (
+                        (have[buying_id] && have[buying_id].quantity >= buying_quantity )&&
+                       (have[win_id] && have[win_id].quantity >= win_quantity)
+                    ) {
+                        have[buying_id].quantity -= promotion.buying_quantity;
+                        have[win_id].quantity -= promotion.win_quantity;
+
+                        if (have[win_id].quantity >= 0) {
+                            disccount[win_id] = !!disccount[win_id]
+                                ? disccount[win_id] +
+                                  have[win_id].price * (have[win_id].quantity > promotion.win_quantity ? promotion.win_quantity : have[win_id].quantity)
+                                : have[win_id].price * (have[win_id].quantity > promotion.win_quantity ? promotion.win_quantity : have[win_id].quantity);
+                        }
+                    }
+                }
+            }
+            return disccount;
+        },
     },
 };
 </script>
@@ -632,5 +755,9 @@ export default {
 <style >
 tr:hover {
     background-color: transparent !important;
+}
+
+.disccount .col{
+    padding: 2px;
 }
 </style>

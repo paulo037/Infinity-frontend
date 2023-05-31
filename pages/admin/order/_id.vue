@@ -57,7 +57,7 @@
                     <div class="text-body-1">
                         <span class="font-weight-bold"> Data da compra: </span>
                         <span>
-                            {{ getBrazilianDate(order.created_at) }}
+                            {{ $brazilianDate(order.created_at) }}
                         </span>
                     </div>
                     <div class="text-body-1">
@@ -262,12 +262,7 @@ export default {
     },
 
     methods: {
-        getBrazilianDate(str_date) {
-            const date = new Date(str_date);
-            return `${
-                date.getDate() <= 9 ? `0${date.getDate()}` : `${date.getDate()}`
-            } de ${this.meses[date.getMonth()]} de ${date.getFullYear()}`;
-        },
+
 
         async save() {
             await this.$axios

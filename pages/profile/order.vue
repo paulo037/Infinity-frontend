@@ -11,79 +11,74 @@
             </h1>
 
             <div align="center" v-if="$fetchState.pending || loading">
-                <v-card
-                    class="pa-5 mb-10"
-                    outlined
-                    style="position: relative ;"
-                >
+                <v-card class="pa-5 mb-10" outlined style="position: relative">
                     <v-skeleton-loader class="mx-auto" type="image">
                     </v-skeleton-loader>
                     <v-progress-circular
                         indeterminate
                         color="primary"
-                        style="position: absolute; top: 40%; left: 45%;"
+                        style="position: absolute; top: 40%; left: 45%"
                     ></v-progress-circular>
                 </v-card>
             </div>
-
-            <v-card
-                v-else
-                v-for="(order, index) in orders"
-                :key="index"
-                class="pa-5 mb-10"
-                outlined
-            >
-                <div class="d-flex justify-space-between align-end">
-                    <div align="left">
-                        <div>
-                            {{ getBrazilianDate(order.created_at) }}
+            <div v-else>
+                <v-card
+                    v-for="(order, index) in orders"
+                    :key="index"
+                    class="pa-5 mb-10"
+                    outlined
+                >
+                    <div class="d-flex justify-space-between align-end">
+                        <div align="left">
+                            <div>
+                                {{ $brazilianDate(order.created_at) }}
+                            </div>
+                            <div
+                                :class="`${
+                                    status[order.status + 1].color
+                                }--text font-weight-bold pb-2 text-left`"
+                            >
+                                {{ status[order.status + 1].text }}
+                            </div>
                         </div>
-                        <div
-                            :class="`${
-                                status[order.status + 1].color
-                            }--text font-weight-bold pb-2 text-left`"
-                        >
-                            {{ status[order.status + 1].text }}
-                        </div>
-                    </div>
-                    <span>
-                        <v-icon
-                            v-if="order.status + 1 < 2"
-                            class="red--text mb-5"
-                            @click="deleteOrder(index)"
-                            style="cursor: pointer"
-                            >mdi-delete</v-icon
-                        >
-                        <span v-else-if="order.status >= 2" class="pb-1">
-                            <span class="font-itaic pr-2">
-                                Código de rastreio:
-                            </span>
-                            <span class="text-body-2 font-weight-bold">
-                                {{ order.tracking_code }}
+                        <span>
+                            <v-icon
+                                v-if="order.status + 1 < 2"
+                                class="red--text mb-5"
+                                @click="deleteOrder(index)"
+                                style="cursor: pointer"
+                                >mdi-delete</v-icon
+                            >
+                            <span v-else-if="order.status >= 2" class="pb-1">
+                                <span class="font-itaic pr-2">
+                                    Código de rastreio:
+                                </span>
+                                <span class="text-body-2 font-weight-bold">
+                                    {{ order.tracking_code }}
+                                </span>
                             </span>
                         </span>
-                    </span>
-                </div>
-                <div>
-                    <ProductTable
-                        :products="order.products"
-                        :head="false"
-                        :show_rating="order.status == 3"
-                    />
-                    <div class="d-flex justify-center">
-                        <v-btn
-                            class="accent white--text font-weight-bold mt-5"
-                            @click="checkout(index)"
-                            >{{
-                                order.status >= 1
-                                    ? "Comprar novamente"
-                                    : "Concluir Pagamento"
-                            }}</v-btn
-                        >
                     </div>
-                </div>
-            </v-card>
-
+                    <div>
+                        <ProductTable
+                            :products="order.products"
+                            :head="false"
+                            :show_rating="order.status == 3"
+                        />
+                        <div class="d-flex justify-center">
+                            <v-btn
+                                class="accent white--text font-weight-bold mt-5"
+                                @click="checkout(index)"
+                                >{{
+                                    order.status >= 1
+                                        ? "Comprar novamente"
+                                        : "Concluir Pagamento"
+                                }}</v-btn
+                            >
+                        </div>
+                    </div>
+                </v-card>
+            </div>
             <v-divider class="mb-10"></v-divider>
 
             <div style="max-width: 400px">
@@ -104,7 +99,6 @@ import { v4 } from "uuid";
 import { sign } from "jsonwebtoken";
 
 export default {
-
     data() {
         return {
             orders: [],
@@ -155,7 +149,7 @@ export default {
                 const params = new URLSearchParams();
                 params.append("limit", this.limit);
                 params.append("page", this.page);
-    
+
                 let { orders, count } = await this.$axios.$get(`order`, {
                     params,
                 });
@@ -165,14 +159,6 @@ export default {
                 this.loading = false;
             }
             this.loading = false;
-        },
-
-
-        getBrazilianDate(str_date) {
-            const date = new Date(str_date);
-            return `${
-                date.getDate() <= 9 ? `0${date.getDate()}` : `${date.getDate()}`
-            } de ${this.meses[date.getMonth()]} de ${date.getFullYear()}`;
         },
 
         async deleteOrder(index) {

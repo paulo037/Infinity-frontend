@@ -39,6 +39,7 @@ export default {
         '~plugins/vue-the-mask.js',
         '~/plugins/axios.js',
         '~/plugins/toasted.js',
+        '~/plugins/brazilianDate.js',
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components

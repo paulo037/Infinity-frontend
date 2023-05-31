@@ -54,6 +54,7 @@ export default {
                 { label: "Produtos", link: "/admin/product" },
                 { label: "Pedidos", link: "/admin/order" },
                 { label: "Propriedades", link: "/admin/property" },
+                { label: "Promoções", link: "/admin/promotion" },
             ],
         };
     },
