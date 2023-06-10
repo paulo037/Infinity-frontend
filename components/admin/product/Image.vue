@@ -9,10 +9,10 @@
                     <v-col cols="12" sm="10" xl="6" class="pa-1 text-center">
                         <v-btn
                             color="accent"
-                            :loading="isSelecting"
                             outlined
-                            @click="handleFileImport"
+                            @click="handleFileImport();"
                             class="mb-5"
+
                         >
                             Adicionar<wbr /> Imagem
                         </v-btn>
@@ -21,9 +21,11 @@
                             ref="uploader"
                             class="d-none"
                             type="file"
-                            accept="image/*"
+                            :accept="allowedMimes.join(', ')"
                             name="uploadImages"
                             @change="onFileChanged"
+                            
+                           
                         />
                     </v-col>
                 </v-row>
@@ -93,6 +95,15 @@ export default {
                 { value: "primary", sortable: false },
                 { value: "actions", sortable: false },
             ],
+            allowedMimes: [
+                "image/jpeg",
+                "image/jpg",
+                "image/pjpeg",
+                "image/png",
+                "image/gif",
+                "image/webp",
+                "image/heic",
+            ],
         };
     },
     props: {
@@ -101,13 +112,15 @@ export default {
         create_items: Array,
     },
     methods: {
+        k(){
+            console.log("blue")
+        },
         handleFileImport() {
-            this.isSelecting = true;
-
+           
             window.addEventListener(
                 "focus",
                 () => {
-                    this.isSelecting = false;
+                    
                 },
                 { once: true }
             );
