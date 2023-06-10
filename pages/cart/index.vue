@@ -291,155 +291,100 @@
                         "
                     ></v-divider>
 
-                    <v-row class="py-5">
-                        <v-col
-                            cols="12"
-                            sm="4"
-                            class="d-flex justify-center align-center"
-                        >
-                            <span
-                                class="third--text text-h5 mb-8 ml-5 text-center"
-                                >TOTAL</span
-                            >
-                        </v-col>
-                        <v-col cols="12" sm="8" class="d-flex justify-center">
-                            <v-row class="disccount">
-                                <v-col cols="12" class="">
-                                    <v-row class="" justify="center">
-                                        <div
-                                            class="text-right"
-                                            style="width: 100px"
-                                        >
-                                            Sub-Total
-                                        </div>
-                                        <div
-                                            class="text-right"
-                                            style="width: 150px"
-                                        >
-                                            R$
-
-                                            {{
-                                                calculateAmount
-                                                    .toFixed(2)
-                                                    .replace(".", ",")
-                                            }}
-                                        </div>
-                                    </v-row>
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-row class="" justify="center">
-                                        <div
-                                            class="text-right"
-                                            style="width: 100px"
-                                        >
-                                            Frete
-                                        </div>
-
-                                        <div
-                                            class="text-right"
-                                            style="width: 150px"
-                                        >
-                                            + R$
-                                            {{
-                                                (calculateAmount >= 200 ? 0 : 25)
-                                                    .toFixed(2)
-                                                    .replace(".", ",")
-                                            }}
-                                        </div>
-                                    </v-row>
-                                </v-col>
-
-                                <v-col
-                                    v-for="item in calcDiscount"
-                                    :key="item"
+                    <v-card
+                        max-width="400px"
+                        class="my-10 third--text pa-2"
+                        outlined
+                    >
+                        <v-row>
+                            <v-col>
+                                <v-row> Sub-total </v-row>
+                                <v-row>Frete Estimado</v-row>
+                                <v-row
+                                    v-for="(item, index) in calcDiscount"
+                                    :key="index"
                                     cols="12"
                                 >
-                                    <v-row class="" justify="center">
-                                        <div
-                                            class="text-right"
-                                            style="width: 100px"
-                                        >
-                                            Desconto
-                                        </div>
+                                    <div v-if="item > 0">Desconto</div>
+                                </v-row>
+                            </v-col>
 
-                                        <div
-                                            class="text-right"
-                                            style="width: 150px"
-                                        >
-                                            - R$
-                                            {{
-                                                item
-                                                    .toFixed(2)
-                                                    .replace(".", ",")
-                                            }}
-                                        </div>
-                                    </v-row>
-                                </v-col>
+                            <v-col>
+                                <v-row class="justify-end">
+                                    {{ getPrice(calculateAmount) }}
+                                </v-row>
 
-                                <v-col cols="12">
-                                    <v-row justify="center">
-                                        <div
-                                            class="text-right ml-8"
-                                            style="width: 100px"
-                                        >
-                                            
-                                        </div>
+                                <v-row class="justify-end">
+                                    +{{
+                                        getPrice(
+                                            (calculateAmount >= 200 ? 0 : 25)
+                                                
+                                        )
+                                    }}</v-row
+                                >
+                                <v-row
+                                    v-for="(item, index) in calcDiscount"
+                                    :key="index"
+                                    class="justify-end"
+                                    cols="12"
+                                >
+                                
+                                    <div v-if="item > 0">
+                                        -{{ getPrice(item) }}
+                                    </div>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
 
-                                     
-                                        <v-divider
-                                            class="mb-1 text-right"
-                                            style="
-                                                border-bottom: thin solid
-                                                    rgba(255, 255, 255, 0.12);
-                                                max-width: 150px;
-                                            "
-                                        ></v-divider>
-                                    </v-row>
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-row justify="center">
-                                        <div
-                                            class="text-right"
-                                            style="width: 100px"
-                                        >
-                                            Total
-                                        </div>
+                        <v-row>
+                            <v-col>
+                                <v-row> Total</v-row>
+                            </v-col>
+                            <v-col>
+                                <v-row class="justify-end">
+                                    {{
+                                        getPrice(
+                                            calculateAmount -
+                                                disccountAmount +
+                                                (calculateAmount >= 200
+                                                    ? 0
+                                                    : 25)
+                                        )
+                                    }}
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-card>
 
-                                        <div
-                                            class="text-right"
-                                            style="width: 150px"
-                                        >
-                                            R$
-
-                                            {{
-                                                (
-                                                    calculateAmount -
-                                                    disccountAmount +  (calculateAmount >= 200 ? 0 : 25)
-                                                )
-                                                    .toFixed(2)
-                                                    .replace(".", ",")
-                                            }}
-                                        </div>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                    </v-row>
 
                     <v-divider
-                        class=""
+                        class="mb-5"
                         style="
                             border-bottom: thin solid rgba(255, 255, 255, 0.12);
                         "
                     ></v-divider>
                     <div>
-                        <div style="max-width: 400px" class="mt-5">
+                        <div
+                                    class="d-flex align-center justify-center green2--text font-weight-bold"
+                                >
+                                    {{
+                                        disccountAmount > 0
+                                            ? "Comprando agora você economiza " +
+                                            getPrice(disccountAmount) +
+                                              "!"
+                                            : ""
+                                    }}
+                                </div>
+                        <div style="max-width: 400px" >
                             <div
                                 class="d-flex align-center justify-center green2--text font-weight-bold"
                             >
-                                <span v-if="200 - calculateAmount > 0">
+                            
+                                                
+                                <span v-if="200 - (calculateAmount - disccountAmount ) > 0">
                                     Por mais
-                                    {{ formatMoney(200 - calculateAmount) }}
+                                    {{ getPrice(200 - (calculateAmount - disccountAmount )) }}
                                     o frete é grátis!
                                 </span>
                                 <span v-else>
@@ -548,13 +493,13 @@ export default {
     async fetch() {
         this.products = await this.$axios.$get(`cart`);
         this.promotions = await this.$axios.$get(`promotions`);
-        console.log(this.promotions);
+
         this.page_loading = false;
     },
 
     methods: {
-        formatMoney(value) {
-            return `R$ ${value.toFixed(2).toString().replace(".", ",")}`;
+        getPrice(amount) {
+            return ` R$ ${amount.toFixed(2).replace(".", ",")}`;
         },
 
         async checkout() {
@@ -582,8 +527,11 @@ export default {
                     name: p.name,
                     price: p.price,
                     image: p.image,
+                    categories: p.categories,
                 });
             });
+
+
 
             this.$cookies.set("reference", reference, {
                 path: "/",
@@ -724,29 +672,40 @@ export default {
             let disccount = {};
 
             for (const promotion of this.promotions) {
-                if (!!have[promotion.buying_category_id] && have[promotion.buying_category_id].quantity) {
+                if (
+                    !!have[promotion.buying_category_id] &&
+                    have[promotion.buying_category_id].quantity
+                ) {
                     let buying_id = promotion.buying_category_id;
                     let buying_quantity = promotion.buying_quantity;
                     let win_id = promotion.win_category_id;
                     let win_quantity = promotion.win_quantity;
-
+                    disccount[win_id] = 0;
                     while (
-                        (have[buying_id] && have[buying_id].quantity >= buying_quantity )&&
-                       (have[win_id] && have[win_id].quantity >= win_quantity)
+                        have[buying_id] &&
+                        have[buying_id].quantity >= buying_quantity &&
+                        have[win_id] &&
+                        have[win_id].quantity >= win_quantity
                     ) {
                         have[buying_id].quantity -= promotion.buying_quantity;
-                        have[win_id].quantity -= promotion.win_quantity;
+                        const add_q = Math.min(
+                            have[win_id].quantity,
+                            promotion.win_quantity
+                        );
+                        have[win_id].quantity -= add_q;
 
-                        if (have[win_id].quantity >= 0) {
-                            disccount[win_id] = !!disccount[win_id]
-                                ? disccount[win_id] +
-                                  have[win_id].price * (have[win_id].quantity > promotion.win_quantity ? promotion.win_quantity : have[win_id].quantity)
-                                : have[win_id].price * (have[win_id].quantity > promotion.win_quantity ? promotion.win_quantity : have[win_id].quantity);
-                        }
+                        disccount[win_id] += have[win_id].price * add_q;
                     }
                 }
             }
-            return disccount;
+
+            let arr = [];
+            const keysArray = Object.keys(disccount);
+            for (const key of keysArray) {
+                arr.push(disccount[key]);
+            }
+
+            return arr;
         },
     },
 };
@@ -757,7 +716,7 @@ tr:hover {
     background-color: transparent !important;
 }
 
-.disccount .col{
+.disccount .col {
     padding: 2px;
 }
 </style>

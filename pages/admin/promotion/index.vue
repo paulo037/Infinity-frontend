@@ -35,7 +35,13 @@
                                 {{ text1 }}
                             </div>
 
-                            <v-dialog v-model="modal1Open" persistent>
+                            <v-dialog
+                                v-model="modal1Open"
+                                persistent
+                                :content-class="
+                                    modal1Open ? 'dialogActiveClass' : ''
+                                "
+                            >
                                 <div class="d-flex flex-column">
                                     <v-date-picker
                                         v-model="startDate"
@@ -79,6 +85,9 @@
                                 v-model="modal2Open"
                                 persistent
                                 class="pa-10"
+                                :content-class="
+                                    modal2Open ? 'dialogActiveClass' : ''
+                                "
                             >
                                 <div class="d-flex flex-column">
                                     <v-date-picker
@@ -184,12 +193,12 @@
                 :items="promotions"
                 item-key="id"
             >
-                <template v-slot:item.actions="{ index, item }">
+                <template #item.actions="{ index, item }">
                     <v-icon
                         small
                         @click="chose(index)"
                         class="mr-2 accent--text"
-                        >mdi-pencil</v-icon 
+                        >mdi-pencil</v-icon
                     >
                     <v-icon
                         small
@@ -198,13 +207,12 @@
                         >mdi-delete</v-icon
                     >
                 </template>
-                >
 
-                <template v-slot:item.startDate="{ item }">
+                <template #item.startDate="{ item }">
                     {{ $brazilianDate(item.startDate) }}
                 </template>
 
-                <template v-slot:item.endDate="{ item }">
+                <template #item.endDate="{ item }">
                     {{ $brazilianDate(item.endDate) }}
                 </template>
             </v-data-table>
@@ -411,12 +419,12 @@ export default {
 };
 </script>
   
-  <style >
+<style >
 .promotion-info {
     margin-bottom: 16px;
 }
 
-.v-dialog--active {
+.dialogActiveClass {
     display: contents !important;
 }
 

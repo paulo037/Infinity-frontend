@@ -22,14 +22,10 @@
                     v-model="product.price"
                 ></v-text-field>
 
-                <v-textarea
-                    outlined
-                    auto-grow
-                    name="input-7-1"
-                    label="Descrição"
-                    v-model="descriptionText"
-                ></v-textarea>
-
+                <v-card outlined class="my-5 py-0">
+                    <v-card-title>Descrição</v-card-title>
+                    <Editor  v-model="product.description"/>
+                </v-card>
                 <AdminProductImage
                     :items="product.images"
                     :create_items="createImages"
@@ -76,7 +72,7 @@ import { mapMutations } from "vuex";
 
 export default {
 
-    data: () => ({
+    data: () => ({  
         rate: 0,
         errors: {},
         timeout: 3000,
@@ -93,6 +89,7 @@ export default {
             colors: [],
             categories: [],
         },
+        
     }),
 
     computed: {
@@ -112,14 +109,6 @@ export default {
                             : "Ocorreu um erro inesperado!",
                     })
                 );
-
-            let pDescription = this.product.description;
-
-            if (pDescription) {
-                this.descriptionText = pDescription
-                    .replace(/<br>/g, "\n")
-                    .replace(/<wbr\/\>&nbsp;<wbr\/\>/g, " ");
-            }
 
             this.product.colors.forEach((item) => {
                 if (!colors.find((color) => color.value == item.color)) {
@@ -163,10 +152,8 @@ export default {
         async save() {
             this.$store.commit("setLoading", { loading: true });
             this.product.colors = this.$store.state.admin.product.sizes;
-            this.product.description = await this.descriptionText
-                .replace(/\n/g, "<br>")
-                .replace(/ /g, "<wbr/>&nbsp;<wbr/>");
-
+            this.product.name = this.product.name.trim();
+          
             if (!this.validation()) return;
 
             let formData = new FormData();
@@ -223,10 +210,7 @@ export default {
         async create() {
             this.$store.commit("setLoading", { loading: true });
             this.product.colors = this.$store.state.admin.product.sizes;
-            this.product.description = await this.descriptionText
-                .replace(/\n/g, "<br>")
-                .replace(/ /g, "<wbr/>&nbsp;<wbr/>");
-
+            this.product.name = this.product.name.trim();
             if (!this.validation()) return;
 
             let formData = new FormData();
@@ -272,37 +256,6 @@ export default {
                             : "Ocorreu um erro inesperado!",
                     })
                 );
-            this.$store.commit("setLoading", { loading: false });
-        },
-        async uploadImages() {
-            let formData = new FormData();
-
-            this.createImages.forEach((image, index) => {
-                formData.append("uploadImages", image.file);
-            });
-            this.product.images = this.product.images.filter((i) => !i.file);
-            formData.append("product", JSON.stringify(this.product));
-            formData.append(
-                "primary",
-                JSON.stringify(this.createImages.map((i) => i.primary))
-            );
-
-            await this.$axios
-                .$put(`product/${this.product.id}`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                })
-                .catch((e) =>
-                    this.$toasted({
-                        text: e.response.data
-                            ? e.response.data
-                            : "Ocorreu um erro inesperado!",
-                    })
-                )
-                .then((images) => {
-                    // this.parseImages(images);
-                });
             this.$store.commit("setLoading", { loading: false });
         },
 
@@ -363,22 +316,6 @@ export default {
             return true;
         },
 
-        parseImages(images) {
-            let m = [];
-            this.product.images.map((file) => {
-                if (!file.id) {
-                    images.forEach((img) => {
-                        if (img.name === file.name) {
-                            img.primary = Boolean(file.primary);
-                            m.push(img);
-                        }
-                    });
-                } else {
-                    m.push(file);
-                }
-            });
-            this.product.images = m;
-        },
     },
 };
 </script>

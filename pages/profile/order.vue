@@ -65,7 +65,7 @@
                             :head="false"
                             :show_rating="order.status == 3"
                         />
-                        <div class="d-flex justify-center">
+                        <!-- <div class="d-flex justify-center">
                             <v-btn
                                 class="accent white--text font-weight-bold mt-5"
                                 @click="checkout(index)"
@@ -75,7 +75,7 @@
                                         : "Concluir Pagamento"
                                 }}</v-btn
                             >
-                        </div>
+                        </div> -->
                     </div>
                 </v-card>
             </div>
@@ -133,6 +133,7 @@ export default {
 
     async fetch() {
         await this.getOrders();
+        
     },
 
     watch: {
@@ -153,6 +154,7 @@ export default {
                 let { orders, count } = await this.$axios.$get(`order`, {
                     params,
                 });
+                
                 this.orders = await orders;
                 this.count = count;
             } catch (error) {
@@ -180,53 +182,52 @@ export default {
                 );
         },
 
-        async checkout(index) {
-            if (!this.$auth.loggedIn) {
-                this.$toasted({
-                    text: "Entre ou crie uma conta para comprar produtos!",
-                });
-                this.$store.commit(
-                    "setBack_url",
-                    this.$router.history.current.path
-                );
-                return this.$router.push("/login");
-            }
+        // async checkout(index) {
+        //     if (!this.$auth.loggedIn) {
+        //         this.$toasted({
+        //             text: "Entre ou crie uma conta para comprar produtos!",
+        //         });
+        //         this.$store.commit(
+        //             "setBack_url",
+        //             this.$router.history.current.path
+        //         );
+        //         return this.$router.push("/login");
+        //     }
 
-            const products = this.orders[index].products;
-            if (this.orders[index].status < 1) {
-                await this.$axios.$delete(`/order/${this.orders[index].id}`);
-            }
-            const reference = v4();
+        //     const products = this.orders[index].products;
+        //     if (this.orders[index].status < 1) {
+        //         await this.$axios.$delete(`/order/${this.orders[index].id}`);
+        //     }
+        //     const reference = v4();
 
-            let items = [];
+        //     let items = [];
 
-            products.forEach((p) => {
-                items.push({
-                    product_id: p.product_id,
-                    quantity: p.quantity,
-                    size: p.size,
-                    color: p.color,
-                    name: p.name,
-                    price: p.price,
-                    image: p.image,
-                });
-            });
+        //     products.forEach((p) => {
+        //         items.push({
+        //             product_id: p.product_id,
+        //             quantity: p.quantity,
+        //             size: p.size,
+        //             color: p.color,
+        //             name: p.name,
+        //             price: p.price,
+        //             image: p.image,
+        //             categories: p.categories
+        //         });
+        //     });
 
-            localStorage.setItem(
-                "reference",
-                sign(reference, process.env.JWT_SECRET)
-            );
+        //     this.$cookies.set("reference", reference, {
+        //         path: "/",
+        //         maxAge: 60 * 60 * 3,
+        //     });
 
-            localStorage.setItem(
-                "checkout",
-                sign(JSON.stringify(items), process.env.JWT_SECRET)
-            );
+        //     this.$store.commit("setItems", items);
 
-            await this.$router.push({
-                path: "/checkout",
-                query: { reference: reference, type: "order" },
-            });
-        },
+          
+        //     await this.$router.push({
+        //         path: "/checkout",
+        //         query: { reference: reference, type: "order" },
+        //     });
+        // },
     },
 };
 </script>

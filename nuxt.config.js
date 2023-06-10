@@ -40,6 +40,7 @@ export default {
         '~/plugins/axios.js',
         '~/plugins/toasted.js',
         '~/plugins/brazilianDate.js',
+        '~/plugins/tip-tap.js'
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -222,6 +223,6 @@ export default {
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {
-
+        transpile: ['vuetify/lib', "tiptap-vuetify"]
     }
 }

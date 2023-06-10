@@ -170,38 +170,60 @@
                         Produtos
                     </div>
                     <v-divider class="pb-5"></v-divider>
-                    <ProductTable
-                        :products="order.products"
-                        :head="true"
-                    />
-                    <!-- <v-divider class="third my-5  mx-10"></v-divider> -->
+                    <ProductTable :products="order.products" :head="true" />
+                    <v-card
+                        max-width="400px"
+                        class="my-10 third--text pa-2"
+                        outlined
+                    >
+                        <v-row>
+                            <v-col>
+                                <v-row> Sub-total </v-row>
+                                <v-row>Frete</v-row>
+                                <v-row
+                                    v-for="(item, index) in order.promotions"
+                                    :key="index"
+                                    cols="12"
+                                >
+                                    <div v-if="item.quantity > 0">Desconto</div>
+                                </v-row>
+                            </v-col>
 
-                    <v-container class="py-5">
-                        <v-layout row wrap align-top justify-center>
-                            <!-- <v-flex md8> -->
-                            <span
-                                class="
-                                    third--text
-                                    text-h5
-                                    mb-8
-                                    ml-5
-                                    text-center
-                                "
-                                >TOTAL:</span
-                            >
-                            <!-- </v-flex> -->
+                            <v-col>
+                                <v-row class="justify-end">
+                                    {{ getPrice(order.subtotal) }}
+                                </v-row>
 
-                            <!-- <v-flex md4> -->
-                            <span
-                                class="primary--text text-h5 ml-10 text-right"
-                            >
-                                R$:
+                                <v-row class="justify-end">
+                                    +{{ getPrice(order.shipping_price) }}</v-row
+                                >
+                                <v-row
+                                    v-for="(item, index) in order.promotions"
+                                    :key="index"
+                                    class="justify-end"
+                                    cols="12"
+                                >
+                                    <div v-if="item.quantity > 0">
+                                        -{{
+                                            getPrice(item.quantity * item.price)
+                                        }}
+                                    </div>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                        <v-divider></v-divider>
 
-                                {{ order.price }}
-                            </span>
-                            <!-- </v-flex> -->
-                        </v-layout>
-                    </v-container>
+                        <v-row>
+                            <v-col>
+                                <v-row> Total</v-row>
+                            </v-col>
+                            <v-col>
+                                <v-row class="justify-end">
+                                    {{ getPrice(order.price) }}
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                    </v-card>
                 </v-card>
                 <div class="mb-10"></div>
             </div>
@@ -210,9 +232,7 @@
 </template>
 
 <script>
-
 export default {
-
     data() {
         return {
             order: {
@@ -258,12 +278,19 @@ export default {
             })
         );
 
+        this.order.subtotal = this.order.products.reduce(
+            (a, b) => a + b.price * b.quantity,
+            0
+        );
+        this.order.price = this.order.price + this.order.shipping_price;
+
         this.status_model = this.status[this.order.status + 1].text;
     },
 
     methods: {
-
-
+        getPrice(amount) {
+            return ` R$ ${amount.toFixed(2).replace(".", ",")}`;
+        },
         async save() {
             await this.$axios
                 .$put(`order/${this.order.id}`, {
@@ -311,5 +338,7 @@ export default {
 </script>
 
 <style>
-  
+.disccount .col {
+    padding: 2px;
+}
 </style>

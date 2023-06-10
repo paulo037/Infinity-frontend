@@ -59,13 +59,7 @@
                             >
                                 <v-card
                                     outlined
-                                    class="
-                                        pa-0-8
-                                        d-flex
-                                        justify-center
-                                        my-2
-                                        align-center
-                                    "
+                                    class="pa-0-8 d-flex justify-center my-2 align-center"
                                     rounded="md"
                                     style="
                                         height: 6vw;
@@ -166,13 +160,7 @@
                             >
                                 <v-card
                                     outlined
-                                    class="
-                                        pa-0-8
-                                        d-flex
-                                        justify-center
-                                        mx-1
-                                        align-center
-                                    "
+                                    class="pa-0-8 d-flex justify-center mx-1 align-center"
                                     rounded="md"
                                     style="
                                         height: 10vw;
@@ -222,12 +210,7 @@
                                     ></v-rating>
 
                                     <div
-                                        class="
-                                            grey--text
-                                            ms-4
-                                            d-inline-block
-                                            pt-1
-                                        "
+                                        class="grey--text ms-4 d-inline-block pt-1"
                                     >
                                         {{
                                             product.rating
@@ -297,20 +280,36 @@
                                         {{ size.value }}
                                     </v-btn>
                                 </v-container>
+                                <div
+                                    class="d-flex align-center justify-center green2--text font-weight-bold"
+                                >
+                                    {{
+                                        disccountAmount > 0
+                                            ? "Comprando agora você economiza " +
+                                              formatMoney(disccountAmount) +
+                                              "!"
+                                            : ""
+                                    }}
+                                </div>
                                 <div style="max-width: 400px">
                                     <div
-                                        class="
-                                            d-flex
-                                            align-center
-                                            justify-center
-                                            green2--text
-                                            font-weight-bold
-                                        "
+                                        class="d-flex align-center justify-center green2--text font-weight-bold"
                                     >
-                                        <span v-if="200 - product.price > 0">
+                                        <span
+                                            v-if="
+                                                product.price * quantity -
+                                                    disccountAmount <
+                                                200
+                                            "
+                                        >
                                             Por mais
                                             {{
-                                                formatMoney(200 - product.price)
+                                                formatMoney(
+                                                    200 -
+                                                        (product.price *
+                                                            quantity -
+                                                            disccountAmount)
+                                                )
                                             }}
                                             o frete é grátis!
                                         </span>
@@ -377,13 +376,7 @@
                                     <v-btn
                                         block
                                         style=""
-                                        class="
-                                            accent
-                                            white--text
-                                            font-weight-bold
-                                            pa-5
-                                            my-1
-                                        "
+                                        class="accent white--text font-weight-bold pa-5 my-1"
                                         @click="checkout"
                                         >Comprar agora
                                     </v-btn>
@@ -432,11 +425,11 @@
                             <v-card-title class="flex justify-center">
                                 Descrição do Produto</v-card-title
                             >
-                            <v-card-text
+                            <div
                                 style="text-align: initial"
+                                class="pa-8 pt-2"
                                 v-html="product.description"
-                            >
-                            </v-card-text>
+                            ></div>
                         </v-card>
                     </v-col>
                 </v-row>
@@ -482,7 +475,7 @@ export default {
 
             page_loading: true,
             imageLoad: [],
-
+            promotions: [],
             model: null,
         };
     },
@@ -500,7 +493,7 @@ export default {
         }
 
         this.product = await this.$axios.$get(`product/${product_id}`);
-
+        console.log(this.product);
         if (this.product.colors.length > 0) {
             this.color = this.product.colors[0].color;
             this.size_selected = this.getSizeSelected();
@@ -513,14 +506,13 @@ export default {
                     provider: "cloudinary",
                 });
         }
-
+        this.promotions = await this.$axios.$get(`promotions`);
         this.imageLoad = this.product.images.map(() => false);
     },
 
     methods: {
         loaded(i) {
             this.$refs.loading[i].$el.style = "display: none !important";
-            // this.$refs.images[i].$el.style = "display: block !important";
         },
 
         ...mapMutations(["toasted", "setBack_url"]),
@@ -549,15 +541,20 @@ export default {
                     image: this.product.images[0].url,
                     size: this.product.colors[this.size_selected].size,
                     color: this.product.colors[this.size_selected].color,
+                    categories: this.product.categories.map((category) => {
+                        return category.id;
+                    }),
                 },
             ];
+
+            console.log(items);
 
             this.$cookies.set("reference", reference, {
                 path: "/",
                 maxAge: 60 * 60 * 3,
             });
 
-            this.$store.commit('setItems', items)
+            this.$store.commit("setItems", items);
 
             await this.$router.push({
                 path: "/checkout",
@@ -669,6 +666,76 @@ export default {
     },
 
     computed: {
+        disccountAmount() {
+            let amount = 0;
+            const keysArray = Object.keys(this.calcDiscount);
+            for (const key of keysArray) {
+                amount += this.calcDiscount[key];
+            }
+            return amount;
+        },
+
+        category_frequence() {
+            const categoryIds = {};
+
+            const categories = this.product.categories.map((category) => {
+                return category.id;
+            });
+            for (const categoryId of categories) {
+                if (categoryIds[categoryId]) {
+                    categoryIds[categoryId].quantity += this.quantity;
+                } else {
+                    categoryIds[categoryId] = {
+                        quantity: this.quantity,
+                        price: this.product.price,
+                    };
+                }
+            }
+
+            return categoryIds;
+        },
+
+        calcDiscount() {
+            console.log(this.category_frequence);
+            let have = JSON.parse(JSON.stringify(this.category_frequence));
+            let disccount = {};
+
+            for (const promotion of this.promotions) {
+                if (
+                    !!have[promotion.buying_category_id] &&
+                    have[promotion.buying_category_id].quantity
+                ) {
+                    let buying_id = promotion.buying_category_id;
+                    let buying_quantity = promotion.buying_quantity;
+                    let win_id = promotion.win_category_id;
+                    let win_quantity = promotion.win_quantity;
+                    disccount[win_id] = 0;
+                    while (
+                        have[buying_id] &&
+                        have[buying_id].quantity >= buying_quantity &&
+                        have[win_id] &&
+                        have[win_id].quantity >= win_quantity
+                    ) {
+                        have[buying_id].quantity -= promotion.buying_quantity;
+                        const add_q = Math.min(
+                            have[win_id].quantity,
+                            promotion.win_quantity
+                        );
+                        have[win_id].quantity -= add_q;
+
+                        disccount[win_id] += have[win_id].price * add_q;
+                    }
+                }
+            }
+
+            let arr = [];
+            const keysArray = Object.keys(disccount);
+            for (const key of keysArray) {
+                arr.push(disccount[key]);
+            }
+
+            return arr;
+        },
         colors() {
             let colors = [];
 

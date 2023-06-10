@@ -53,7 +53,7 @@
                     width="36px"
                     height="36px"
                     format="webp"
-                    :provider="item.provider || 'clo'"
+                    :provider="item.provider || 'cloudinary'"
                 >
                 </nuxt-img>
             </template>

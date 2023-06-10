@@ -65,12 +65,7 @@
                                     "
                                 >
                                     <router-link
-                                        class="
-                                            accent--text
-                                            pl-5
-                                            text-left text-decoration-none
-                                            third--text
-                                        "
+                                        class="accent--text pl-5 text-left text-decoration-none third--text"
                                         to="/profile/address"
                                     >
                                         <span class="accent--text">
@@ -160,18 +155,10 @@
                             <div class="text-h5 pb-5" v-if="address">
                                 Confira os itens do seu pedido
                             </div>
-                            <ProductTable
-                                :products="products"
-                                :head="true"
-                            />
+                            <ProductTable :products="products" :head="true" />
                             <div class="d-flex justify-end">
                                 <v-btn
-                                    class="
-                                        accent
-                                        white--text
-                                        font-weight-bold
-                                        mt-5
-                                    "
+                                    class="accent white--text font-weight-bold mt-5"
                                     @click="step = 3"
                                 >
                                     Continue
@@ -195,15 +182,41 @@
                                     <v-col>
                                         <v-row> Produtos </v-row>
                                         <v-row>Frete</v-row>
+                                        <v-row
+                                            v-for="(
+                                                item, index
+                                            ) in calcDiscount"
+                                            :key="index"
+                                            cols="12"
+                                        >
+                                            <div v-if="item > 0">Desconto</div>
+                                        </v-row>
                                     </v-col>
                                     <v-col>
                                         <v-row class="justify-end">
                                             {{ getPrice(amount) }}
                                         </v-row>
 
-                                        <v-row class="justify-end">{{
-                                            getPrice(shipments)
-                                        }}</v-row>
+                                        <v-row class="justify-end"
+                                            >+{{ getPrice(shipments) }}</v-row
+                                        >
+                                        <v-row
+                                            v-for="(
+                                                item, index
+                                            ) in calcDiscount"
+                                            :key="index"
+                                            class="justify-end"
+                                            cols="12"
+                                        >
+                                            <div v-if="item > 0">
+                                                - R$
+                                                {{
+                                                    item
+                                                        .toFixed(2)
+                                                        .replace(".", ",")
+                                                }}
+                                            </div>
+                                        </v-row>
                                     </v-col>
                                 </v-row>
                                 <v-divider></v-divider>
@@ -214,7 +227,13 @@
                                     </v-col>
                                     <v-col>
                                         <v-row class="justify-end">
-                                            {{ getPrice(shipments + amount) }}
+                                            {{
+                                                getPrice(
+                                                    shipments +
+                                                        amount -
+                                                        disccountAmount
+                                                )
+                                            }}
                                         </v-row>
                                     </v-col>
                                 </v-row>
@@ -250,11 +269,9 @@
 </template>
 
 <script>
-
 import { verify } from "jsonwebtoken";
 
 export default {
-
     data() {
         return {
             preferece_id: null,
@@ -268,6 +285,7 @@ export default {
             text: " Concluir Compra",
 
             products: [],
+            promotions: [],
         };
     },
 
@@ -287,6 +305,7 @@ export default {
         };
     },
     async fetch() {
+        this.promotions = await this.$axios.$get(`promotions`);
         await this.$axios
             .get("/addresses")
             .then((a) => {
@@ -305,7 +324,8 @@ export default {
         const reference = await this.$cookies.get("reference");
 
         if (this.$route.query.reference == reference) {
-            this.products = JSON.parse(JSON.stringify(this.$store.state.items))
+            this.products = JSON.parse(JSON.stringify(this.$store.state.items));
+            console.log(this.products);
         } else {
             this.$toasted({
                 text: "Checkout não encontrado!",
@@ -330,7 +350,78 @@ export default {
         },
 
         shipments() {
-            return this.amount >= 200 ? 0 : 25;
+            return ( this.amount -  this.disccountAmount) >= 200 ? 0 : 25;
+        },
+
+        category_frequence() {
+            const categoryIds = {};
+
+            for (const product of this.products) {
+                const { categories } = product;
+                for (const categoryId of categories) {
+                    if (categoryIds[categoryId]) {
+                        categoryIds[categoryId].quantity += product.quantity;
+                    } else {
+                        categoryIds[categoryId] = {
+                            quantity: product.quantity,
+                            price: product.price,
+                        };
+                    }
+                }
+            }
+
+            return categoryIds;
+        },
+
+        calcDiscount() {
+            console.log(this.category_frequence);
+            let have = JSON.parse(JSON.stringify(this.category_frequence));
+            let disccount = {};
+
+            for (const promotion of this.promotions) {
+                if (
+                    !!have[promotion.buying_category_id] &&
+                    have[promotion.buying_category_id].quantity
+                ) {
+                    let buying_id = promotion.buying_category_id;
+                    let buying_quantity = promotion.buying_quantity;
+                    let win_id = promotion.win_category_id;
+                    let win_quantity = promotion.win_quantity;
+                    disccount[win_id] = 0;
+                    while (
+                        have[buying_id] &&
+                        have[buying_id].quantity >= buying_quantity &&
+                        have[win_id] &&
+                        have[win_id].quantity >= win_quantity
+                    ) {
+                        have[buying_id].quantity -= promotion.buying_quantity;
+                        const add_q = Math.min(
+                            have[win_id].quantity,
+                            promotion.win_quantity
+                        );
+                        have[win_id].quantity -= add_q;
+
+                        disccount[win_id] += have[win_id].price * add_q;
+                    }
+                }
+            }
+
+            let arr = [];
+            const keysArray = Object.keys(disccount);
+            for (const key of keysArray) {
+                arr.push(disccount[key]);
+            }
+
+            return arr;
+        },
+
+        disccountAmount() {
+            let amount = 0;
+            const keysArray = Object.keys(this.calcDiscount);
+            for (const key of keysArray) {
+                amount += this.calcDiscount[key];
+            }
+            return amount;
         },
     },
 
